@@ -6,7 +6,7 @@
   "scripts": {
     "start": "wrangler dev",
     "dev": "wrangler dev",
-    "check": "node --check worker.js && node --check game.js && node --check public/app.js && node --check public/sw.js && node --check src/ui.js && node --check scripts/build-ui.mjs && node --check public/avatar.js && node --check public/cast.js && node --check src/character3d.js && node --check public/progression.js && node --check public/effects.js",
+    "check": "node --check worker.js && node --check game.js && node --check public/app.js && node --check public/sw.js && node --check src/ui.js && node --check scripts/build-ui.mjs && node --check public/avatar.js && node --check public/cast.js && node --check src/character3d.js && node --check public/progression.js && node --check public/effects.js && node --check party.js",
     "test": "node --test",
     "deploy": "wrangler deploy",
     "db:local": "wrangler d1 migrations apply DB --local",

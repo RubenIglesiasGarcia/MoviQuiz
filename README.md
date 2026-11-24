@@ -22,3 +22,6 @@ Avatares 3D originales de geometría ligera con Three.js en vestuario, perfil, r
 
 ### Plató 3D
 La vista TV muestra una escena Three.js con hasta ocho concursantes (el marcador conserva todos), atriles, pulsadores, luces y cámara animada. Usa geometría ligera y fallback sin WebGL. El vestuario permite captura frontal con guía ovalada y confirmación antes de subir la foto. Probar cámara, TV y Chromecast reales tras desplegar.
+
+### Gran concurso
+Modo fiesta inicial: calentamiento, pulsador con turno y rebote, subasta de hasta 500 puntos del juego y final doble. Preguntas privadas opcionales solo en lobby, máximo dos por usuario, aprobadas por anfitrión, excluyendo al autor y anfitrión de responderlas. Si se incluyen, la partida no suma XP oficial. No hay publicación comunitaria ni moderación automática; el anfitrión debe revisar veracidad y contenido. Pendiente ampliar el banco y probar sincronización real.
