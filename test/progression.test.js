@@ -1,0 +1,4 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {progressFrom,itemAllowed} from '../public/progression.js';
+test('new profiles only get base wardrobe',()=>{const p=progressFrom();assert.equal(p.level,1);assert.equal(p.xp,0);assert.equal(itemAllowed(p,'hat','scout'),true);assert.equal(itemAllowed(p,'hat','party'),false);});
+test('XP thresholds and official unlocks are deterministic',()=>{const p=progressFrom({answered:30,correct:25,fast:5,matches:1,wins:0});assert.equal(p.xp,890);assert.equal(p.level,6);assert.equal(itemAllowed(p,'hat','fox'),true);assert.equal(itemAllowed(p,'shirt','gold'),true);assert.equal(itemAllowed(p,'hat','star'),true);assert.equal(itemAllowed(p,'shirt','champion'),false);});
+test('win reward threshold',()=>{assert.equal(itemAllowed(progressFrom({wins:4}),'shirt','champion'),false);assert.equal(itemAllowed(progressFrom({wins:5}),'shirt','champion'),true);});
