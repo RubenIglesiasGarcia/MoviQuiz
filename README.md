@@ -11,3 +11,6 @@ La política de privacidad y términos son borradores para revisar antes de publ
 
 ## Interfaz
 Componentes visuales propios con Lit (escenario, pulsadores y contador segmentado), controles HTML nativos y fuentes Barlow Condensed/Space Grotesk autoalojadas con Fontsource. esbuild compila public/generated mediante npm install y antes de wrangler deploy; no hay que cambiar el comando de despliegue. No se utiliza un tema de dashboard ni CDN de componentes. Revisar en móvil y televisión después del despliegue.
+
+## Vestuario y pantalla TV
+Perfil persistente en D1, foto opcional redimensionada en el navegador y accesorios originales. La foto se muestra mediante URL aleatoria a quienes acceden a la sala; puede retirarse. Para Cast nativo registrar un Custom Web Receiver en https://cast.google.com/publish/ con URL HTTPS /cast-receiver.html, añadir CAST_APP_ID en Variables and Secrets y probar en un Chromecast registrado. Google cobra registro de desarrollador; no es obligatorio para abrir la vista TV por URL. Cast web no está soportado en Chrome iOS. El receptor aún requiere pruebas físicas.

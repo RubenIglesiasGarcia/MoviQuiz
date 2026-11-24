@@ -1,5 +1,5 @@
-const CACHE='mobiquiz-shell-v5';
-const SHELL=['/','/style.css','/app.js','/generated/ui.js','/generated/ui.css','/manifest.webmanifest','/icons/192.png','/icons/512.png'];
+const CACHE='mobiquiz-shell-v6';
+const SHELL=['/','/style.css','/app.js','/avatar.js','/cast.js','/generated/ui.js','/generated/ui.css','/manifest.webmanifest','/icons/192.png','/icons/512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)));self.skipWaiting();});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('mobiquiz-shell-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(e.request.method!=='GET'||u.origin!==self.location.origin)return;if(e.request.mode==='navigate'&&u.pathname!=='/')return;if(e.request.mode!=='navigate'&&!SHELL.includes(u.pathname))return;e.respondWith(fetch(e.request).then(r=>{if(r.ok){const clone=r.clone();caches.open(CACHE).then(c=>c.put(e.request.mode==='navigate'?'/':e.request,clone)).catch(()=>{});}return r;}).catch(async()=>{const hit=await caches.match(e.request.mode==='navigate'?'/':e.request);return hit||new Response('MobiQuiz requiere conexión a Internet.',{status:503});}));});
