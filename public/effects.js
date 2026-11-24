@@ -1,6 +1,8 @@
 let ctx,enabled=localStorage.getItem('mq.sound')!=='off',music=localStorage.getItem('mq.music')!=='off',master,musicBus,lastResume=0,nextBeat=0,step=0,mode='',lastKey='',lastSecond=-1,lastResultCue=-1;
 export function soundEnabled(){return enabled;}
 export function musicEnabled(){return music;}
+export function setMusicEnabled(value){if(music===!!value){if(music)unlockAudio();return music;}return toggleMusic();}
+export function setSoundEnabled(value){if(enabled===!!value){if(enabled)unlockAudio();return enabled;}return toggleSound();}
 export function toggleMusic(){music=!music;localStorage.setItem('mq.music',music?'on':'off');if(music)unlockAudio();else if(musicBus&&ctx)musicBus.gain.setTargetAtTime(0,ctx.currentTime,.03);return music;}
 export function toggleSound(){enabled=!enabled;localStorage.setItem('mq.sound',enabled?'on':'off');if(enabled){unlockAudio();playSound('correct');}else if(master&&ctx)master.gain.setTargetAtTime(0,ctx.currentTime,.03);return enabled;}
 export function unlockAudio(){if(!enabled&&!music)return;try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;if(!ctx){ctx=new AC();master=ctx.createGain();master.gain.value=enabled?.65:0;master.connect(ctx.destination);musicBus=ctx.createGain();musicBus.gain.value=0;musicBus.connect(ctx.destination);}master.gain.setTargetAtTime(enabled?.65:0,ctx.currentTime,.02);if(ctx.state==='suspended'){const now=Date.now();if(now-lastResume>1000){lastResume=now;ctx.resume().catch(()=>{});}}}catch{}}
