@@ -23,17 +23,17 @@ export function mountCharacter(host,a={},reaction='idle'){for(const e of [...act
 let stageEntry=null;
 export function syncStage(host,state){
  if(!host)return;
- const players=[...state.players].sort((a,b)=>a.id.localeCompare(b.id)).slice(0,8),signature=JSON.stringify(players.map(p=>[p.id,p.name,p.avatar]));
+ const players=[...state.players].sort((a,b)=>a.id.localeCompare(b.id)).slice(0,8),signature=JSON.stringify([state.theme,players.map(p=>[p.id,p.name,p.avatar])]);
  if(stageEntry&&(stageEntry.host!==host||stageEntry.signature!==signature)){stageEntry.dispose();stageEntry=null;}
  if(stageEntry){stageEntry.state=state;return;}
  let renderer;try{renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'low-power'});}catch{return;}
  const canvas=renderer.domElement;canvas.className='stage-canvas';canvas.setAttribute('aria-hidden','true');host.append(canvas);host.classList.add('stage-ready');
- const scene=new THREE.Scene();scene.background=new THREE.Color(0x15182e);scene.fog=new THREE.Fog(0x15182e,15,37);
+ const scene=new THREE.Scene();const themes={neon:[0x15182e,0x242843],space:[0x070e26,0x1e3159],tropical:[0x124942,0x237a68],retro:[0x321b42,0x592c56]};const [sky,ground]=themes[state.theme]||themes.neon;scene.background=new THREE.Color(sky);scene.fog=new THREE.Fog(sky,15,37);
  const camera=new THREE.PerspectiveCamera(39,1,.1,80);camera.position.set(0,5.7,15);
  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.outputColorSpace=THREE.SRGBColorSpace;
  scene.add(new THREE.HemisphereLight(0xf5eaff,0x47466b,2.3));const key=new THREE.DirectionalLight(0xffe1b5,2.5);key.position.set(-5,8,6);scene.add(key);
  const fill=new THREE.DirectionalLight(0x7c9dff,2);fill.position.set(7,4,-4);scene.add(fill);
- const floor=mat(0x242843,.45),trim=mat(0x7784d4,.4),black=mat(0x14182b),gold=mat(0xf8d64d,.35);
+ const floor=mat(ground,.45),trim=mat(0x7784d4,.4),black=mat(0x14182b),gold=mat(0xf8d64d,.35);
  mesh(scene,new THREE.CylinderGeometry(6.8,7,.32,64),floor,0,-.2,0);
  const ring=mesh(scene,new THREE.TorusGeometry(6.5,.045,10,80),new THREE.MeshBasicMaterial({color:0x70b8ff}),0,-.02,0);ring.rotation.x=Math.PI/2;
  const palette=[0xff6685,0x65b6ff,0xf8d64d,0x6ee5a3,0xa89bff,0xffa34f,0x5bd9db,0xf4a6df];
