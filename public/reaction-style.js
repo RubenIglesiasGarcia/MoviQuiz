@@ -1,0 +1,5 @@
+export const REVEAL_MS=7000;
+export function rankBefore(players){return [...players].sort((a,b)=>(a.previousRank??Infinity)-(b.previousRank??Infinity)||((b.score-(b.last||0))-(a.score-(a.last||0))));}
+export function movement(players,p){const old=rankBefore(players).findIndex(x=>x.id===p.id),now=players.findIndex(x=>x.id===p.id);return old<0||now<0?0:old-now;}
+function seed(s){let h=2166136261;for(const c of String(s)){h=Math.imul(h^c.charCodeAt(0),16777619);}return h>>>0;}
+export function reactionStyle(p={},round=0,rankMove=0){if(p.hits)return 'pie';if(p.fooled)return 'giggle';const pick=(xs)=>xs[(seed(p.id||p.name||'player')+Math.max(0,round))%xs.length];if(rankMove<0)return pick(['shrug','facepalm','slump']);if(rankMove>0&&p.reaction!=='wrong'&&p.reaction!=='timeout')return pick(['disco','fistpump','spin','bounce']);if(p.fast)return pick(['doublejump','fistpump','disco']);if(p.reaction==='correct')return pick(['bounce','disco','fistpump','spin']);if(p.reaction==='wrong')return pick(['facepalm','shrug','slump']);if(p.reaction==='timeout')return pick(['sleepy','shrug','slump']);return 'idle';}
