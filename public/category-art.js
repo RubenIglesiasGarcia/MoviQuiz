@@ -1,3 +1,4 @@
+import {levels} from './difficulty.js';
 const normalize=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const groups=[
  ['science','#aeeed1',/ciencia|tecnologia/,'M12 3v6l-6 10q-1 2 2 2h8q3 0 2-2L12 9M9 3h6M8 16h8M10 19h.1'],
@@ -14,6 +15,6 @@ const groups=[
  ['skill','#b7eaff',/memoria|observacion|percepcion/,'M2 12q10-14 20 0-10 14-20 0M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8']
 ];
 export function categoryArt(category){const g=groups.find(x=>x[2].test(normalize(category)));return g?{key:g[0],color:g[1],path:g[3]}:{key:'general',color:'#ffd55a',path:'M8 8a4 4 0 1 1 6 3q-2 1-2 4M12 20h.1'};}
-export function difficultyArt(d){return ({'Fácil':{level:1,color:'#77e2b2'},'Media':{level:2,color:'#ffd55a'},'Difícil':{level:3,color:'#ff9b9c'}})[d]||{level:0,color:'#d7c7e9'};}
+export function difficultyArt(d){const i=levels.findIndex(x=>x.id===d);return i<0?{level:0,color:'#d7c7e9',label:d}:{...levels[i],level:i+1};}
 export function categoryBadge(category){const a=categoryArt(category),span=document.createElement('span');span.className='category-emblem';span.style.setProperty('--category',a.color);const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');const path=document.createElementNS(svg.namespaceURI,'path');path.setAttribute('d',a.path);svg.append(path);const label=document.createElement('b');label.textContent=category||'General';span.append(svg,label);return span;}
-export function difficultyBadge(d){const a=difficultyArt(d),wrap=document.createElement('span');wrap.className='difficulty-emblem';wrap.style.setProperty('--difficulty',a.color);const bars=document.createElement('span');bars.className='difficulty-bars';bars.setAttribute('aria-hidden','true');for(let i=1;i<=3;i++){const bar=document.createElement('i');if(i<=a.level)bar.className='active';bars.append(bar);}const label=document.createElement('b');label.textContent=d||'Sin nivel';wrap.append(bars,label);wrap.setAttribute('aria-label','Dificultad: '+label.textContent);return wrap;}
+export function difficultyBadge(d){const a=difficultyArt(d),wrap=document.createElement('span');wrap.className='difficulty-emblem';wrap.style.setProperty('--difficulty',a.color);const bars=document.createElement('span');bars.className='difficulty-bars';bars.setAttribute('aria-hidden','true');for(let i=1;i<=5;i++){const bar=document.createElement('i');if(i<=a.level)bar.className='active';bars.append(bar);}const label=document.createElement('b');label.textContent=a.label||d||'Sin nivel';wrap.append(bars,label);wrap.setAttribute('aria-label','Dificultad: '+label.textContent);return wrap;}
