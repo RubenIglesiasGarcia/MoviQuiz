@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101226"><title>MobiQuiz — El concurso está en tus manos</title>
+<link rel="stylesheet" href="/style.css"><script src="/socket.io/socket.io.js" defer></script>
+<script src="https://accounts.google.com/gsi/client" async></script><script type="module" src="/app.js"></script>
+</head>
+<body><header id="header"><button class="brand" id="home" aria-label="Inicio"><span class="logo">M</span><span>Mobi<span class="accent">Quiz</span></span></button><span class="live"><i></i> CONCURSO EN DIRECTO</span><nav id="nav"></nav></header>
+<main id="app" aria-live="polite"></main><div id="toast" role="status"></div>
+<template id="home-template"><section class="hero"><div class="eyebrow"><span class="spark">✦</span> TU SALÓN, TU CONCURSO</div><h1>¿Listos para<br><em>jugar?</em></h1><p>La televisión es vuestro plató. El móvil es vuestro pulsador. Que empiece el espectáculo.</p><div class="hero-actions"><button class="primary" id="create">Crear partida <span>↗</span></button><button class="secondary" id="join">Unirme a una sala <span>→</span></button></div><div class="pills"><span>⚡ En directo</span><span>▣ Pantalla compartida</span><span>✦ Estadísticas personales</span></div></section><section class="hero-art" aria-hidden="true"><div class="halo"></div><div class="mock"><div class="mock-top"><span>RONDA 03</span><span class="mini-time">12s</span></div><div class="mock-title">¡Cada segundo cuenta!</div><div class="mock-grid"><div>A <small>CIENCIA</small></div><div>B <small>HISTORIA</small></div><div>C <small>MÚSICA</small></div><div>D <small>DEPORTE</small></div></div><div class="mock-footer"><span>● ● ●</span><span>1.850 PTS</span></div></div><div class="floating">✦ +1.000</div><div class="float2">⚡ RACHA X3</div></section><section class="feature-grid"><article><b>01 / JUEGA</b><h3>Un móvil, un mando</h3><p>Entra con un código y responde en tiempo real.</p></article><article><b>02 / COMPITE</b><h3>Mucho más que preguntas</h3><p>Imágenes, vídeos, audio, velocidad y retos de lógica.</p></article><article><b>03 / MEJORA</b><h3>Tu historial, tu progreso</h3><p>Descubre qué categorías dominas y cómo evolucionas.</p></article></section></template>
+</body></html>
