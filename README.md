@@ -41,3 +41,5 @@ También se puede seleccionar modo y dificultad en individual, con lobby previo 
 Arcade amplía a 13 rondas individuales con conteo visual y escalera numérica. En salas con dos o más jugadores, arcade y gran concurso incorporan dos dibujos en directo: palabra privada para el dibujante, trazos sincronizados en TV y móviles, intentos limitados y puntos compartidos. Las rondas de dibujo no son oficiales para XP de conocimientos. No existe moderación automática de dibujos; jugar con personas de confianza.
 
 Dirección artística ShowTime: cartel ilustrado SVG original, tickets físicos, paleta cálida morada/crema con colores del mando, Bungee para cartelería y Bricolage Grotesque para lectura. Se elimina Lit y se sustituyen los componentes por elementos web nativos propios. Las fuentes se empaquetan localmente.
+
+Identidad por categoría: emblemas SVG propios, acento cromático y dificultad de tres niveles. Fichas de concursante al acabar, restringidas al anfitrión y jugadores de la misma sala y partida; historial global optativo por sala y nunca se exponen IDs de cuenta, sesiones ni historial fechado. Las estadísticas de la partida son visibles a los participantes.
