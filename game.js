@@ -38,7 +38,7 @@ export function grade(q,a){
   default:return Number.isInteger(a)&&a===q.correct;
  }
 }
-export function points(q,correct,ms){if(!correct)return 0;const remaining=Math.max(0,1-ms/(q.seconds*1000));return Math.round((q.mode==='fast'?300:600)+(q.mode==='fast'?900:400)*remaining);}
+export function points(q,correct,ms){if(!correct)return 0;const remaining=Math.max(0,Math.min(1,1-ms/(q.seconds*1000)));if(q.party==='order-round'||q.party==='buzzer')return Math.round(800+400*remaining);return Math.round((q.mode==='fast'?300:600)+(q.mode==='fast'?900:400)*remaining);}
 function metric(rows){const valid=rows.filter(x=>x.ms!==null);const correct=rows.filter(x=>x.correct).length;return {total:rows.length,correct,accuracy:rows.length?Math.round(correct/rows.length*100):0,avgMs:valid.length?Math.round(valid.reduce((s,x)=>s+x.ms,0)/valid.length):null,points:rows.reduce((s,x)=>s+x.points,0),timeouts:rows.filter(x=>x.timeout).length};}
 function groups(rows,key){const map=new Map();for(const r of rows){const k=r[key];if(!map.has(k))map.set(k,[]);map.get(k).push(r);}return [...map].map(([name,rs])=>({name,...metric(rs)})).sort((a,b)=>b.total-a.total);}
 export function summarize(rows,matches){
