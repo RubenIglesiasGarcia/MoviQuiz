@@ -1,0 +1,3 @@
+export const levels=[{id:'Muy fácil',label:'Muy fácil',icon:'❄️',color:'#91dcff',hint:'Calentamiento · preguntas muy accesibles'},{id:'Fácil',label:'Fácil',icon:'🌱',color:'#77e2b2',hint:'Para jugar sin complicaciones'},{id:'Media',label:'Medio',icon:'⚡',color:'#ffd55a',hint:'Cultura general · el equilibrio ideal'},{id:'Difícil',label:'Difícil',icon:'🔥',color:'#ffab68',hint:'Un reto para los que saben mucho'},{id:'Muy difícil',label:'Muy difícil',icon:'🌋',color:'#ff829d',hint:'Nivel experto · pon a prueba tus conocimientos'}];
+export const difficultyIds=levels.map(x=>x.id);
+export function normalizeLevel(d){if(d==='Medio')return 'Media';return difficultyIds.includes(d)||d==='Mixta'?d:'Mixta';}
