@@ -16,7 +16,7 @@ export function validateQuestions(raw){
   const prompt=String(q.prompt||'').trim().slice(0,600),category=String(q.category||'General').slice(0,60);
   if(!prompt)throw Error('Falta el enunciado de la pregunta '+(i+1));
   const options=Array.isArray(q.options)?q.options.map(x=>String(x).slice(0,160)):undefined;
-  if(['choice','fast','order'].includes(q.mode)&&(!options||options.length<2||options.length>6||options.some(x=>!x.trim())))throw Error('Usa entre 2 y 6 opciones.');
+  if(['choice','fast','order'].includes(q.mode)&&(!options||options.length<2||options.length>6||options.some(x=>!x.trim())||new Set(options.map(x=>x.trim().toLowerCase())).size!==options.length))throw Error('Usa entre 2 y 6 opciones distintas.');
   const c=q.correct;
   if(['choice','fast'].includes(q.mode)&&(!Number.isInteger(c)||c<0||c>=options.length))throw Error('Índice de respuesta incorrecto.');
   if(q.mode==='boolean'&&typeof c!=='boolean')throw Error('La respuesta debe ser true o false.');
