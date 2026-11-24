@@ -5,7 +5,7 @@ const rows=[
 ['Fácil','Deporte','¿En qué deporte se usa una canasta?','Baloncesto','Rugby','Golf','Tenis'],
 ['Fácil','Ciencia','¿Qué estrella ilumina la Tierra?','Sol','Sirio','Vega','Polaris'],
 ['Fácil','Gastronomía','¿De qué se hace tradicionalmente la tortilla española?','Patata y huevo','Arroz y leche','Pan y queso','Pasta y tomate'],
-['Fácil','Geografía','¿En qué continente está Egipto?','África','Asia','Europa','Oceanía'],
+['Fácil','Geografía','¿En qué continente está la mayor parte del territorio de Egipto?','África','Asia','Europa','Oceanía'],
 ['Fácil','Música','¿Qué instrumento tiene teclas y pedales?','Piano','Violín','Flauta','Trompeta'],
 ['Fácil','Cultura','¿Cuántos minutos tiene una hora?','60','30','90','100'],
 ['Fácil','Videojuegos','¿Qué se recoge habitualmente en Sonic?','Anillos','Llaves','Setas','Cartas'],
