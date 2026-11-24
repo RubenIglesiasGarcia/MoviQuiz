@@ -1,4 +1,4 @@
-const CACHE='mobiquiz-shell-v28';
+const CACHE='mobiquiz-shell-v29';
 const SHELL=['/','/show-poster.svg','/style.css','/app.js','/round-results.js','/order.js','/draw-board.js','/category-art.js','/difficulty.js','/arcade-rules.js','/arcade-play.js','/reaction-style.js','/emotes.js','/face-crop.js','/generated/room-qr.js','/avatar.js','/progression.js','/effects.js','/generated/character3d.js','/cast.js','/generated/ui.js','/generated/ui.css','/manifest.webmanifest','/icons/mobiquiz-v2.webp','/icons/v2-192.png','/icons/v2-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)));self.skipWaiting();});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('mobiquiz-shell-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
