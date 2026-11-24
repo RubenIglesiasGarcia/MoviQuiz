@@ -19,3 +19,6 @@ El logo aprobado se sirve en /icons/mobiquiz-v2.webp; la compilación genera los
 
 ## Personajes y progresión
 Avatares 3D originales de geometría ligera con Three.js en vestuario, perfil, reacción personal y podio; marcador con fallback 2D. Los modelos se pueden girar arrastrando. XP y seis logros con accesorios verificados en servidor; solo partidas oficiales creadas sin JSON personalizado suman progresión, los resultados anteriores sin marca de oficial no se cuentan como XP. Sonidos originales sintetizados mediante Web Audio y botón de silencio; algunos navegadores requieren interacción previa. Los dispositivos sin WebGL usan el avatar 2D.
+
+### Plató 3D
+La vista TV muestra una escena Three.js con hasta ocho concursantes (el marcador conserva todos), atriles, pulsadores, luces y cámara animada. Usa geometría ligera y fallback sin WebGL. El vestuario permite captura frontal con guía ovalada y confirmación antes de subir la foto. Probar cámara, TV y Chromecast reales tras desplegar.
