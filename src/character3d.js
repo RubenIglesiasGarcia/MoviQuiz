@@ -33,7 +33,7 @@ export function syncStage(host,state){
  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.outputColorSpace=THREE.SRGBColorSpace;
  scene.add(new THREE.HemisphereLight(0xf5eaff,0x47466b,2.3));const key=new THREE.DirectionalLight(0xffe1b5,2.5);key.position.set(-5,8,6);scene.add(key);
  const fill=new THREE.DirectionalLight(0x7c9dff,2);fill.position.set(7,4,-4);scene.add(fill);
- const floor=mat(ground,.45),trim=mat(0x7784d4,.4),black=mat(0x14182b),gold=mat(0xf8d64d,.35);
+ const floor=mat(ground,.45),trim=mat(0x7784d4,.4),black=mat(0x14182b),gold=mat(0xf8d64d,.35),white=mat(0xffffff);
  mesh(scene,new THREE.CylinderGeometry(6.8,7,.32,64),floor,0,-.2,0);
  const ring=mesh(scene,new THREE.TorusGeometry(6.5,.045,10,80),new THREE.MeshBasicMaterial({color:0x70b8ff}),0,-.02,0);ring.rotation.x=Math.PI/2;
  const palette=[0xff6685,0x65b6ff,0xf8d64d,0x6ee5a3,0xa89bff,0xffa34f,0x5bd9db,0xf4a6df];

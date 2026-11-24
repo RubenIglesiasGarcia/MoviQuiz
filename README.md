@@ -45,3 +45,5 @@ Dirección artística ShowTime: cartel ilustrado SVG original, tickets físicos,
 Identidad por categoría: emblemas SVG propios, acento cromático y dificultad de tres niveles. Fichas de concursante al acabar, restringidas al anfitrión y jugadores de la misma sala y partida; historial global optativo por sala y nunca se exponen IDs de cuenta, sesiones ni historial fechado. Las estadísticas de la partida son visibles a los participantes.
 
 Perfil: pase de concursante con avatar, nivel y progreso XP en cabecera; cierre de sesión dentro del perfil. El diálogo de televisión prepara el SDK antes de pulsar conectar, muestra mensajes de configuración y conserva el enlace TV alternativo. El registro de Cast y las pruebas físicas siguen pendientes.
+
+Cast: se confirma la apertura de la sala desde la pantalla TV al emisor con mensajes custom bidireccionales, reintentos y errores visibles. Se corrige el material blanco del atrezo 3D. El receptor conserva su URL registrada; verificar con hardware real.
