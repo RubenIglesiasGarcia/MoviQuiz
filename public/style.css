@@ -130,3 +130,6 @@ body.tv-mode .screen[data-phase=finished]>.board{grid-template-columns:minmax(0,
 
 /* Keep the modal visible while hiding the question behind it. */
 body.tv-mode .screen[data-phase=reveal] .tv-results-overlay{visibility:visible}
+
+/* Category statistics share the quiz's category identity, including at 0%. */
+.category-stat{margin-top:16px}.category-stat>div:first-child{align-items:center;gap:8px}.category-stat>div:first-child>span{display:flex;align-items:center;gap:5px;min-width:0;flex-wrap:wrap}.category-stat .category-emblem{background:transparent;border:0;box-shadow:none;color:var(--stat-color);padding:0;font-size:clamp(14px,2vw,18px);gap:7px}.category-stat .category-emblem svg{width:22px;height:22px}.category-stat strong{color:var(--stat-color);font-variant-numeric:tabular-nums}.category-stat .bar{background:#ffffff12;height:10px;border-radius:6px;overflow:hidden;margin:8px 0 3px;box-shadow:inset 0 0 0 1px #ffffff0b}.category-stat .bar i{background:var(--stat-color);border-radius:6px}.category-stat>small{font-size:12px;color:#d7c7e9}.category-stat>div:first-child small{font-size:12px;white-space:nowrap}
