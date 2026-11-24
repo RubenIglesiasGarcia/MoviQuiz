@@ -9,8 +9,8 @@
     "check": "node --check worker.js && node --check game.js && node --check public/app.js && node --check public/sw.js",
     "test": "node --test",
     "deploy": "wrangler deploy",
-    "db:local": "wrangler d1 migrations apply mobiquiz-db --local",
-    "db:remote": "wrangler d1 migrations apply mobiquiz-db --remote"
+    "db:local": "wrangler d1 migrations apply DB --local",
+    "db:remote": "wrangler d1 migrations apply DB --remote"
   },
   "engines": {
     "node": ">=22"

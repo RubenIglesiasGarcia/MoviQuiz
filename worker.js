@@ -13,7 +13,7 @@ async function session(env,u){const token=hex(32);await env.DB.batch([env.DB.pre
 async function body(req){const t=await req.text();if(t.length>250000)throw Error('Petición demasiado grande.');return JSON.parse(t||'{}');}
 function audio(){const rate=16000,count=rate*2,b=new ArrayBuffer(44+count*2),v=new DataView(b),u=new Uint8Array(b);const w=(i,s)=>u.set(new TextEncoder().encode(s),i);w(0,'RIFF');v.setUint32(4,b.byteLength-8,true);w(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,rate,true);v.setUint32(28,rate*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,count*2,true);for(let i=0;i<count;i++){const t=i/rate,f=t<1?440:880,e=Math.min(1,t%1*20,(1-t%1)*20);v.setInt16(44+i*2,Math.round(9000*e*Math.sin(2*Math.PI*f*t)),true);}return new Response(b,{headers:{'Content-Type':'audio/wav','Cache-Control':'public, max-age=86400'}});}
 export default {async fetch(req,env){const url=new URL(req.url),p=url.pathname;try{
- if(p==='/privacy'||p==='/terms')return env.ASSETS.fetch(new Request(new URL(p+'.html',url),req));
+ if(p==='/privacy'||p==='/terms')return env.ASSETS.fetch(req);
  if(/^\/icons\/(180|192|512)\.png$/.test(p)){const asset=await env.ASSETS.fetch(req);if(asset.ok)return asset;return new Response(iconPng(Number(p.match(/\d+/)[0])),{headers:{'Content-Type':'image/png'}});}
  if(!p.startsWith('/api/'))return env.ASSETS.fetch(req);
  if(req.method==='GET'&&p==='/api/config')return json({googleClientId:env.GOOGLE_CLIENT_ID||''});

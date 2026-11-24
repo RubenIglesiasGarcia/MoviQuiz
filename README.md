@@ -3,7 +3,7 @@ PWA multijugador con móvil, TV opcional y modo individual. El backend de produc
 
 ## Configurar y desplegar
 Node 22 o superior. `npm install`, `npm run check`, `npm test`.
-Para desarrollo local: `npm run db:local`, `npm start` (puerto 8787). Para producción, ejecutar `npm run db:remote` y `npm run deploy` con autorización de Cloudflare, o conectar GitHub en Workers Builds. Configurar build command `npm install`, deploy command `npx wrangler d1 migrations apply mobiquiz-db --remote && npx wrangler deploy` (el token de build debe permitir D1 y Workers; si no, aplicar migración desde D1 SQL Console o CLI autorizado). La base D1 ya está referenciada en wrangler.jsonc. Usar plan gratuito y clase SQLite. No se necesita Pages ni un servidor Node permanente.
+Para desarrollo local: `npm run db:local`, `npm start` (puerto 8787). Para producción, ejecutar `npm run db:remote` y `npm run deploy` con autorización de Cloudflare, o conectar GitHub en Workers Builds. Configurar build command `npm install`, deploy command `npx wrangler d1 migrations apply DB --remote && npx wrangler deploy` (el token de build debe permitir D1 y Workers; si no, aplicar migración desde D1 SQL Console o CLI autorizado). La base D1 ya está referenciada en wrangler.jsonc. Usar plan gratuito y clase SQLite. No se necesita Pages ni un servidor Node permanente.
 
 En Worker > Settings > Variables and Secrets añade GOOGLE_CLIENT_ID (texto, ID público de cliente OAuth). En Google añade el origen HTTPS exacto y http://localhost:8787 para desarrollo, sin ruta. El modo invitado funciona sin Google. El logo oficial puede colocarse como archivos public/icons/{180,192,512}.png; el icono generado anterior sirve de respaldo.
 
