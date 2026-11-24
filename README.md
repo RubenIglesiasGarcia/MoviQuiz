@@ -14,3 +14,5 @@ Componentes visuales propios con Lit (escenario, pulsadores y contador segmentad
 
 ## Vestuario y pantalla TV
 Perfil persistente en D1, foto opcional redimensionada en el navegador y accesorios originales. La foto se muestra mediante URL aleatoria a quienes acceden a la sala; puede retirarse. Para Cast nativo registrar un Custom Web Receiver en https://cast.google.com/publish/ con URL HTTPS /cast-receiver.html, añadir CAST_APP_ID en Variables and Secrets y probar en un Chromecast registrado. Google cobra registro de desarrollador; no es obligatorio para abrir la vista TV por URL. Cast web no está soportado en Chrome iOS. El receptor aún requiere pruebas físicas.
+
+El logo aprobado se sirve en /icons/mobiquiz-v2.webp; la compilación genera los PNG de instalación en 180, 192 y 512 px. La versión de partida del logo está optimizada para tamaño pequeño.

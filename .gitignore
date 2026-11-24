@@ -4,3 +4,5 @@ data/
 *.log
 
 /public/generated/
+
+/public/icons/v2-*.png

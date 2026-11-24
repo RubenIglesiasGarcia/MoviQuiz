@@ -6,7 +6,7 @@
   "scripts": {
     "start": "wrangler dev",
     "dev": "wrangler dev",
-    "check": "node --check worker.js && node --check game.js && node --check public/app.js && node --check public/sw.js && node --check src/ui.js && node --check scripts/build-ui.mjs",
+    "check": "node --check worker.js && node --check game.js && node --check public/app.js && node --check public/sw.js && node --check src/ui.js && node --check scripts/build-ui.mjs && node --check public/avatar.js && node --check public/cast.js",
     "test": "node --test",
     "deploy": "wrangler deploy",
     "db:local": "wrangler d1 migrations apply DB --local",
@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "wrangler": "^4.0.0",
-    "esbuild": "^0.25.0"
+    "esbuild": "^0.25.0",
+    "sharp": "^0.34.0"
   }
 }
