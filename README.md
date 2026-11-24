@@ -39,3 +39,5 @@ Modos: clásico con dificultad estricta (12 preguntas), gran concurso con prueba
 También se puede seleccionar modo y dificultad en individual, con lobby previo para el vestuario. Espacial, tropical y retro incorporan decoración 3D procedural propia. La señal de reflejos no publica su instante de inicio antes de activarse.
 
 Arcade amplía a 13 rondas individuales con conteo visual y escalera numérica. En salas con dos o más jugadores, arcade y gran concurso incorporan dos dibujos en directo: palabra privada para el dibujante, trazos sincronizados en TV y móviles, intentos limitados y puntos compartidos. Las rondas de dibujo no son oficiales para XP de conocimientos. No existe moderación automática de dibujos; jugar con personas de confianza.
+
+Dirección artística ShowTime: cartel ilustrado SVG original, tickets físicos, paleta cálida morada/crema con colores del mando, Bungee para cartelería y Bricolage Grotesque para lectura. Se elimina Lit y se sustituyen los componentes por elementos web nativos propios. Las fuentes se empaquetan localmente.
