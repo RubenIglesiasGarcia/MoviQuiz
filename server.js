@@ -4,6 +4,7 @@ import { Server } from 'socket.io';
 import { randomBytes, createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync, renameSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
+import { iconPng } from './icons.js';
 import { OAuth2Client } from 'google-auth-library';
 import { questions as defaults, validateQuestions, grade, points, summarize } from './game.js';
 
@@ -58,14 +59,16 @@ app.get('/api/sample-audio',(_req,res)=>{
   for(let i=0;i<count;i++){const t=i/rate;const f=t<1?440:880;const env=Math.min(1,(t%1)*20,(1-t%1)*20);b.writeInt16LE(Math.round(9000*env*Math.sin(2*Math.PI*f*t)),44+2*i);}
   res.type('audio/wav').send(b);
 });
+app.get('/icons/:size.png',(req,res)=>{const size=Number(req.params.size);if(![192,512,180].includes(size))return res.sendStatus(404);res.type('png').set('Cache-Control','public, max-age=86400').send(iconPng(size));});
 app.use(express.static('public'));
+app.get('/sw.js',(_req,res)=>res.sendFile(resolve('public/sw.js')));
 
 const rooms=new Map();
 function code(){let c;do{c=randomBytes(3).toString('hex').toUpperCase();}while(rooms.has(c));return c;}
 function publicState(r){
   const q=r.questions[r.index], reveal=r.phase==='reveal'||r.phase==='finished';
   const question=q?{id:q.id,category:q.category,mode:q.mode,prompt:q.prompt,options:q.options,media:q.media,seconds:q.seconds,difficulty:q.difficulty,...(reveal?{correct:q.correct,tolerance:q.tolerance,explanation:q.explanation}: {})}:null;
-  return {code:r.code,phase:r.phase,index:r.index,total:r.questions.length,question,deadline:r.deadline,serverNow:Date.now(),players:[...r.players.values()].map(p=>({id:p.publicId,name:p.name,score:p.score,answered:r.answers.has(p.userId),...(reveal?{last:r.answers.get(p.userId)?.points||0}: {})})).sort((a,b)=>b.score-a.score),answered:r.answers.size};
+  return {code:r.code,solo:r.solo,hostPlays:r.hostPlays,phase:r.phase,index:r.index,total:r.questions.length,question,deadline:r.deadline,serverNow:Date.now(),players:[...r.players.values()].map(p=>({id:p.publicId,name:p.name,score:p.score,answered:r.answers.has(p.userId),...(reveal?{last:r.answers.get(p.userId)?.points||0}: {})})).sort((a,b)=>b.score-a.score),answered:r.answers.size};
 }
 function broadcast(r){io.to(r.code).emit('state',publicState(r));}
 function closeRound(r){
@@ -84,7 +87,7 @@ function next(r){
   if(!r.players.size)throw Error('Debe entrar al menos un jugador.');
   if(r.index+1>=r.questions.length){
     const top=Math.max(...[...r.players.values()].map(p=>p.score));
-    for(const p of r.players.values())db.matches.push({userId:p.userId,matchId:r.matchId,score:p.score,win:p.score===top,at:new Date().toISOString()});
+    for(const p of r.players.values())db.matches.push({userId:p.userId,matchId:r.matchId,score:p.score,solo:r.solo,win:!r.solo&&r.players.size>1&&p.score===top,at:new Date().toISOString()});
     save();r.phase='finished';broadcast(r);return;
   }
   r.index++;r.answers.clear();r.phase='question';r.started=Date.now();r.deadline=r.started+r.questions[r.index].seconds*1000;
@@ -99,10 +102,12 @@ io.on('connection',s=>{
   function enter(r,role){if(s.data.code)s.leave(s.data.code);s.data.code=r.code;s.data.role=role;s.join(r.code);}
   function room(){const r=rooms.get(s.data.code);if(!r)throw Error('Sala no encontrada.');return r;}
   function host(){const r=room();if(s.data.role!=='host'||identity()?.id!==r.host)throw Error('Solo el presentador puede controlar la partida.');return r;}
-  call('create',({questions})=>{
+  call('create',({questions,hostPlays=false,solo=false})=>{
     const u=identity();if(!u)throw Error('Identifícate primero.');
     const r={code:code(),matchId:token(),host:u.id,questions:validateQuestions(questions||defaults),players:new Map(),answers:new Map(),index:-1,phase:'lobby',deadline:null};
-    rooms.set(r.code,r);enter(r,'host');return {state:publicState(r)};
+    r.solo=solo===true;r.hostPlays=hostPlays===true||r.solo;
+    if(r.hostPlays)r.players.set(u.id,{userId:u.id,publicId:randomBytes(8).toString('hex'),name:u.name,score:0});
+    rooms.set(r.code,r);enter(r,'host');if(r.solo)next(r);return {state:publicState(r),playerId:r.players.get(u.id)?.publicId};
   });
   call('join',({code,role})=>{
     const r=rooms.get(String(code||'').trim().toUpperCase());if(!r)throw Error('No existe esa sala.');
@@ -110,6 +115,7 @@ io.on('connection',s=>{
     if(role==='host'){if(u?.id!==r.host)throw Error('No eres el presentador.');}
     else if(role==='player'){
       if(!u)throw Error('Identifícate primero.');
+      if(r.solo)throw Error('Esta partida es individual.');
       if(!r.players.has(u.id)){
         if(r.phase!=='lobby')throw Error('La partida ya ha comenzado.');
         if(r.players.size>=32)throw Error('La sala está llena.');
@@ -120,11 +126,12 @@ io.on('connection',s=>{
     return {state:publicState(r),playerId:r.players.get(u?.id)?.publicId};
   });
   call('next',()=>{next(host());return {};});
-  call('reveal',()=>{closeRound(host());return {};});
-  call('answer',({answer})=>{
+  call('reveal',()=>{const r=host();if(r.hostPlays)throw Error('Espera a que termine el tiempo o respondan todos.');closeRound(r);return {};});
+  call('answer',({answer,questionId})=>{
     const r=room(),u=identity(),q=r.questions[r.index];
-    if(s.data.role!=='player'||!u||!r.players.has(u.id))throw Error('No eres un jugador de esta sala.');
+    if(!['player','host'].includes(s.data.role)||!u||!r.players.has(u.id))throw Error('No eres un jugador de esta sala.');
     if(r.phase!=='question'||Date.now()>=r.deadline)throw Error('El tiempo ha terminado.');
+    if(questionId!==q.id)throw Error('La pregunta ha cambiado.');
     if(r.answers.has(u.id))throw Error('Ya has respondido.');
     if(!['string','number'].includes(typeof answer)&&!Array.isArray(answer))throw Error('Respuesta inválida.');
     if(JSON.stringify(answer).length>1000)throw Error('Respuesta demasiado larga.');

@@ -31,3 +31,6 @@ Los índices comienzan en 0. Para ordenar, correct es un array de índices. Para
 
 ## Siguientes pasos
 Editor visual de preguntas, QR, Cast nativo opcional, reconexión de sala tras reinicio, banco de contenidos, ligas, logros y rankings sociales.
+
+## Móvil y PWA
+No se necesita ordenador para jugar una vez desplegada la app en un servidor HTTPS. Un móvil puede crear la sala y jugar a la vez; los demás entran mediante enlace compartido o código. La televisión es opcional: abre o comparte su enlace de solo lectura. El modo individual comienza inmediatamente y guarda estadísticas, sin sumar victorias competitivas. En Android usa Instalar aplicación; en iOS, Safari > Compartir > Añadir a pantalla de inicio. El servicio worker solo cachea la interfaz básica como respaldo; jugar y acceder a las estadísticas requiere conexión. Google sigue requiriendo un cliente OAuth con el origen HTTPS autorizado y `GOOGLE_CLIENT_ID` configurado. En producción, no uses GitHub Pages solo: hace falta un servidor Node con Socket.IO y almacenamiento persistente. Para las pruebas por Wi-Fi, los invitados pueden usar la IP local del servidor; Google requiere un origen autorizado seguro (o localhost para desarrollo).

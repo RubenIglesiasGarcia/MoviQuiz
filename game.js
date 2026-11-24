@@ -42,5 +42,5 @@ function metric(rows){const valid=rows.filter(x=>x.ms!==null);const correct=rows
 function groups(rows,key){const map=new Map();for(const r of rows){const k=r[key];if(!map.has(k))map.set(k,[]);map.get(k).push(r);}return [...map].map(([name,rs])=>({name,...metric(rs)})).sort((a,b)=>b.total-a.total);}
 export function summarize(rows,matches){
  const dates=groups(rows.map(r=>({...r,day:r.at.slice(0,10)})),'day').sort((a,b)=>a.name.localeCompare(b.name));
- return {...metric(rows),matches:matches.length,wins:matches.filter(m=>m.win).length,bestScore:Math.max(0,...matches.map(m=>m.score)),byCategory:groups(rows,'category'),byMode:groups(rows,'mode'),byMedia:groups(rows,'media'),byDifficulty:groups(rows,'difficulty'),trend:dates.slice(-30),recent:matches.slice(-12).reverse().map(({at,score,win})=>({at,score,win}))};
+ return {...metric(rows),matches:matches.length,wins:matches.filter(m=>m.win).length,bestScore:Math.max(0,...matches.map(m=>m.score)),byCategory:groups(rows,'category'),byMode:groups(rows,'mode'),byMedia:groups(rows,'media'),byDifficulty:groups(rows,'difficulty'),trend:dates.slice(-30),recent:matches.slice(-12).reverse().map(({at,score,win,solo})=>({at,score,win,solo}))};
 }
