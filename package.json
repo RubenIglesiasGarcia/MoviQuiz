@@ -4,10 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "check": "node --check server.js && node --check game.js && node --check public/app.js",
-    "test": "node --test"
+    "start": "wrangler dev",
+    "dev": "wrangler dev",
+    "check": "node --check worker.js && node --check game.js && node --check public/app.js && node --check public/sw.js",
+    "test": "node --test",
+    "deploy": "wrangler deploy",
+    "db:local": "wrangler d1 migrations apply mobiquiz-db --local",
+    "db:remote": "wrangler d1 migrations apply mobiquiz-db --remote"
   },
   "engines": {
     "node": ">=22"
@@ -15,6 +18,10 @@
   "dependencies": {
     "express": "^5.1.0",
     "socket.io": "^4.8.1",
-    "google-auth-library": "^9.15.1"
+    "google-auth-library": "^9.15.1",
+    "jose": "^6.1.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
   }
 }

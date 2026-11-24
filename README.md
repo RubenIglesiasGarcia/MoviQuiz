@@ -1,36 +1,10 @@
-# MobiQuiz
+# MobiQuiz — Cloudflare Workers
+PWA multijugador con móvil, TV opcional y modo individual. El backend de producción usa Durable Objects SQLite (estado y alarmas de sala, WebSocket hibernable), D1 (usuarios, sesiones y estadísticas) y Google Identity Services (verificación JWT RS256 en el Worker). El antiguo server.js se conserva como referencia, no como backend de producción.
 
-Concurso multijugador para una TV o proyector y móviles, inspirado en los concursos de pulsadores.
+## Configurar y desplegar
+Node 22 o superior. `npm install`, `npm run check`, `npm test`.
+Para desarrollo local: `npm run db:local`, `npm start` (puerto 8787). Para producción, ejecutar `npm run db:remote` y `npm run deploy` con autorización de Cloudflare, o conectar GitHub en Workers Builds. Configurar build command `npm install`, deploy command `npx wrangler d1 migrations apply mobiquiz-db --remote && npx wrangler deploy` (el token de build debe permitir D1 y Workers; si no, aplicar migración desde D1 SQL Console o CLI autorizado). La base D1 ya está referenciada en wrangler.jsonc. Usar plan gratuito y clase SQLite. No se necesita Pages ni un servidor Node permanente.
 
-## Ejecutar
-Requiere Node.js 22 o superior.
+En Worker > Settings > Variables and Secrets añade GOOGLE_CLIENT_ID (texto, ID público de cliente OAuth). En Google añade el origen HTTPS exacto y http://localhost:8787 para desarrollo, sin ruta. El modo invitado funciona sin Google. El logo oficial puede colocarse como archivos public/icons/{180,192,512}.png; el icono generado anterior sirve de respaldo.
 
-```sh
-npm install
-npm test
-npm run check
-npm start
-```
-
-Abre http://localhost:3000. Para jugar desde móviles en la misma Wi-Fi, abre la IP local del ordenador con el puerto 3000 y permite el acceso en el cortafuegos. El presentador crea una sala, abre la vista TV y comparte el enlace o código. Para televisión se puede usar un navegador de TV, HDMI o transmitir la pestaña de Chrome desde el sistema; no incorpora una integración Cast nativa.
-
-## Google
-Crea un cliente OAuth de tipo aplicación web en Google Cloud, añade los orígenes JavaScript autorizados (localhost para desarrollo y el dominio HTTPS de producción) y configura `GOOGLE_CLIENT_ID` en el entorno del servidor. No hace falta colocar un secreto OAuth en el frontend. Se verifica el token de identidad en el servidor. Sin esta configuración se puede jugar como invitado. Los perfiles de invitado y de Google son independientes.
-
-## Persistencia
-Las respuestas (incluidas las no contestadas), resultados, perfiles y sesiones se guardan en `data/store.json`. Configura `DATA_FILE` con una ubicación persistente y privada en producción. Esta versión usa una instancia Node única, memoria para salas activas y almacenamiento JSON local: las estadísticas se conservan al reiniciar, las salas activas no. Para una publicación a escala, sustituir por una base de datos transaccional y almacenamiento de estado compartido, añadir límites de petición y políticas de privacidad/retención. Usar HTTPS en producción.
-
-## Pruebas
-Opción múltiple, velocidad, verdadero/falso, estimación numérica, ordenar y texto libre. Cualquiera puede acompañarse de imagen, vídeo o audio mediante una URL HTTPS o una ruta local. Las respuestas correctas se mantienen en el servidor hasta revelar. Hay ocho preguntas de demostración, una de ellas usa un vídeo externo de MDN.
-
-El presentador puede cargar un array JSON al crear la sala. Ejemplo:
-```json
-[{"category":"Geografía","mode":"choice","prompt":"¿Cuál es la capital de Portugal?","options":["Oporto","Lisboa","Braga","Faro"],"correct":1,"seconds":20,"difficulty":"Fácil"}]
-```
-Los índices comienzan en 0. Para ordenar, correct es un array de índices. Para número, correct es un número y tolerance es opcional. Para verdadero/falso, correct es booleano. Para texto, correct es una cadena. La puntuación combina acierto y velocidad; la prueba rápida aumenta el peso de la velocidad. El porcentaje incluye las preguntas no respondidas y el tiempo medio excluye las no respondidas. Los empates cuentan como victoria compartida.
-
-## Siguientes pasos
-Editor visual de preguntas, QR, Cast nativo opcional, reconexión de sala tras reinicio, banco de contenidos, ligas, logros y rankings sociales.
-
-## Móvil y PWA
-No se necesita ordenador para jugar una vez desplegada la app en un servidor HTTPS. Un móvil puede crear la sala y jugar a la vez; los demás entran mediante enlace compartido o código. La televisión es opcional: abre o comparte su enlace de solo lectura. El modo individual comienza inmediatamente y guarda estadísticas, sin sumar victorias competitivas. En Android usa Instalar aplicación; en iOS, Safari > Compartir > Añadir a pantalla de inicio. El servicio worker solo cachea la interfaz básica como respaldo; jugar y acceder a las estadísticas requiere conexión. Google sigue requiriendo un cliente OAuth con el origen HTTPS autorizado y `GOOGLE_CLIENT_ID` configurado. En producción, no uses GitHub Pages solo: hace falta un servidor Node con Socket.IO y almacenamiento persistente. Para las pruebas por Wi-Fi, los invitados pueden usar la IP local del servidor; Google requiere un origen autorizado seguro (o localhost para desarrollo).
+La política de privacidad y términos son borradores para revisar antes de publicación pública; añadir identidad y correo de contacto del responsable, revisar retención y dominio autorizado. Las salas expiran en 24 horas sin actividad; el perfil se puede eliminar desde estadísticas. Las estadísticas consultan las últimas 10.000 respuestas y 2.000 partidas. Las partidas necesitan Internet. Se conservan las seis modalidades de pregunta y las ocho preguntas de ejemplo. Revisar límites, abuso y pruebas entre dispositivos antes de lanzamiento general.
