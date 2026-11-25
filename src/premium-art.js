@@ -26,7 +26,7 @@ export function enrichAvatar({root,torso,head,arms,legs,skin,dark,white,hair,shi
   plate(torso,cream,[[-.22,1.37],[.22,1.37],[.11,.86],[-.11,.86]],.305);
   for(const s of [-1,1]){
    plate(torso,lapel,[[s*.05,1.44],[s*.31,1.34],[s*.21,1.12],[s*.32,1.10],[s*.09,.82]],.326);
-   const cuff=add(arms[s===1?1:0],new THREE.CylinderGeometry(.13,.13,.07,16),cream,s*.15,-.29,.02);cuff.rotation.z=s*.10;
+   // Sleeve cuffs are integrated into the sculpted body.
    // Existing avatar eyebrows are retained; one silhouette per eye.
   }
   sphere(torso,gold,-.10,1.37,.34,.13,.06,.035);sphere(torso,gold,.10,1.37,.34,.13,.06,.035);sphere(torso,lapel,0,1.37,.37,.048,.055,.035);
@@ -35,8 +35,7 @@ export function enrichAvatar({root,torso,head,arms,legs,skin,dark,white,hair,shi
   // Sculpted hair swept upward with a single coherent silhouette.
   for(let i=0;i<4;i++){const lock=sphere(head,hair,-.30+i*.17,.43+i*.026,.10,.19,.22,.30);lock.rotation.z=-.35;}
  }else{
-  for(const s of [-1,1]){const cuff=add(arms[s===1?1:0],new THREE.CylinderGeometry(.135,.135,.05,12),seam,s*.15,-.28,.02);cuff.rotation.z=s*.1;}
-  plate(torso,seam,[[-.25,.91],[.25,.91],[.23,.95],[-.23,.95]],.305);
+  // Player seams and hems are integrated into the sculpted body.
  }
  const iris=standard(host?0x694538:0x655f86,.37),nose=sphere(head,skin,0,-.05,.475,.093,.105,.09);
  facialFeatures.push(nose);
@@ -46,7 +45,7 @@ export function enrichAvatar({root,torso,head,arms,legs,skin,dark,white,hair,shi
  lip.renderOrder=0;mouth.position.z=.487;mouth.renderOrder=1;facialFeatures.push(lip);
  const teeth=sphere(head,white,0,-.202,.508,.077,.015,.016),tongue=sphere(head,standard(0xce797d),0,-.245,.505,.055,.016,.012);
  teeth.visible=false;tongue.visible=false;facialFeatures.push(teeth,tongue);
- for(const s of [-1,1]){const shoe=legs[s===1?1:0];if(host)sphere(shoe,dark,0,-.49,.20,.217,.12,.23);}
+ // Shoes are now fully modelled in the body module.
  return {lip,teeth,tongue,host,facialFeatures};
 }
 export function articulate(model,amount,time=0){
