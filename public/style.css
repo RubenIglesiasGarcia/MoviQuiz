@@ -203,3 +203,54 @@ body.tv-mode .tv-results-overlay .round-result-list{flex:1 1 0;min-height:0}
 body.tv-mode .tv-results-overlay .result-show-footer{flex:0 0 auto}
 body.tv-mode .tv-results-overlay .result-delta{font-variant-numeric:tabular-nums;opacity:1}
 body.tv-mode .tv-results-overlay[data-step=answer] .result-delta{opacity:.35}
+
+/* Arcade: TV is the arena, phone can become a dedicated landscape gamepad. */
+.arcade-pad-tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.arcade-pad-tools[hidden],.arcade-arena[hidden],.arcade-timing[hidden],.arcade-live-scores[hidden],.arcade-rotate[hidden]{display:none!important}
+.arcade-rotate{font-size:12px;text-align:center;color:#ffd55a;margin:0}
+.arcade-combo{color:#ffd55a;font-size:clamp(12px,2vw,22px);font-weight:900}
+.arcade-input{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;user-select:none;-webkit-user-select:none;touch-action:none;-webkit-tap-highlight-color:transparent}
+.pad-symbol{font:900 clamp(30px,6vw,62px)/1 system-ui}
+.pad-label{font-weight:900;font-size:clamp(12px,2.4vw,19px)}
+.arcade-live-scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:5px;max-height:18vh;overflow:auto}
+.arcade-live-player{display:flex;align-items:center;gap:6px;min-width:0;background:#211632;border:1px solid #73579a;border-radius:8px;padding:5px 8px}
+.arcade-live-player b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;font-size:clamp(10px,1.5vh,18px)}
+.arcade-live-player strong{color:#ffd55a;white-space:nowrap;font-variant-numeric:tabular-nums}
+.arcade-live-player small{color:#77e2b2}
+.arcade-pad-mode{position:fixed;inset:0;width:100%;height:100vh;height:100dvh;min-height:0;overflow:hidden;overscroll-behavior:none}
+body.arcade-pad-mode>#header,body.arcade-pad-mode>footer,body.arcade-pad-mode #app>.room-head,body.arcade-pad-mode #app>.host-controls,body.arcade-pad-mode #app .side{display:none}
+body.arcade-pad-mode #app{width:100%;height:100%;max-width:none;padding: max(5px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));margin:0;overflow:hidden}
+body.arcade-pad-mode #app>.board{display:block;height:100%;margin:0}
+body.arcade-pad-mode #round{height:100%;min-height:0;padding:0;background:transparent;box-shadow:none;border:0;overflow:hidden;display:flex;flex-direction:column;gap:0}
+body.arcade-pad-mode #round>:not(#answers){display:none}
+body.arcade-pad-mode #answers{height:100%;min-height:0;display:flex}
+.tv-gamepad{width:100%;height:100%;min-height:0;display:grid;grid-template-rows:auto auto auto auto minmax(0,1fr) auto;gap:clamp(4px,1.7vh,10px);align-content:stretch}
+.tv-gamepad .arcade-hud{grid-row:1;justify-content:space-between;font-size:clamp(11px,2.9vh,19px)}
+.tv-gamepad .arcade-beats{grid-row:2}
+.tv-gamepad .arcade-pad-tools{grid-row:3;justify-content:space-between}
+.tv-gamepad .arcade-pad-tools button{padding:5px 10px;font-size:11px;min-height:30px}
+.tv-gamepad .arcade-rotate{grid-row:4}
+.tv-gamepad .arcade-buttons{grid-row:5;min-height:0;align-items:stretch;gap:clamp(10px,3vw,28px);padding:4px 4px 8px}
+.tv-gamepad .arcade-input{height:100%;min-height:0;border:3px solid #171024;border-radius:22px 32px 22px 32px;box-shadow:0 7px #100b22,inset 0 3px #ffffff65;transition:transform .08s,filter .08s}
+.tv-gamepad .arcade-input:active{transform:translateY(4px);filter:brightness(1.15)}
+.tv-gamepad .arcade-input:disabled{opacity:.55}
+.tv-gamepad .arcade-input[data-action=jump],.tv-gamepad .arcade-input[data-action=shoot]{background:#ffd55a}
+.tv-gamepad .arcade-input[data-action=right],.tv-gamepad .arcade-input[data-action="2"]{background:#ff9b9c}
+.tv-gamepad .arcade-input[data-action=left],.tv-gamepad .arcade-input[data-action="0"]{background:#79c9ff}
+.tv-gamepad .pad-symbol{font-size:clamp(29px,15vh,75px)}
+.tv-gamepad .pad-label{font-size:clamp(11px,3.5vh,20px)}
+.tv-gamepad .arcade-hint{grid-row:6;margin:0;min-height:1.3em;text-align:center;font-weight:900;font-size:clamp(11px,3vh,18px)}
+.tv-gamepad[data-hit=yes] .arcade-hint{color:#77e2b2}
+.tv-gamepad[data-hit=no] .arcade-hint{color:#ff9b9c}
+body.tv-mode .screen[data-arcade=true][data-phase=question]>.board{display:grid;grid-template-columns:minmax(0,1fr)}
+body.tv-mode .screen[data-arcade=true][data-phase=question] .side{display:none}
+body.tv-mode .screen[data-arcade=true][data-phase=question] .question{padding:1vh 1vw}
+body.tv-mode .screen[data-arcade=true][data-phase=question] .question-format,body.tv-mode .screen[data-arcade=true][data-phase=question] .question-identity,body.tv-mode .screen[data-arcade=true][data-phase=question] .question h2,body.tv-mode .screen[data-arcade=true][data-phase=question] .round-rule{display:none}
+body.tv-mode .screen .arcade-arena{height:52vh;min-height:0;border-radius:1vw;box-shadow:0 .4vh #100b22}
+body.tv-mode .screen .arcade-cue{font-size:clamp(16px,3.3vh,43px)}
+body.tv-mode .screen .arcade-timing{height:2.7vh}
+body.tv-mode .screen .arcade-hint{font-size:clamp(11px,1.8vh,22px);margin:0}
+body.tv-mode .screen .arcade-live-scores{grid-template-columns:repeat(auto-fit,minmax(12vw,1fr));max-height:16vh}
+.odd-grid{grid-template-columns:repeat(auto-fit,minmax(min(54px,18%),1fr))}
+.number-hunt{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(orientation:portrait){.tv-gamepad .arcade-buttons{grid-template-columns:repeat(3,minmax(0,1fr));max-height:44vh}.tv-gamepad.arcade-hoops .arcade-buttons{grid-template-columns:1fr}}
