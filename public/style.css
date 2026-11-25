@@ -264,3 +264,18 @@ body.tv-mode .screen .arcade-live-scores{grid-template-columns:repeat(auto-fit,m
 .arcade-2d-lane.safe{border-color:#77e2b2;background:radial-gradient(ellipse,#387b64,#31274e 75%)}
 .arcade-2d-players{display:flex;flex-wrap:wrap;justify-content:center;gap:5px}
 .arcade-2d-person{font-size:clamp(10px,1.7vh,20px);background:#201438;border:1px solid #9d8ac6;border-radius:8px;padding:4px 8px}
+
+/* Prerecorded presenter, visible on the TV even during score reveals. */
+.voice-presenter{display:flex;align-items:center;gap:12px;width:100%;min-width:0;padding:6px 10px;background:linear-gradient(120deg,#4c3378,#251736);border:2px solid #ffd55a;border-radius:12px;color:#fff1d3;text-align:left}
+.voice-presenter-avatar{position:relative;display:grid;place-items:center;flex:0 0 auto;width:64px;height:76px;background:radial-gradient(ellipse,#9a74ce,#3d285b);border-radius:50%;overflow:hidden}
+.voice-presenter-avatar .character3d{position:absolute;inset:0;width:100%;height:100%;display:block}
+.voice-presenter-avatar.has-3d .voice-presenter-fallback{display:none}
+.voice-presenter-fallback{font-size:28px}
+.voice-presenter-copy{display:grid;gap:3px;min-width:0;flex:1}
+.voice-presenter-copy strong{color:#ffd55a;font-size:11px;letter-spacing:.1em}
+.voice-presenter-copy span{font-weight:800;overflow-wrap:anywhere;font-size:clamp(13px,2vh,25px)}
+body.tv-mode .voice-presenter{padding:.4vh .8vw;gap:.8vw}
+body.tv-mode .voice-presenter-avatar{width:7vh;height:8vh}
+body.tv-mode .voice-presenter-copy strong{font-size:clamp(10px,1.4vh,17px)}
+body.tv-mode .voice-presenter-copy span{font-size:clamp(13px,2.15vh,28px)}
+#presenter-line:has(.voice-presenter)>.presenter-name,#presenter-line:has(.voice-presenter)>.presenter-speech{display:none}
