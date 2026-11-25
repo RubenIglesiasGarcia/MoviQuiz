@@ -279,3 +279,11 @@ body.tv-mode .voice-presenter-avatar{width:7vh;height:8vh}
 body.tv-mode .voice-presenter-copy strong{font-size:clamp(10px,1.4vh,17px)}
 body.tv-mode .voice-presenter-copy span{font-size:clamp(13px,2.15vh,28px)}
 #presenter-line:has(.voice-presenter)>.presenter-name,#presenter-line:has(.voice-presenter)>.presenter-speech{display:none}
+
+/* Premium studio surface: practical highlights and a cleaner broadcast frame. */
+.tv-stage,.arcade-arena{background:radial-gradient(ellipse at 48% 12%,#493774,#161124 70%);isolation:isolate}
+.tv-stage:after,.arcade-arena:after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 38px #08041470,inset 0 0 0 1px #d5c0ff26;z-index:1}
+.arcade-cue{z-index:2;background:#21152be8;letter-spacing:.025em;box-shadow:0 4px 14px #100b2266}
+.voice-presenter{background:linear-gradient(115deg,#3e285b,#171021 75%);box-shadow:inset 0 0 0 1px #f3d27b33}
+.voice-presenter-avatar{background:radial-gradient(ellipse at 40% 25%,#c8a6ff,#3d285b 65%,#1a112b);border:1px solid #ad8ce5}
+body.tv-mode .voice-presenter-avatar{width:9vh;height:9vh}
