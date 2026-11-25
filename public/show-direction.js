@@ -19,8 +19,8 @@ export function showScene(state){
  return {kind,theme,finale,opening,title:party==='final'?'GRAN FINAL · ×'+(q.multiplier||2):last?'ÚLTIMA RONDA · '+style[1]:style[1],tag:state?.kind==='arcade'?'MOBIQUIZ / ARCADE':'MOBIQUIZ / EL PLATÓ',subtitle:style[2]};
 }
 export function resultTimeline(state,now){
- const duration=Math.max(0,(state.revealUntil||0)-(state.revealStarted||0))||10000;
- const elapsed=Math.max(0,now-(state.revealStarted||state.revealUntil-duration||now));
+ const start=Number(state.revealStarted)||0,end=Number(state.revealUntil)||0;const duration=start&&end>start?end-start:10000;
+ const elapsed=Math.max(0,now-(start||(end?end-duration:now)));
  const quick=duration<8000,pointStart=quick?1000:2200,pointDuration=quick?1200:2000,rankAt=quick?2600:5200;
  return {elapsed,duration,pointStart,pointDuration,rankAt,stage:elapsed>=rankAt?'rank':elapsed>=pointStart?'points':'answer'};
 }
@@ -38,4 +38,4 @@ export function standingsSpotlight(players=[]){
  const margin=players[1]?leader.score-players[1].score:null;
  return {kind:'leader',title:'AL FRENTE DEL MARCADOR',detail:leader.name+(margin!==null?' · '+margin.toLocaleString('es-ES')+' pts de ventaja':''),ids:[leader.id]};
 }
-export function applyShowScene(root,state){const scene=showScene(state);root.dataset.showScene=scene.kind;root.dataset.showFinal=String(scene.finale);root.style.setProperty('--show-accent',scene.theme);return scene;}
+export function applyShowScene(root,state){const scene=showScene(state);if(root.dataset.showScene!==scene.kind)root.dataset.showScene=scene.kind;if(root.dataset.showFinal!==String(scene.finale))root.dataset.showFinal=String(scene.finale);if(root.style.getPropertyValue('--show-accent')!==scene.theme)root.style.setProperty('--show-accent',scene.theme);return scene;}
