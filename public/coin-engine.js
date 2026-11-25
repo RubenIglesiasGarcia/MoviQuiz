@@ -38,7 +38,7 @@ export function controlCoins(action,id,input,now){
  const match=/^(-?\d{1,3}),(-?\d{1,3}),([01])$/.exec(input);if(!match)throw Error('Control inválido.');
  const x=Number(match[1]),z=Number(match[2]);if(Math.abs(x)>100||Math.abs(z)>100)throw Error('Control inválido.');
  if(p.lastControl&&now-p.lastControl<COIN_MIN_INPUT)throw Error('Control demasiado rápido.');
- advanceCoins(action,now);const norm=Math.max(100,Math.hypot(x,z));p.vx=x/norm;p.vz=z/norm;p.until=now+COIN_LEASE;p.lastControl=now;p.attempts++;
+ advanceCoins(action,now);const norm=Math.max(100,Math.hypot(x,z));p.vx=x/norm;p.vz=z/norm;p.until=now+COIN_LEASE;p.lastControl=now;if(x||z)p.attempts++;
  if(match[3]==='1'&&(x||z)&&now>=p.boostReady){p.boostUntil=now+450;p.boostReady=now+2200;}
  return 0;
 }
