@@ -40,7 +40,7 @@ export function enrichAvatar({root,torso,head,arms,legs,skin,dark,white,hair,shi
  }
  const iris=standard(host?0x694538:0x655f86,.37),nose=sphere(head,skin,0,-.05,.475,.093,.105,.09);
  facialFeatures.push(nose);
- for(const s of [-1,1]){const i=sphere(head,iris,s*.2,.08,.493,.079,.091,.037);facialFeatures.push(i);}
+ for(const s of [-1,1]){const i=sphere(head,iris,s*.2,.08,.493,.079,.091,.037);facialFeatures.push(i);eyes.push([i,.091]);}
  // Lip and interior remain independent, so the avatar can articulate vowels and closed consonants.
  const lip=sphere(head,standard(0xb86e64,.82),0,-.222,.465,.141,.052,.035);
  lip.renderOrder=0;mouth.position.z=.487;mouth.renderOrder=1;facialFeatures.push(lip);
