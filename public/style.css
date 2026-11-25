@@ -343,3 +343,10 @@ body.tv-mode .tv-results-overlay .broadcast-spotlight{padding:.6vh .8vw}
 .broadcast-finale .winner-trophy:before{content:'';position:absolute;z-index:-1;width:65%;height:150%;background:radial-gradient(ellipse,#ffd55a26,transparent 70%);pointer-events:none}
 @media(max-width:600px){.broadcast-spotlight{flex-direction:column;gap:3px}.broadcast-intro .intro-title{font-size:clamp(22px,5.6vw,36px)}}
 @media(prefers-reduced-motion:reduce){.broadcast-intro *,.broadcast-finale *{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+
+/* Responsive timing feedback: one clear result, readable from a sofa. */
+.arcade-game[data-feedback=perfect] .arcade-hint{color:#ffe29b;font-weight:900}
+.arcade-game[data-feedback=hit] .arcade-hint{color:#9cf2ce}
+.arcade-game[data-feedback=miss] .arcade-hint{color:#ffb0bc}
+.arcade-game[data-feedback=perfect] .arcade-input:disabled{border-color:#f3d477}
+.broadcast-spotlight[data-kind=neutral]{border-color:#ffffff15}
