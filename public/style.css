@@ -429,6 +429,10 @@ body.order-controller #answerstatus{font-size:11px;line-height:1.15;margin:0}
 @media(max-height:420px) and (pointer:coarse){
 body.order-controller #round .sort-hint{display:none}
 body.order-controller #round h2{font-size:16px}
-body.order-controller #round .media{display:none}
+body.order-controller #round .media{max-height:12dvh}
 body.order-controller .sortable-list .sort-tile{min-height:40px}
 }
+
+.results-modal .result-portrait{overflow:hidden;isolation:isolate}
+.results-modal .result-name{min-width:0;overflow:hidden}
+.results-modal .result-delta,.results-modal .result-total{font-variant-numeric:tabular-nums;white-space:nowrap}
