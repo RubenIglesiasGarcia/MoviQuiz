@@ -46,7 +46,7 @@ export async function updateRecordedPresenter(s,offset,mountCharacter,enabled=tr
  const banner=node('div','voice-presenter'),portrait=node('div','voice-presenter-avatar'),fallback=node('span','voice-presenter-fallback','🎙️'),copy=node('div','voice-presenter-copy');
  portrait.append(fallback);copy.append(node('strong','','MOBI · PRESENTADOR'),node('span','',clip.text));banner.append(portrait,copy);target.prepend(banner);
  active={banner,clip};try{mountCharacter(portrait,{shirt:'champion',hat:'none',presenter:true},'idle');}catch{}
- try{audio.currentTime=clip.start;await audio.play();}catch{if(token===generation)stopPresenter();return;}
+ try{audio.currentTime=clip.start;await audio.play();}catch{if(token===generation){document.documentElement.dataset.mqSpeaking='0';const duration=Math.max(700,Math.min(3500,(clip.end-clip.start)*1000));setTimeout(()=>{if(token===generation)stopPresenter();},duration);}return;}
  if(token!==generation)return;document.documentElement.dataset.mqSpeaking='1';
  const tick=()=>{if(token!==generation)return;if(!banner.isConnected||audio.paused||audio.ended||audio.currentTime>=clip.end||Date.now()+offset>=deadline){stopPresenter();return;}
  const f=Math.floor(Math.max(0,audio.currentTime-clip.start)*1000/m.frameMs),v=Math.max(0,Math.min(1,(clip.mouth[f]||0)/100));
