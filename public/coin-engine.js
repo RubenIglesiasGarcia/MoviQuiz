@@ -21,13 +21,13 @@ export function advanceCoins(action,now){
  const begin=action.started+action.plan.lead,end=Math.min(now,begin+action.plan.duration);if(end<=world.tick)return;
  const ids=Object.keys(action.players).sort();
  while(world.tick<end){
-  const dt=Math.min(50,end-world.tick),time=world.tick+dt,elapsed=time-begin,step=dt/1000;
-  for(const id of ids){const p=action.players[id],moving=time<=p.until,speed=time<p.boostUntil?7.1:4.15;
-   if(moving){const x=clamp(p.x+p.vx*speed*step,-COIN_BOUNDS.x+.24,COIN_BOUNDS.x-.24),z=clamp(p.z+p.vz*speed*step,-COIN_BOUNDS.z+.24,COIN_BOUNDS.z-.24);if(!blocked(x,p.z))p.x=x;if(!blocked(p.x,z))p.z=z;}
+  const dt=Math.min(50,end-world.tick),time=world.tick+dt,elapsed=time-begin;
+  for(const id of ids){const p=action.players[id],moving=Math.max(0,Math.min(time,p.until)-world.tick),turbo=Math.max(0,Math.min(time,p.until,p.boostUntil)-world.tick),distance=((moving-turbo)*4.15+turbo*7.1)/1000;
+   if(moving>0){const x=clamp(p.x+p.vx*distance,-COIN_BOUNDS.x+.24,COIN_BOUNDS.x-.24),z=clamp(p.z+p.vz*distance,-COIN_BOUNDS.z+.24,COIN_BOUNDS.z-.24);if(!blocked(x,p.z))p.x=x;if(!blocked(p.x,z))p.z=z;}
   }
   // Resolve contested pickups by nearest player; stable tie-break, no input order advantage.
   for(const c of action.plan.coins){if(c.at>elapsed||world.taken[c.id]||elapsed-c.at>=10000)continue;let winner=null,best=.48*.48;
-   for(const id of ids){const p=action.players[id],d=(p.x-c.x)**2+(p.z-c.z)**2;if(d<best){winner=p;best=d;}}
+   for(const id of ids){const p=action.players[id],d=(p.x-c.x)**2+(p.z-c.z)**2;if(p.attempts>0&&d<best){winner=p;best=d;}}
    if(winner){world.taken[c.id]=true;winner.score+=c.value;winner.hits++;}
   }
   world.tick=time;
