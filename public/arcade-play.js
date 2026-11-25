@@ -1,10 +1,12 @@
 import {actionBeat,actionMeta,beatDuration} from '/arcade-rules.js';
 import {syncArcadeStage} from '/generated/character3d.js';
+import {mountCoinGame} from '/coin-play.js';
 import {playSound} from '/effects.js';
 let lastPadRoom='',lastPadPreference=null;
 const h=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e;};
 const btn=(cls,text,fn)=>{const b=h('button',cls,text);b.type='button';b.onclick=fn;return b;};
 export function mountArcadeGame(parent,{state,playerId,play,send,offset,reveal,role}){
+ if(state.arcade.plan.kind==='coins')return mountCoinGame(parent,{state,playerId,play,send,offset,reveal,role});
  const kind=state.arcade.plan.kind,meta=actionMeta[kind],wrap=h('section','arcade-game arcade-'+kind),arena=h('div','arcade-arena'),overlay=h('div','arcade-cue'),hud=h('div','arcade-hud'),title=h('strong'),points=h('strong'),combo=h('span','arcade-combo'),progress=h('div','arcade-beats'),control=h('div','arcade-buttons'),hint=h('p','arcade-hint'),meter=h('div','arcade-timing'),fill=h('i'),zone=h('b'),tools=h('div','arcade-pad-tools'),live=h('div','arcade-live-scores'),rotate=h('p','arcade-rotate','Gira el móvil para jugar como con un mando.');
  const coarse=matchMedia('(pointer:coarse)'),landscape=matchMedia('(orientation:landscape)');let preference=lastPadRoom===state.code?lastPadPreference:null,pad=false,current=state,clock=offset,attempt=-1,active=false,last=-2,frame=0,lastFeedback=-1,lastFrame=0,signature='',disposed=false;
  const setText=(node,value)=>{if(node.textContent!==value)node.textContent=value;};
