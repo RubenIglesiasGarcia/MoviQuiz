@@ -27,7 +27,7 @@ export function enrichAvatar({root,torso,head,arms,legs,skin,dark,white,hair,shi
   for(const s of [-1,1]){
    plate(torso,lapel,[[s*.05,1.44],[s*.31,1.34],[s*.21,1.12],[s*.32,1.10],[s*.09,.82]],.326);
    const cuff=add(arms[s===1?1:0],new THREE.CylinderGeometry(.13,.13,.07,16),cream,s*.15,-.29,.02);cuff.rotation.z=s*.10;
-   const brow=sphere(head,hair,s*.20,.28,.448,.145,.033,.027);brow.rotation.z=-s*.12;facialFeatures.push(brow);
+   // Existing avatar eyebrows are retained; one silhouette per eye.
   }
   sphere(torso,gold,-.10,1.37,.34,.13,.06,.035);sphere(torso,gold,.10,1.37,.34,.13,.06,.035);sphere(torso,lapel,0,1.37,.37,.048,.055,.035);
   for(let i=0;i<2;i++)sphere(torso,gold,0,.92-i*.14,.294,.038,.038,.019);
@@ -40,7 +40,7 @@ export function enrichAvatar({root,torso,head,arms,legs,skin,dark,white,hair,shi
  }
  const iris=standard(host?0x694538:0x655f86,.37),nose=sphere(head,skin,0,-.05,.475,.093,.105,.09);
  facialFeatures.push(nose);
- for(const s of [-1,1]){const i=sphere(head,iris,s*.2,.08,.493,.079,.091,.037);facialFeatures.push(i);eyes.push([i,.091]);}
+ for(const s of [-1,1]){const i=sphere(head,iris,s*.2,.08,.483,.079,.091,.026);facialFeatures.push(i);eyes.push([i,.091]);}
  // Lip and interior remain independent, so the avatar can articulate vowels and closed consonants.
  const lip=sphere(head,standard(0xb86e64,.82),0,-.222,.465,.141,.052,.035);
  lip.renderOrder=0;mouth.position.z=.487;mouth.renderOrder=1;facialFeatures.push(lip);
@@ -89,14 +89,14 @@ export function premiumStudio(scene,theme){
  const panels=[];for(let i=0;i<18;i++)panels.push([-4.6+i*.54,2.35,-6.68,.018,1.1,.025]);
  instanced(scene,new THREE.BoxGeometry(1,1,1),cool,panels);
  const rail=ring(scene,warm,0,4.7,-.6,5.9,.045);rail.rotation.x=Math.PI/2;
- const audience=[];for(let r=0;r<3;r++)for(let i=0;i<28;i++){const theta=(i-13.5)*.077;audience.push([Math.sin(theta)*(7.7+r*.35),.4+r*.5,-Math.cos(theta)*(7.7+r*.35),.15,.22,.15]);}
+ const audience=[];for(let r=0;r<3;r++)for(let i=0;i<22;i++){const theta=(i-10.5)*.109;audience.push([Math.sin(theta)*(6.8+r*.3),.48+r*.48,-Math.cos(theta)*5.7-r*.25,.15,.22,.15]);}
  instanced(scene,new THREE.SphereGeometry(1,8,6),standard(0x5e427e,.85),audience);
  const lights=[];for(let i=0;i<9;i++){const x=(i-4)*1.4;box(scene,metal,x,4.65,-4.9,.55,.28,.38);lights.push([x,4.62,-4.68,.18,.12,.04]);}
  instanced(scene,new THREE.SphereGeometry(1,12,8),warm,lights);
  // Low-cost translucent light shafts: additive, no volumetric ray marching.
  const beamMat=new THREE.MeshBasicMaterial({color:0xb9a0ff,transparent:true,opacity:.045,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending});
  const beams=[];for(const x of [-4.2,-2.8,2.8,4.2]){const b=add(scene,new THREE.ConeGeometry(1.35,5.5,16,1,true),beamMat,x,2.0,-3.6);b.rotation.z=x*.04;beams.push(b);}
- return {animate(t,celebrate){beams.forEach((b,i)=>{b.rotation.z=(i-1.5)*.11+Math.sin(t*.5+i)*.12;});beamMat.opacity=celebrate?.09:.045;}};
+ const target=new THREE.Color();return {animate(t,celebrate,accent='#b9a0ff'){beams.forEach((b,i)=>{b.rotation.z=(i-1.5)*.11+Math.sin(t*.5+i)*.12;});beamMat.opacity=celebrate?.085:.042;target.set(accent);beamMat.color.lerp(target,.045);cool.emissive.lerp(target,.035);}};
 }
 export function premiumArcade(scene,kind,width){
  const metal=standard(0x22223d,.44,.4),edge=glow(kind==='dash'?0x7bd5ff:kind==='dodge'?0x9f8dff:0xffb866,1.1),gold=glow(0xffdf80,1);
