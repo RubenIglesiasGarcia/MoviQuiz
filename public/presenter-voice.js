@@ -5,7 +5,7 @@ const node=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.classNa
 export const presenterEnabled=()=>localStorage.getItem('mq.voice')!=='off';
 export const presenterSpeaking=()=>!!active&&!audio?.paused;
 export function preloadPresenter(){
- if(!manifestPromise)manifestPromise=fetch('/presenter.json').then(async r=>{if(!r.ok)throw Error('Voice pack unavailable');const m=await r.json();if(m.version!==1||m.audio!=='/presenter.mp3'||!Array.isArray(m.clips)||m.clips.length!==30||!Number.isFinite(m.frameMs)||m.frameMs<=0||m.clips.some(c=>!Number.isFinite(c.start)||!Number.isFinite(c.end)||c.end<=c.start||typeof c.text!=='string'||!Array.isArray(c.mouth)))throw Error('Invalid voice pack');audio=new Audio(m.audio);audio.preload='auto';audio.volume=.90;audio.load();return m;}).catch(()=>null);
+ if(!manifestPromise)manifestPromise=fetch('/presenter.json').then(async r=>{if(!r.ok)throw Error('Voice pack unavailable');const m=await r.json();if(m.version!==1||m.audio!=='/presenter.mp3'||!Array.isArray(m.clips)||m.clips.length!==30||!Number.isFinite(m.frameMs)||m.frameMs<=0||m.clips.some(c=>!Number.isFinite(c.start)||!Number.isFinite(c.end)||c.end<=c.start||typeof c.text!=='string'||!Array.isArray(c.mouth)))throw Error('Invalid voice pack');audio=new Audio(m.audio);audio.preload='auto';audio.volume=.90;audio.load();return m;}).catch(()=>{manifestPromise=null;return null;});
  return manifestPromise;
 }
 export function stopPresenter(){generation++;cancelAnimationFrame(frame);if(audio)audio.pause();active?.banner?.remove();active=null;document.documentElement.style.removeProperty('--mq-mouth');document.documentElement.dataset.mqSpeaking='0';}
@@ -45,7 +45,7 @@ export async function updateRecordedPresenter(s,offset,mountCharacter,enabled=tr
  if(!target)return;
  const banner=node('div','voice-presenter'),portrait=node('div','voice-presenter-avatar'),fallback=node('span','voice-presenter-fallback','🎙️'),copy=node('div','voice-presenter-copy');
  portrait.append(fallback);copy.append(node('strong','','MOBI · PRESENTADOR'),node('span','',clip.text));banner.append(portrait,copy);target.prepend(banner);
- active={banner,clip};try{mountCharacter(portrait,{shirt:'champion',hat:'none'},'idle');}catch{}
+ active={banner,clip};try{mountCharacter(portrait,{shirt:'champion',hat:'none',presenter:true},'idle');}catch{}
  try{audio.currentTime=clip.start;await audio.play();}catch{if(token===generation)stopPresenter();return;}
  if(token!==generation)return;document.documentElement.dataset.mqSpeaking='1';
  const tick=()=>{if(token!==generation)return;if(!banner.isConnected||audio.paused||audio.ended||audio.currentTime>=clip.end||Date.now()+offset>=deadline){stopPresenter();return;}
