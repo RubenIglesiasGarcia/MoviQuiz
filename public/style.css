@@ -301,3 +301,15 @@ body.tv-mode .screen .coin-arena{height:60vh}
 .coin-controller[hidden],.coin-stage-canvas[hidden]{display:none!important}
 
 .coin-stick:focus-visible{outline:3px solid #ffd55a;outline-offset:4px}.coin-controller{overscroll-behavior:contain;user-select:none}.coin-arena{touch-action:pan-y}.coin-boost{user-select:none;-webkit-tap-highlight-color:transparent}
+
+.coin-time-track{height:7px;background:#2c203c;border-radius:8px;overflow:hidden}.coin-time-track i{height:100%;display:block;background:linear-gradient(90deg,#79c9ff,#77e2b2);transform-origin:left;transition:transform .12s linear}
+.coin-final-seconds .coin-time-track i{background:#ff7a91}.coin-final-seconds .arcade-hud>strong:first-child{color:#ff9b9c}
+.coin-feedback .arcade-hud>strong:nth-child(2){color:#77e2b2}
+.coin-boost{position:relative;isolation:isolate;overflow:hidden}.coin-boost:before{content:'';position:absolute;inset:0;background:conic-gradient(#ffef8a 0 var(--charge,100%),#b18a3b var(--charge,100%) 100%);z-index:-1}
+.arcade-coins.tv-gamepad{grid-template-rows:auto auto auto minmax(0,1fr) auto}.arcade-coins.tv-gamepad .coin-time-track{grid-row:2}.arcade-coins.tv-gamepad .arcade-pad-tools{grid-row:3}.arcade-coins.tv-gamepad .coin-controller{grid-row:4}.arcade-coins.tv-gamepad .arcade-hint{grid-row:5}
+body.tv-mode .screen[data-arcade=true][data-round-stage=arcade-action] .tv-question-content{height:100%;gap:.55vh}
+body.tv-mode .screen[data-arcade=true][data-round-stage=arcade-action] #answers{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+body.tv-mode .screen[data-arcade=true][data-round-stage=arcade-action] .arcade-game{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:.55vh}
+body.tv-mode .screen[data-arcade=true][data-round-stage=arcade-action] .arcade-arena{flex:1 1 0;min-height:14vh;height:auto}
+body.tv-mode .screen[data-arcade=true][data-round-stage=arcade-action] .arcade-live-scores{flex:0 1 auto;max-height:14vh;overflow:auto}
+body.tv-mode .screen[data-arcade=true][data-round-stage=arcade-action] .arcade-hud,body.tv-mode .screen[data-arcade=true][data-round-stage=arcade-action] .arcade-hint{flex:none}
