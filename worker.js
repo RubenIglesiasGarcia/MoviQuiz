@@ -76,6 +76,25 @@ export class Room extends DurableObject{
  await this.persist(r);return json({state:publicState(r),playerId:u?r.players[u.id]?.publicId:null});
  }catch(e){return fail(e.message||'No se pudo completar la acción.');}});}
  async alarm(){await this.ctx.blockConcurrencyWhile(async()=>{const r=await this.get();if(!r)return;if(r.phase==='question'){if(Date.now()<r.deadline){await this.ctx.storage.setAlarm(r.deadline);return;}await this.advanceExpired(r);await this.persist(r);}else if(Date.now()>=r.expires){for(const ws of this.ctx.getWebSockets())try{ws.close(1000,'Sala caducada');}catch{}await this.ctx.storage.deleteAll();}else await this.ctx.storage.setAlarm(r.expires);});}
- webSocketMessage(ws){try{ws.close(1008,'Solo lectura');}catch{}}
+ async webSocketMessage(ws,message){
+ // Only continuous arcade controls are writable on this socket. Authorization is
+ // scoped to the current match, never supplied in a URL or broadcast.
+ if(typeof message!=='string'||message.length>512){try{ws.close(1008,'Mensaje inválido');}catch{}return;}
+ let m;try{m=JSON.parse(message);}catch{return;}
+ if(m?.type!=='coin-control'||!Number.isSafeInteger(m.requestId)||m.requestId<1||typeof m.input!=='string'||m.input.length>16){try{ws.close(1008,'Control inválido');}catch{}return;}
+ const ack=(ok,error)=>{try{ws.send(JSON.stringify({type:'coin-ack',requestId:m.requestId,ok,...(error?{error}:{})}));}catch{}};
+ await this.ctx.blockConcurrencyWhile(async()=>{try{
+ const r=await this.get(),now=Date.now();
+ if(!r||r.phase!=='question'||r.partyStage!=='arcade-action'||r.action?.plan.kind!=='coins'||m.questionId!==r.questions[r.index]?.id||now>=r.deadline){ack(false,'La prueba ha terminado.');return;}
+ let session=ws.deserializeAttachment()||{};
+ if(session.match!==r.matchId||session.expires<=now||!r.players[session.user]){
+  if(typeof m.token!=='string'||! /^[a-f0-9]{64}$/.test(m.token)){ack(false,'Mando sin autenticar.');return;}
+  const u=await auth(new Request('https://room/coin-control',{headers:{Authorization:'Bearer '+m.token}}),this.env);
+  if(!u||!r.players[u.id]){ack(false,'No eres jugador de esta sala.');return;}
+  session={user:u.id,match:r.matchId,expires:now+45000};ws.serializeAttachment(session);
+ }
+ recordAction(r,session.user,m.input,0,Date.now());await this.persist(r);ack(true);
+ }catch(e){ack(false,e.message||'Control no disponible.');}});
+ }
  webSocketClose(ws,code){try{ws.close(code);}catch{}}
 }
