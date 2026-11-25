@@ -45,9 +45,9 @@ export function buildContestantBody({root,torso,skin,dark,white,shirt,gold,arms,
  }
 }
 // Batch static meshes by material on each animated joint, preserving independent limbs.
-function batchStaticParts(parent){const groups=new Map();for(const o of parent.children){if(!o.isMesh||Array.isArray(o.material)||o.material.transparent||!o.geometry.attributes.position||!o.geometry.attributes.normal||!o.geometry.attributes.uv)continue;const list=groups.get(o.material)||[];list.push(o);groups.set(o.material,list);}for(const [mat,parts] of groups){if(parts.length<2)continue;const copies=parts.map(o=>{o.updateMatrix();const g=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();g.applyMatrix4(o.matrix);return g;});let combined;try{combined=mergeGeometries(copies,false);}finally{copies.forEach(g=>g.dispose());}if(!combined)continue;for(const o of parts){parent.remove(o);o.geometry.dispose();}mesh(parent,combined,mat);}}
+function batchStaticParts(parent){const groups=new Map();for(const o of parent.children){if(!o.isMesh||Array.isArray(o.material)||o.material.transparent||!o.geometry.attributes.position||!o.geometry.attributes.normal||!o.geometry.attributes.uv)continue;const list=groups.get(o.material)||[];list.push(o);groups.set(o.material,list);}for(const [mat,parts] of groups){if(parts.length<2)continue;const copies=parts.map(o=>{o.updateMatrix();const g=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();g.applyMatrix4(o.matrix);return g;});let combined;try{combined=mergeGeometries(copies,false);}catch{combined=null;}finally{copies.forEach(g=>g.dispose());}if(!combined)continue;for(const o of parts){parent.remove(o);o.geometry.dispose();}mesh(parent,combined,mat);}}
 export function optimizeContestantBody(torso,arms,legs){for(const joint of [torso,...arms,...legs])batchStaticParts(joint);}
-function maskGeometry(rx=.405,ry=.455,depth=.085,front=.52){
+export function maskGeometry(rx=.405,ry=.455,depth=.085,front=.52){
  const n=48,rings=10,positions=[0,-.012,front],uv=[.5,.5],indices=[];
  for(let i=1;i<=rings;i++){const r=i/rings;for(let j=0;j<=n;j++){const a=j*2*Math.PI/n,x=r*Math.cos(a),y=r*Math.sin(a);positions.push(x*rx,y*ry-.012,front-depth*r*r);uv.push(.5+x*.5,.5+y*.5);}}
  for(let j=0;j<n;j++)indices.push(0,1+j,2+j);
