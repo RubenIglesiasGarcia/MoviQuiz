@@ -1,13 +1,14 @@
 import {actionBeat,actionMeta,beatDuration} from '/arcade-rules.js';
 import {syncArcadeStage} from '/generated/character3d.js';
 import {playSound} from '/effects.js';
+let lastPadRoom='',lastPadPreference=null;
 const h=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e;};
 const btn=(cls,text,fn)=>{const b=h('button',cls,text);b.type='button';b.onclick=fn;return b;};
 export function mountArcadeGame(parent,{state,playerId,play,send,offset,reveal,role}){
  const kind=state.arcade.plan.kind,meta=actionMeta[kind],wrap=h('section','arcade-game arcade-'+kind),arena=h('div','arcade-arena'),overlay=h('div','arcade-cue'),hud=h('div','arcade-hud'),title=h('strong'),points=h('strong'),combo=h('span','arcade-combo'),progress=h('div','arcade-beats'),control=h('div','arcade-buttons'),hint=h('p','arcade-hint'),meter=h('div','arcade-timing'),fill=h('i'),zone=h('b'),tools=h('div','arcade-pad-tools'),live=h('div','arcade-live-scores'),rotate=h('p','arcade-rotate','Gira el móvil para jugar como con un mando.');
- const coarse=matchMedia('(pointer:coarse)'),landscape=matchMedia('(orientation:landscape)');let preference=null,pad=false,current=state,clock=offset,attempt=-1,active=false,last=-2,frame=0,lastFeedback=-1,lastFrame=0,signature='',disposed=false;
+ const coarse=matchMedia('(pointer:coarse)'),landscape=matchMedia('(orientation:landscape)');let preference=lastPadRoom===state.code?lastPadPreference:null,pad=false,current=state,clock=offset,attempt=-1,active=false,last=-2,frame=0,lastFeedback=-1,lastFrame=0,signature='',disposed=false;
  const setText=(node,value)=>{if(node.textContent!==value)node.textContent=value;};
- meter.append(zone,fill);arena.append(overlay);hud.append(title,points,combo);wrap.append(hud,arena,progress,meter,live,tools,rotate,control,hint);parent.append(wrap);
+ const fallback=h('div','arcade-2d'),lanes=h('div','arcade-2d-lanes'),fallbackPlayers=h('div','arcade-2d-players');for(let i=0;i<3;i++)lanes.append(h('div','arcade-2d-lane'));fallback.append(lanes,fallbackPlayers);meter.append(zone,fill);arena.append(overlay,fallback);hud.append(title,points,combo);wrap.append(hud,arena,progress,meter,live,tools,rotate,control,hint);parent.append(wrap);
  const options=kind==='dash'?[['left','◀','IZQUIERDA'],['right','▶','DERECHA'],['jump','↑','SALTO']]:kind==='dodge'?[['0','◀','IZQUIERDA'],['1','●','CENTRO'],['2','▶','DERECHA']]:[['shoot','●','LANZAR']];
  const buttons=[];
  const vibrate=pattern=>{try{if(play)navigator.vibrate?.(pattern);}catch{}};
@@ -15,7 +16,7 @@ export function mountArcadeGame(parent,{state,playerId,play,send,offset,reveal,r
  for(const [value,icon,label] of options){const b=btn('arcade-input','',()=>input(value));b.dataset.action=value;b.setAttribute('aria-label',label);b.append(h('span','pad-symbol',icon),h('span','pad-label',label));b.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'||!e.isPrimary||b.disabled)return;e.preventDefault();input(value);});control.append(b);buttons.push(b);}
  // Multiple fingers can press controls; one accepted action per obstacle prevents spam.
  control.hidden=!play;tools.hidden=!play;rotate.hidden=true;
- const switchMode=btn('ghost arcade-mode-toggle','Mando TV',()=>{preference=!pad;applyMode();});
+ const switchMode=btn('ghost arcade-mode-toggle','Mando TV',()=>{preference=!pad;lastPadRoom=current.code;lastPadPreference=preference;applyMode();});
  const full=btn('ghost arcade-fullscreen','⛶ Pantalla completa',async()=>{try{if(!document.fullscreenElement&&document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();await screen.orientation?.lock?.('landscape');}catch{}applyMode();});
  tools.append(switchMode,full);
  function refreshScene(){if(arena.hidden)return;try{syncArcadeStage(arena,current,clock,play?playerId:null);}catch{arena.classList.add('arcade-fallback');}}
@@ -35,7 +36,7 @@ export function mountArcadeGame(parent,{state,playerId,play,send,offset,reveal,r
   const streak=p?.lastBeat>=b.index-1?p?.combo||0:0;setText(combo,play&&streak>1?'🔥 COMBO ×'+streak:!play&&beat?'NIVEL '+((beat.level||0)+1)+'/4':'');
   if(b.index!==last){last=b.index;progress.replaceChildren(...a.plan.beats.map((_,i)=>h('i',i<b.index?'done':i===b.index?'current':'')));setText(hint,play?(pad?'Mira la televisión. Usa los botones.':meta.subtitle):meta.subtitle);}
   const cue=finished?'¡META!':b.index<0?String(Math.ceil(-b.elapsed/1000)):kind==='dash'?({left:'◀ ESQUIVA',right:'ESQUIVA ▶',jump:'↑ SALTA'})[beat.target]:kind==='dodge'?'BUSCA EL CARRIL LIBRE':'AFINA EL TIRO';
-  setText(overlay,cue);
+  setText(overlay,cue);if(arena.classList.contains('arcade-fallback')){for(const [i,lane] of [...lanes.children].entries()){const blocked=!!beat&&(kind==='dodge'?String(i)!==beat.target:kind==='dash'?beat.target==='jump'||i===(beat.target==='left'?2:0):false);lane.classList.toggle('blocked',blocked);lane.classList.toggle('safe',!!beat&&kind==='dodge'&&!blocked);setText(lane,blocked?(kind==='dodge'?'☄':'▰'):kind==='hoops'&&i===1?'◎':'');lane.style.setProperty('--approach',active?String(b.elapsed/duration):'0');}const persons=(play?current.players.filter(x=>x.id===playerId):current.players).slice(0,8);const fs=JSON.stringify(persons.map(x=>[x.name,a.players[x.id]?.lastBeat,a.players[x.id]?.lastInput,a.players[x.id]?.lastPoints,b.index]));if(fallbackPlayers.dataset.signature!==fs){fallbackPlayers.dataset.signature=fs;fallbackPlayers.replaceChildren(...persons.map(x=>{const p=a.players[x.id],n=h('span','arcade-2d-person',x.name+' '+(p?.lastBeat===b.index?(p.lastPoints>0?'✓':'✕'):'●'));return n;}));}}
   const value=active?Math.max(0,Math.min(100,b.elapsed/duration*100)):0;fill.style.left=value+'%';
   const showZone=active&&(kind==='hoops'||Number.isFinite(beat.window));zone.style.display=showZone?'block':'none';
   if(showZone){const w=beat.window||350;zone.style.left=Math.max(0,(beat.center-w)/duration*100)+'%';zone.style.width=(Math.min(duration,beat.center+w)-Math.max(0,beat.center-w))/duration*100+'%';}
