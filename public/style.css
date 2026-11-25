@@ -299,3 +299,5 @@ body.tv-mode .voice-presenter-avatar{width:9vh;height:9vh}
 body.tv-mode .screen .coin-arena{height:60vh}
 
 .coin-controller[hidden],.coin-stage-canvas[hidden]{display:none!important}
+
+.coin-stick:focus-visible{outline:3px solid #ffd55a;outline-offset:4px}.coin-controller{overscroll-behavior:contain;user-select:none}.coin-arena{touch-action:pan-y}.coin-boost{user-select:none;-webkit-tap-highlight-color:transparent}
