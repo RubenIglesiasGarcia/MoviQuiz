@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
+import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 // Hand-authored modular character meshes. All measurements match the existing
 // joint pivots, so gameplay poses and cosmetics keep working.
 const material=(color,roughness=.65,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
@@ -12,7 +13,7 @@ function profile(parent,mat,points,x,y,z,depth=1,segments=24){
 }
 function stitch(parent,mat,points,r=.012){const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));return mesh(parent,new THREE.TubeGeometry(curve,12,r,6,false),mat);}
 export function buildContestantBody({root,torso,skin,dark,white,shirt,gold,arms,legs},a){
- const host=a.presenter===true,trim=material(shirt.color.clone().multiplyScalar(.63),.84),light=material(shirt.color.clone().lerp(new THREE.Color(0xffffff),.19),.76),pants=material(host?0x292437:0x28334d,.83),sole=material(0x151c30,.87),rubber=material(0xe7eaf2,.67);
+ const host=a.presenter===true;if(host)shirt.color.setHex(0x643ba2);const trim=material(shirt.color.clone().multiplyScalar(.63),.84),light=material(shirt.color.clone().lerp(new THREE.Color(0xffffff),.19),.76),pants=material(host?0x292437:0x28334d,.83),sole=material(0x151c30,.87),rubber=material(0xe7eaf2,.67),crease=material(0xb87e59,.8),pantSeam=material(0x151d30,.8);
  shirt.roughness=.78;
  profile(torso,shirt,[[0,.61],[.27,.62],[.36,.68],[.37,.82],[.39,1.02],[.46,1.25],[.43,1.38],[.28,1.47],[.15,1.48],[0,1.47]],0,0,0,.77,32);
  profile(torso,trim,[[0,.61],[.31,.62],[.36,.65],[.37,.70],[.35,.73],[0,.74]],0,0,0,.79);
@@ -29,10 +30,10 @@ export function buildContestantBody({root,torso,skin,dark,white,shirt,gold,arms,
   const fore=profile(arm,skin,[[0,0],[.113,-.01],[.113,-.095],[.087,-.19],[0,-.2]],s*.15,-.265,.018,.9);fore.rotation.z=-s*.05;
   rounded(arm,skin,s*.15,-.48,.045,.22,.22,.19,.085);
   oval(arm,skin,s*.035,-.453,.105,.065,.09,.065);
-  for(let j=0;j<3;j++)stitch(arm,material(0xb87e59,.8),[[s*.15-.065+j*.045,-.49,.137],[s*.15-.060+j*.045,-.54,.118]],.005);
+  for(let j=0;j<3;j++)stitch(arm,crease,[[s*.15-.065+j*.045,-.49,.137],[s*.15-.060+j*.045,-.54,.118]],.005);
   const leg=new THREE.Group();leg.position.set(s*.215,.69,0);root.add(leg);legs.push(leg);
   profile(leg,pants,[[0,0],[.17,-.02],[.19,-.14],[.16,-.30],[.145,-.44],[0,-.47]],0,0,0,.92);
-  stitch(leg,material(0x151d30),[[s*.15,-.09,.085],[s*.15,-.25,.075],[s*.12,-.41,.065]],.009);
+  stitch(leg,pantSeam,[[s*.15,-.09,.085],[s*.15,-.25,.075],[s*.12,-.41,.065]],.009);
   profile(leg,white,[[0,0],[.145,0],[.145,-.085],[0,-.085]],0,-.38,0,.95);
   rounded(leg,sole,0,-.605,.135,.43,.10,.59,.045);
   rounded(leg,rubber,0,-.557,.14,.43,.09,.60,.04);
@@ -43,6 +44,9 @@ export function buildContestantBody({root,torso,skin,dark,white,shirt,gold,arms,
   for(const z of [-.04,.10,.24])rounded(leg,trim,s*.207,-.561,z,.015,.034,.065,.007);
  }
 }
+// Batch static meshes by material on each animated joint, preserving independent limbs.
+function batchStaticParts(parent){const groups=new Map();for(const o of parent.children){if(!o.isMesh||Array.isArray(o.material)||o.material.transparent||!o.geometry.attributes.position||!o.geometry.attributes.normal||!o.geometry.attributes.uv)continue;const list=groups.get(o.material)||[];list.push(o);groups.set(o.material,list);}for(const [mat,parts] of groups){if(parts.length<2)continue;const copies=parts.map(o=>{o.updateMatrix();const g=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();g.applyMatrix4(o.matrix);return g;});let combined;try{combined=mergeGeometries(copies,false);}finally{copies.forEach(g=>g.dispose());}if(!combined)continue;for(const o of parts){parent.remove(o);o.geometry.dispose();}mesh(parent,combined,mat);}}
+export function optimizeContestantBody(torso,arms,legs){for(const joint of [torso,...arms,...legs])batchStaticParts(joint);}
 function maskGeometry(rx=.405,ry=.455,depth=.085,front=.52){
  const n=48,rings=10,positions=[0,-.012,front],uv=[.5,.5],indices=[];
  for(let i=1;i<=rings;i++){const r=i/rings;for(let j=0;j<=n;j++){const a=j*2*Math.PI/n,x=r*Math.cos(a),y=r*Math.sin(a);positions.push(x*rx,y*ry-.012,front-depth*r*r);uv.push(.5+x*.5,.5+y*.5);}}
