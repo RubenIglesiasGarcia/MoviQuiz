@@ -1,13 +1,15 @@
 // Shared deterministic arcade timing. The server grades all input with its own clock.
+import {coinPlan,startCoins,controlCoins,finishCoins} from './coin-engine.js';
 export const actionKinds=['dash','dodge','hoops'];
-export const isAction=kind=>actionKinds.includes(kind);
+export const isAction=kind=>kind==='coins'||actionKinds.includes(kind);
 export const actionMeta={
+ coins:{title:'FIEBRE DEL ORO',subtitle:'Muévete libremente, esquiva las barreras y recoge más monedas que tus rivales.',category:'Agilidad'},
  dash:{title:'CARRERA DE VALLAS',subtitle:'Esquiva por los lados o salta la valla en el momento justo.',steps:12,interval:1750,category:'Agilidad'},
  dodge:{title:'LLUVIA DE METEORITOS',subtitle:'Observa los meteoritos y salta al carril que quede libre.',steps:12,interval:1700,category:'Reflejos'},
  hoops:{title:'CANASTA ESTELAR',subtitle:'Lanza cuando el indicador atraviese la zona verde.',steps:10,interval:1900,category:'Deportes'}
 };
 export function makeActionPlan(kind,random=Math.random){
- const m=actionMeta[kind];if(!m)throw Error('Prueba desconocida.');
+ if(kind==='coins')return coinPlan(random);const m=actionMeta[kind];if(!m)throw Error('Prueba desconocida.');
  let prev='',repeat=0;
  const beats=Array.from({length:m.steps},(_,i)=>{
   const level=Math.min(3,Math.floor(i*4/m.steps)),duration=m.interval-level*130;
@@ -22,7 +24,7 @@ export function makeActionPlan(kind,random=Math.random){
  return {version:2,kind,lead:3500,interval:m.interval,beats};
 }
 export function beatDuration(plan,index){return plan.beats[index]?.duration||plan.interval;}
-export function actionDuration(plan){return plan.lead+plan.beats.reduce((n,_,i)=>n+beatDuration(plan,i),0)+300;}
+export function actionDuration(plan){return plan.kind==='coins'?plan.lead+plan.duration:plan.lead+plan.beats.reduce((n,_,i)=>n+beatDuration(plan,i),0)+300;}
 export function actionBeat(plan,elapsed){
  let t=elapsed-plan.lead;if(t<0)return {index:-1,elapsed:t};
  for(let i=0;i<plan.beats.length;i++){const duration=beatDuration(plan,i);if(t<duration)return {index:i,elapsed:t,duration};t-=duration;}
@@ -39,10 +41,10 @@ export function actionPoints(kind,beat,input,elapsed){
  return 0;
 }
 export function actionRound(kind){const m=actionMeta[kind],plan=makeActionPlan(kind);return {party:kind,mode:'fast',category:m.category,difficulty:'Difícil',prompt:m.subtitle,seconds:Math.ceil(actionDuration(plan)/1000),plan,correct:null,options:[]};}
-export function startAction(r,q,now){r.action={plan:q.plan,started:now,players:Object.fromEntries(Object.keys(r.players).map(id=>[id,{score:0,hits:0,attempts:0,lastBeat:-1,lastInput:null,lastPoints:0,lastElapsed:null,combo:0,bestCombo:0,perfect:0}]))};r.partyStage='arcade-action';r.deadline=now+actionDuration(q.plan);}
+export function startAction(r,q,now){r.action={plan:q.plan,started:now,players:Object.fromEntries(Object.keys(r.players).map(id=>[id,{score:0,hits:0,attempts:0,lastBeat:-1,lastInput:null,lastPoints:0,lastElapsed:null,combo:0,bestCombo:0,perfect:0}]))};if(q.plan.kind==='coins')startCoins(r.action);r.partyStage='arcade-action';r.deadline=now+actionDuration(q.plan);}
 export function recordAction(r,id,input,beatIndex,now){
  const a=r.action,p=a?.players[id];if(r.phase!=='question'||r.partyStage!=='arcade-action'||!p||!Number.isInteger(beatIndex)||typeof input!=='string')throw Error('Prueba no disponible.');
- const beat=actionBeat(a.plan,now-a.started);
+ if(a.plan.kind==='coins')return controlCoins(a,id,input,now);const beat=actionBeat(a.plan,now-a.started);
  if(beat.index!==beatIndex||beatIndex<0||beatIndex>=a.plan.beats.length||p.lastBeat>=beatIndex)throw Error('Esta oportunidad ya ha terminado.');
  if(!(a.plan.kind==='dash'?['left','right','jump']:a.plan.kind==='dodge'?['0','1','2']:['shoot']).includes(input))throw Error('Control no válido.');
  const base=actionPoints(a.plan.kind,a.plan.beats[beatIndex],input,beat.elapsed);
@@ -50,4 +52,4 @@ export function recordAction(r,id,input,beatIndex,now){
  const score=base+(a.plan.version===2&&base?Math.min(40,Math.max(0,p.combo-1)*10):0);
  p.lastBeat=beatIndex;p.lastInput=input;p.lastPoints=score;p.lastElapsed=beat.elapsed;p.score+=score;p.attempts++;if(score>0)p.hits++;return score;
 }
-export function finishAction(r){if(!r.action)return;for(const [id,p] of Object.entries(r.action.players)){r.answers[id]={correct:p.hits>=Math.ceil(r.action.plan.beats.length/2),points:p.score,ms:null,timeout:p.attempts===0,arcadeHits:p.hits,arcadeAttempts:p.attempts};}}
+export function finishAction(r){if(!r.action)return;if(r.action.plan.kind==='coins')return finishCoins(r);for(const [id,p] of Object.entries(r.action.players)){r.answers[id]={correct:p.hits>=Math.ceil(r.action.plan.beats.length/2),points:p.score,ms:null,timeout:p.attempts===0,arcadeHits:p.hits,arcadeAttempts:p.attempts};}}
