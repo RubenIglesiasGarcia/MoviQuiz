@@ -13,11 +13,11 @@ export function setPresenterEnabled(value){localStorage.setItem('mq.voice',value
 const choice=ids=>{const available=ids.filter(id=>id!==lastId);return (available.length?available:ids)[Math.floor(Math.random()*(available.length||ids.length))];};
 export function selectPresenterClip(s,previousLeader){
  if(s.phase==='lobby')return [1,2,3,4];
- if(s.phase==='finished')return [29,30];
+ if(s.phase==='finished')return [30];
  if(s.phase!=='reveal')return [];
  const q=s.question,players=s.players||[],correct=players.filter(p=>p.reaction==='correct').length;
  const next=s.playlist?.[s.index+1],leader=players[0],remaining=s.total-s.index-1;
- if(remaining===0)return [25,29];
+ if(remaining===0)return [29];
  if(remaining===1||next==='final'&&q?.party!=='final')return [28];
  if(next==='steal'&&q?.party!=='steal')return [19,20];
  if(next==='buzzer'&&q?.party!=='buzzer')return [21];
