@@ -375,3 +375,6 @@ body.tv-mode .tv-results-overlay .broadcast-spotlight{padding:.6vh .8vw}
 .poster-art .poster-logo{width:clamp(100px,19vw,178px);border-radius:50%;object-fit:cover;clip-path:circle(47% at 50% 50%);filter:none;transform:rotate(0)}
 @media(max-width:520px){.poster-art .poster-logo{width:clamp(100px,33vw,145px)}.wardrobe-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.wardrobe-showroom{height:clamp(270px,43vh,340px)}}
 @media(prefers-reduced-motion:reduce){.wardrobe-tab,.wardrobe-choice{transition:none!important}}
+
+.wardrobe-preview-hud .wardrobe-eyebrow{font-size:9px}.wardrobe-showroom .wardrobe-preview-hud{min-height:54px}.wardrobe-showroom .character3d{height:calc(100% - 60px)}.wardrobe-tab:focus-visible,.wardrobe-turn-button:focus-visible,.wardrobe-choice:focus-visible{outline:2px solid #ffdb78;outline-offset:3px}
+.wardrobe-choice .wardrobe-sample{pointer-events:none}.wardrobe-actions .footnote{margin:0;line-height:1.4}.wardrobe-choice:disabled{cursor:not-allowed}
