@@ -254,3 +254,13 @@ body.tv-mode .screen .arcade-live-scores{grid-template-columns:repeat(auto-fit,m
 .odd-grid{grid-template-columns:repeat(auto-fit,minmax(min(54px,18%),1fr))}
 .number-hunt{grid-template-columns:repeat(4,minmax(0,1fr))}
 @media(orientation:portrait){.tv-gamepad .arcade-buttons{grid-template-columns:repeat(3,minmax(0,1fr));max-height:44vh}.tv-gamepad.arcade-hoops .arcade-buttons{grid-template-columns:1fr}}
+
+.arcade-2d{display:none}
+.arcade-fallback .arcade-2d{display:grid;position:absolute;inset:0;padding:clamp(12px,3vw,28px);grid-template-rows:minmax(0,1fr) auto;gap:8px;align-items:stretch;background:radial-gradient(ellipse at 50% 5%,#5c4393,#201438 78%)}
+.arcade-fallback .arcade-cue{top:8px;left:50%;transform:translateX(-50%);z-index:2;font-size:clamp(14px,2.9vh,32px)}
+.arcade-2d-lanes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding-top:38px}
+.arcade-2d-lane{display:grid;place-items:center;min-width:0;border:2px solid #8271ab;border-radius:12px;background:repeating-linear-gradient(0deg,#31274e 0 22px,#413265 23px 25px);color:#ff9b9c;font-size:clamp(32px,11vh,90px);text-shadow:0 4px #180c28}
+.arcade-2d-lane.blocked{border-color:#ff9b9c;background:radial-gradient(ellipse,#c5545766,#31274e 75%);transform:scale(calc(.75 + var(--approach,0)*.25))}
+.arcade-2d-lane.safe{border-color:#77e2b2;background:radial-gradient(ellipse,#387b64,#31274e 75%)}
+.arcade-2d-players{display:flex;flex-wrap:wrap;justify-content:center;gap:5px}
+.arcade-2d-person{font-size:clamp(10px,1.7vh,20px);background:#201438;border:1px solid #9d8ac6;border-radius:8px;padding:4px 8px}
