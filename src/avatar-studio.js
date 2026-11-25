@@ -7,7 +7,7 @@ function mesh(parent,geo,mat,x=0,y=0,z=0){const m=new THREE.Mesh(geo,mat);m.posi
 function oval(parent,mat,x,y,z,sx,sy,sz){const m=mesh(parent,new THREE.SphereGeometry(1,20,14),mat,x,y,z);m.scale.set(sx,sy,sz);return m;}
 function rounded(parent,mat,x,y,z,w,h,d,r=.06){return mesh(parent,new RoundedBoxGeometry(w,h,d,2,r),mat,x,y,z);}
 function profile(parent,mat,points,x,y,z,depth=1,segments=24){
- const c=new THREE.CatmullRomCurve3(points.map(([r,h])=>new THREE.Vector3(r,h,0)),false,'centripetal');
+ const ordered=points[0][1]>points[points.length-1][1]?[...points].reverse():points;const c=new THREE.CatmullRomCurve3(ordered.map(([r,h])=>new THREE.Vector3(r,h,0)),false,'centripetal');
  const p=c.getPoints(28).map(v=>new THREE.Vector2(Math.max(0,v.x),v.y));const m=mesh(parent,new THREE.LatheGeometry(p,segments),mat,x,y,z);m.scale.z=depth;return m;
 }
 function stitch(parent,mat,points,r=.012){const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));return mesh(parent,new THREE.TubeGeometry(curve,12,r,6,false),mat);}
