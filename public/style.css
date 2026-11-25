@@ -297,3 +297,5 @@ body.tv-mode .voice-presenter-avatar{width:9vh;height:9vh}
 .arcade-coins.tv-gamepad{grid-template-rows:auto auto minmax(0,1fr) auto}.arcade-coins.tv-gamepad .arcade-pad-tools{grid-row:2}.arcade-coins.tv-gamepad .coin-controller{grid-row:3}.arcade-coins.tv-gamepad .arcade-hint{grid-row:4}.arcade-coins.tv-gamepad .coin-stick{width:clamp(110px,50vh,240px);height:clamp(110px,50vh,240px)}.arcade-coins.tv-gamepad .coin-boost{min-width:clamp(100px,35vh,180px);min-height:clamp(100px,35vh,180px)}
 @media(max-width:420px){.coin-control-copy{display:none}}
 body.tv-mode .screen .coin-arena{height:60vh}
+
+.coin-controller[hidden],.coin-stage-canvas[hidden]{display:none!important}
