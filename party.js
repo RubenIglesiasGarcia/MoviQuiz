@@ -41,8 +41,46 @@ export function contest(kind,custom,difficulty='Mixta',exclude=[]){if(custom!==u
 
 export const eligible=(r,p,q=r.questions[r.index])=>!!p&&!q?.excluded?.includes(p.userId);
 export function validateProposal(d){const prompt=String(d.prompt||'').trim(),options=Array.isArray(d.options)?d.options.map(x=>String(x).trim()):[];if(prompt.length<12||prompt.length>180||options.length!==4||options.some(x=>x.length<1||x.length>80)||new Set(options.map(x=>x.toLowerCase())).size!==4||!Number.isInteger(d.correct)||d.correct<0||d.correct>3)throw Error('Escribe una pregunta clara, cuatro respuestas distintas y marca la correcta.');return {prompt,options,correct:d.correct,category:'Preguntas de amigos',mode:'choice',seconds:20,difficulty:'Media',party:'custom'};}
+
+ // Surprise events are assigned on the server at round start; no client may choose the reward.
+export function chooseShowEvent(r){
+ const q=r.questions[r.index],players=Object.values(r.players||{}).filter(p=>eligible(r,p,q)).sort((a,b)=>b.score-a.score||String(a.userId).localeCompare(String(b.userId)));
+ if(r.kind!=='party'||players.length<2||!q)return null;
+ const previous=r.questions.slice(0,r.index);
+ const min=players.at(-1).score,max=players[0].score;
+ if(q.party==='steal'&&previous.filter(x=>x.party==='steal').length===1&&min<max){
+  return {kind:'shield',ids:players.filter(p=>p.score===min).map(p=>p.userId)};
+ }
+ if(q.party!=='warmup'||previous.filter(x=>x.party==='warmup').length!==2||q.multiplier===2||min===max)return null;
+ const bottom=players.filter(p=>p.score===min);
+ const pairs=players.slice(0,-1).map((p,i)=>({gap:p.score-players[i+1].score,ids:[p.userId,players[i+1].userId]})).sort((a,b)=>a.gap-b.gap);
+ const uniquePair=pairs.length===1||pairs[0].gap<pairs[1].gap;
+ let hash=0;for(const char of String(r.matchId||''))hash=(Math.imul(hash,31)+char.charCodeAt(0))>>>0;
+ return hash%2===0&&uniquePair?{kind:'duel',ids:pairs[0].ids}:{kind:'comeback',ids:bottom.map(p=>p.userId)};
+}
+export function applyShowEvent(r,q){
+ const event=r.showEvent;if(!event||event.kind==='shield')return;
+ const candidates=event.ids.filter(id=>eligible(r,r.players[id],q)&&r.answers[id]?.correct);
+ const add=(id,value)=>{const a=r.answers[id];if(!a||a.eventBonus)return;a.points+=value;a.eventBonus=value;};
+ if(event.kind==='comeback'){for(const id of candidates)add(id,150);}
+ else if(event.kind==='duel'&&candidates.length){const fastest=Math.min(...candidates.map(id=>r.answers[id].ms));const winners=candidates.filter(id=>r.answers[id].ms===fastest);if(winners.length===1)add(winners[0],150);}
+}
+export function appendTieBreak(r){
+ if(r.solo||r.kind==='arcade'||r.customQuestions||r.questions.filter(q=>q.party==='tiebreak').length>=2)return false;
+ const players=Object.values(r.players||{});if(players.length<2)return false;
+ const top=Math.max(...players.map(p=>p.score)),leaders=players.filter(p=>p.score===top);
+ if(leaders.length<2)return false;
+ const source=r.packSource,all=source?[...(source.standard?standardPool().filter(q=>source.categories===null||source.categories.includes(selectionCategory(q.category))):[]),...source.questions]:standardPool();
+ const used=new Set(r.questions.map(q=>q.prompt));
+ const candidates=all.filter(q=>q.mode==='choice'&&!q.media&&!used.has(q.prompt)&&(r.difficulty==='Mixta'||!r.difficulty||q.difficulty===r.difficulty));
+ if(!candidates.length)return false;
+ const q=validateQuestions([mixOptions(readable(shuffle(candidates)[0]))])[0];
+ r.questions.push({...q,id:'tiebreak-'+(r.questions.filter(q=>q.party==='tiebreak').length+1),party:'tiebreak',excluded:players.filter(p=>p.score!==top).map(p=>p.userId)});
+ return true;
+}
+
 export const INTRO_MS=3000;
-export function prepareRound(r,now=Date.now()){r.partyStage='intro';r.started=now;r.introDuration=r.questions[r.index]?.party==='warmup'&&r.questions[r.index]?.multiplier===2?4000:r.index>0&&r.questions[r.index-1]?.party===r.questions[r.index]?.party?1200:r.kind==='party'||r.kind==='arcade'?6500:INTRO_MS;r.deadline=now+r.introDuration;r.roundEnd=r.deadline;r.buzzer=null;r.hotHolder=null;r.hotTarget=null;r.drawer=null;r.action=null;r.strokes=[];r.bets={};r.bluffs={};r.votes={};r.pies={};r.bluffOptions=[];}
+export function prepareRound(r,now=Date.now()){r.partyStage='intro';r.started=now;r.showEvent=chooseShowEvent(r);r.introDuration=r.showEvent||r.questions[r.index]?.party==='tiebreak'?6500:r.questions[r.index]?.party==='warmup'&&r.questions[r.index]?.multiplier===2?4000:r.index>0&&r.questions[r.index-1]?.party===r.questions[r.index]?.party?1200:r.kind==='party'||r.kind==='arcade'?6500:INTRO_MS;r.deadline=now+r.introDuration;r.roundEnd=r.deadline;r.buzzer=null;r.hotHolder=null;r.hotTarget=null;r.drawer=null;r.action=null;r.strokes=[];r.bets={};r.bluffs={};r.votes={};r.pies={};r.bluffOptions=[];}
 export function begin(r,now=Date.now()){const q=r.questions[r.index];r.partyStage=q.party==='wager'?'bet':q.party==='buzzer'?'buzz':'answer';r.bets={};r.buzzer=null;r.started=now;r.clueStarted=now;r.clueFrozenAt=null;r.deadline=now+(r.partyStage==='bet'?12:r.partyStage==='buzz'?25:q.seconds)*1000;r.roundEnd=r.deadline;r.hotHolder=null;r.hotTarget=null;r.pies={};r.bluffOptions=[];r.bluffs={};r.votes={};if(q.party==='bluff')startBluff(r,now);if(q.party==='hot')startHot(r,now);startArcade(r,q,now);if(q.party==='draw'){r.drawGuesses={};beginDrawing(r,now);}}
 export function betLimit(p){return Math.min(500,Math.max(0,p.score));}
 export function lockBets(r,now=Date.now()){r.partyStage='answer';r.started=now;r.deadline=now+r.questions[r.index].seconds*1000;r.roundEnd=r.deadline;}
@@ -78,8 +116,8 @@ export function startPie(r,now=Date.now()){r.partyStage='pie-target';r.pies={};r
 export function throwPie(r,id,target){if(r.partyStage!=='pie-target'||!r.answers[id]?.correct||Object.hasOwn(r.pies,id)||id===target||!r.players[target])throw Error('No puedes lanzar esa tarta.');r.pies[id]=target;}
 export function finishPie(r){const hits={};for(const target of Object.values(r.pies||{}))hits[target]=(hits[target]||0)+1;for(const [id,n] of Object.entries(hits)){const a=r.answers[id]||{correct:false,points:0,ms:null,timeout:true};a.hits=n;a.points-=Math.min(200,n*75,Math.max(0,r.players[id].score+a.points));r.answers[id]=a;}}
 
-export function settleContestRound(r,q){if(!['estimate','steal'].includes(q.party))return;if(Object.values(r.answers).some(a=>a.contestSettled))return;const ids=Object.keys(r.players).filter(id=>eligible(r,r.players[id],q));if(q.party==='estimate'){const guesses=ids.map(id=>r.answers[id]).filter(a=>a&&Number.isFinite(a.guess));if(!guesses.length)return;const best=Math.min(...guesses.map(a=>a.error)),scale=q.estimateScale||Math.max(1,Math.abs(q.correct)*.1);for(const a of guesses){a.contestSettled=true;const near=Math.max(0,1-a.error/scale);a.correct=ids.length===1?a.error<=scale:Math.abs(a.error-best)<=Math.max(1e-10,Math.abs(best)*1e-12);a.points=ids.length===1?(a.correct?Math.round(600+400*near):0):a.correct?1000:Math.round(500*near);}return;}
- if(ids.length<2)return;const winners=ids.filter(id=>r.answers[id]?.correct).sort((a,b)=>r.answers[a].ms-r.answers[b].ms);if(!winners.length||winners.length>1&&r.answers[winners[0]].ms===r.answers[winners[1]].ms)return;const winner=winners[0],target=ids.filter(id=>id!==winner).sort((a,b)=>r.players[b].score-r.players[a].score||a.localeCompare(b))[0];const amount=Math.max(0,Math.min(400,Math.floor(r.players[target].score*.2),r.players[target].score));if(!amount)return;const a=r.answers[winner],b=r.answers[target]||{correct:false,points:0,ms:null,timeout:true};a.contestSettled=true;a.points+=amount;a.stolen=amount;a.stolenFrom=target;b.contestSettled=true;b.points-=amount;b.lost=amount;b.lostTo=winner;r.answers[target]=b;
+export function settleContestRound(r,q){applyShowEvent(r,q);if(!['estimate','steal'].includes(q.party))return;if(Object.values(r.answers).some(a=>a.contestSettled))return;const ids=Object.keys(r.players).filter(id=>eligible(r,r.players[id],q));if(q.party==='estimate'){const guesses=ids.map(id=>r.answers[id]).filter(a=>a&&Number.isFinite(a.guess));if(!guesses.length)return;const best=Math.min(...guesses.map(a=>a.error)),scale=q.estimateScale||Math.max(1,Math.abs(q.correct)*.1);for(const a of guesses){a.contestSettled=true;const near=Math.max(0,1-a.error/scale);a.correct=ids.length===1?a.error<=scale:Math.abs(a.error-best)<=Math.max(1e-10,Math.abs(best)*1e-12);a.points=ids.length===1?(a.correct?Math.round(600+400*near):0):a.correct?1000:Math.round(500*near);}return;}
+ if(ids.length<2)return;const winners=ids.filter(id=>r.answers[id]?.correct).sort((a,b)=>r.answers[a].ms-r.answers[b].ms);if(!winners.length||winners.length>1&&r.answers[winners[0]].ms===r.answers[winners[1]].ms)return;const winner=winners[0],target=ids.filter(id=>id!==winner).sort((a,b)=>r.players[b].score-r.players[a].score||a.localeCompare(b))[0];if(r.showEvent?.kind==='shield'&&r.showEvent.ids.includes(target)){r.answers[winner].contestSettled=true;r.answers[winner].shieldBlocked=true;return;}const amount=Math.max(0,Math.min(400,Math.floor(r.players[target].score*.2),r.players[target].score));if(!amount)return;const a=r.answers[winner],b=r.answers[target]||{correct:false,points:0,ms:null,timeout:true};a.contestSettled=true;a.points+=amount;a.stolen=amount;a.stolenFrom=target;b.contestSettled=true;b.points-=amount;b.lost=amount;b.lostTo=winner;r.answers[target]=b;
 }
 
 export function standardPool(){return [...questions,...extras,...bank,...orderBank,...estimateBank];}
@@ -93,4 +131,4 @@ export function selectedContest(kind,difficulty,source,exclude=[]){
  let raw;if(kind!=='party'){raw=take(pool,12);}else{const choice=pool.filter(q=>!isMystery(q)&&(q.mode==='choice'||q.mode==='fast'||q.mode==='boolean')),order=pool.filter(q=>q.mode==='order'),number=pool.filter(q=>q.mode==='number');const final=take(choice,Math.min(2,Math.max(0,choice.length-3)),'final').map((q,i,a)=>({...q,multiplier:i===a.length-1?3:2}));const warm=take(choice,3,'warmup').map((q,i)=>i===1?{...q,multiplier:2}:q),ordering=take(order,3,'order-round'),estimating=take(number,3,'estimate'),buzzer=[...take(pool.filter(q=>q.mode==='choice'&&q.media?.effect==='pixel'),1,'buzzer'),...take(pool.filter(q=>q.mode==='choice'&&['video','animation'].includes(q.media?.type)),1,'buzzer')],steal=take(choice,2,'steal');buzzer.push(...take(choice.filter(q=>q.mode==='choice'),3-buzzer.length,'buzzer'));const rest=take(pool,Math.max(0,18-final.length-warm.length-ordering.length-estimating.length-buzzer.length-steal.length));raw=[...warm,...ordering,...estimating,...buzzer,...rest,...steal,...final];}
  return raw.map((q,i)=>({...validateQuestions([q])[0],id:String(i+1),party:q.party,estimateScale:q.estimateScale,multiplier:q.multiplier}));
 }
-export function revealDuration(r){const q=r.questions[r.index],next=r.questions[r.index+1],event=['estimate','steal','final','pie','bluff','draw'].includes(q?.party)||Object.values(r.answers||{}).some(a=>a.stolen||a.hits||a.fooled);return !next||event||next.party!==q.party?10000:5500;}
+export function revealDuration(r){const q=r.questions[r.index],next=r.questions[r.index+1],event=!!r.showEvent||q?.party==='tiebreak'||['estimate','steal','final','pie','bluff','draw'].includes(q?.party)||Object.values(r.answers||{}).some(a=>a.stolen||a.hits||a.fooled);return !next||event||next.party!==q.party?10000:5500;}
