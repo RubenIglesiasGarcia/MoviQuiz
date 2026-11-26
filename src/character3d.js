@@ -45,7 +45,7 @@ export function mountCharacter(host,a={},reaction='idle'){
  const start=performance.now();let last=0,slow=0;const loop=now=>{if(!host.isConnected||!canvas.isConnected){cleanup(entry);return;}entry.frame=requestAnimationFrame(loop);if(document.hidden||renderer.getContext().isContextLost()||now-last<30)return;if(showroom&&last&&now-last>80)slow++;else slow=Math.max(0,slow-1);if(slow>=15){renderer.setPixelRatio(Math.max(1,renderer.getPixelRatio()-.25));fit();slow=0;}last=now;
  const t=(now-start)/1000,m=entry.model,motion=!reduced(),angle=entry.rotation+(showroom&&!entry.manual&&motion?Math.sin(t*.65)*.15:0);poseAvatar(m,reaction,t,motion,angle);
  if(showroom&&motion){set.animate(t);const dt=(now-entry.changed)/1000;if(entry.changed&&dt>=0&&dt<.45){m.root.position.y+=Math.sin(dt/.45*Math.PI)*.10;m.arms[0].rotation.z-=Math.sin(dt/.45*Math.PI)*.13;m.arms[1].rotation.z+=Math.sin(dt/.45*Math.PI)*.13;}}
- if(host.classList.contains('voice-presenter-avatar')){const amount=Math.max(0,Math.min(1,Number(host.dataset.mouth)||0));articulate(m,amount,t);if(m.host)animateSonny(m,t,{motion,speaking:amount>0,amount,mood:host.dataset.mood||'idle'});}renderer.render(scene,camera);};entry.frame=requestAnimationFrame(loop);
+ if(host.classList.contains('voice-presenter-avatar')||host.classList.contains('local-sonny-portrait')){const amount=Math.max(0,Math.min(1,Number(host.dataset.mouth)||0));articulate(m,amount,t);if(m.host)animateSonny(m,t,{motion,speaking:amount>0,amount,mood:host.dataset.mood||document.documentElement.dataset.mqSonnyMood||'idle'});}renderer.render(scene,camera);};entry.frame=requestAnimationFrame(loop);
 }
 
 
