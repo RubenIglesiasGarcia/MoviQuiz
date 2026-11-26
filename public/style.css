@@ -617,3 +617,9 @@ body.tv-mode .screen .question-media-image{height:clamp(80px,24vh,250px)}
 .local-sonny-copy .sonny-inline{padding:0;border:none;background:none;box-shadow:none}
 .local-sonny-copy .voice-presenter-copy span{font-size:clamp(13px,2vw,17px)}
 @media(max-width:420px){.local-sonny{gap:8px;padding:6px 8px;margin-bottom:8px}.local-sonny-portrait{flex-basis:62px;height:76px}}
+
+/* Sonny's petting interaction is only present in non-timed lobby/finale screens. */
+.sonny-pet{align-self:start;justify-self:start;min-height:32px;padding:5px 11px;border:1px solid #947447;border-radius:999px;color:#ffe6ad;background:#3d294c;font-size:12px;font-weight:750;cursor:pointer}
+.sonny-pet:hover{background:#53366a}.sonny-pet:active{transform:scale(.97)}
+.sonny-pet:focus-visible{outline:2px solid #ffd55a;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.sonny-pet:active{transform:none}}
