@@ -7,7 +7,7 @@ const input=(value='',placeholder='',max=300)=>{const n=h('input');n.value=value
 const select=(options,value)=>{const n=h('select');for(const [id,label] of options){const o=h('option','',label);o.value=id;n.append(o);}n.value=value;return n;};
 function modal(title){const d=h('dialog','pack-dialog'),head=h('header','pack-dialog-head'),body=h('div','pack-dialog-body'),close=b('✕','ghost',()=>d.close());close.setAttribute('aria-label','Cerrar');head.append(h('h2','',title),close);d.append(head,body);document.body.append(d);d.addEventListener('close',()=>d.remove(),{once:true});d.showModal();return {d,body};}
 const vis={private:'🔒 Privado',link:'🔗 Por código',public:'🌍 Comunidad'};
-const blank=()=>({mode:'choice',category:'Cultura general',difficulty:'Media',prompt:'',options:['','','',''],correct:0,explanation:''});
+const blank=()=>({mode:'choice',category:'Cultura general',difficulty:'Media',prompt:'',options:['','','',''],correct:null,explanation:''});
 export function createPackPicker({api,notify,user}){
  const node=h('section','mode-setting pack-picker'),header=h('div','pack-picker-head'),summary=h('p','pack-summary'),manage=b('','pack-customize',()=>openLibrary({api,notify,user,selection,onChange:paint}));manage.setAttribute('aria-label','Personalizar preguntas');const icon=document.createElementNS('http://www.w3.org/2000/svg','svg');icon.setAttribute('viewBox','0 0 24 24');icon.setAttribute('fill','none');icon.setAttribute('stroke','currentColor');icon.setAttribute('stroke-width','1.8');icon.setAttribute('stroke-linecap','round');icon.setAttribute('aria-hidden','true');const lines=document.createElementNS(icon.namespaceURI,'path');lines.setAttribute('d','M4 7h7m4 0h5M4 17h3m4 0h9M11 4v6M7 14v6');icon.append(lines);manage.append(icon,h('span','','Personalizar'));header.append(h('span','setup-section-label','04 / PREGUNTAS'),manage);node.append(header,summary);
  const selection={standard:true,categories:null,packs:new Map()};
@@ -31,7 +31,7 @@ export async function openLibrary({api,notify,user,selection=null,onChange=()=>{
  const draftKey='mq.packDraft.'+(user?.id||'local')+'.'+(pack?.id||'new');
  let draft=null;try{draft=JSON.parse(localStorage.getItem(draftKey)||'null');}catch{}
  const copy=q=>JSON.parse(JSON.stringify(q));
- let model={title:pack?.title||'',description:pack?.description||'',visibility:pack?.visibility||'private',questions:(pack?.questions||[blank(),blank(),blank()]).map(copy)};
+ let model={title:pack?.title||'',description:pack?.description||'',visibility:pack?.visibility||'private',questions:(pack?.questions||[blank()]).map(copy)};
  if(draft&&Array.isArray(draft.questions)&&draft.questions.length>=1&&draft.questions.length<=100&&confirm('¿Recuperar el borrador de este pack?'))model=draft;
  let index=0,step=0,busy=false;
  const message=h('p','pack-status');message.setAttribute('role','status');message.setAttribute('aria-live','polite');
@@ -49,6 +49,23 @@ export async function openLibrary({api,notify,user,selection=null,onChange=()=>{
  function add(mode='choice'){if(model.questions.length>=100){message.textContent='Máximo 100 preguntas.';return;}model.questions.splice(index+1,0,newQuestion(mode));index++;persist();go(1);}
  function remove(){if(model.questions.length===1){message.textContent='Conserva al menos una pregunta.';return;}if(!confirm('¿Eliminar esta pregunta?'))return;model.questions.splice(index,1);index=Math.min(index,model.questions.length-1);persist();renderEditor();}
  function move(delta){const to=index+delta;if(to<0||to>=model.questions.length)return;[model.questions[index],model.questions[to]]=[model.questions[to],model.questions[index]];index=to;persist();renderEditor();}
+ function importQuestions(){
+ const {d:dialog,body:body}=modal('Añadir preguntas en bloque');
+ const text=h('textarea');text.rows=8;text.placeholder='Pregunta | Correcta | Incorrecta 1 | Incorrecta 2 | Incorrecta 3';
+ const level=select(levels.map(x=>[x.id,x.label]),model.questions[index]?.difficulty||'Media'),category=input(model.questions[index]?.category||model.title||'Cultura general','Categoría',60),feedback=h('p','pack-status');
+ body.append(h('p','sub','Pega una pregunta por línea. Separa con | el enunciado, la respuesta correcta y tres alternativas. No se sustituirán tus preguntas actuales.'),field('Preguntas',text),field('Categoría',category),field('Dificultad',level),feedback,b('Importar preguntas','primary full',()=>{
+ const lines=text.value.split(/\r?\n/).filter(x=>x.trim());if(!lines.length){feedback.textContent='Pega al menos una pregunta.';return;}
+ const imported=[];for(let i=0;i<lines.length;i++){const parts=lines[i].split('|').map(x=>x.trim());const q={...blank(),category:category.value.trim(),difficulty:level.value,prompt:parts[0],options:parts.slice(1),correct:0};const err=parts.length!==5?'Se necesitan cinco campos separados por |.':check(q);if(err||q.prompt.length>300||q.options.some(x=>x.length>160)){feedback.textContent='Línea '+(i+1)+': '+(err||'Texto demasiado largo.');return;}imported.push(q);}
+ const onlyBlank=model.questions.length===1&&!model.questions[0].prompt&&!model.questions[0].options?.some(Boolean)&&model.questions[0].mode==='choice';const existing=onlyBlank?[]:model.questions;if(existing.length+imported.length>100){feedback.textContent='Máximo 100 preguntas por pack.';return;}model.questions=[...existing,...imported];index=existing.length;persist();dialog.close();go(1);message.textContent=imported.length+' preguntas importadas.';
+ }));
+ }
+ function tryQuestion(){
+ const q=model.questions[index],err=check(q);if(err){message.textContent=err;return;}
+ const {body:body}=modal('Prueba tu pregunta');const feedback=h('p','pack-status');feedback.setAttribute('role','status');body.append(h('p','sub',q.category+' · '+q.difficulty),h('h3','',q.prompt));const reveal=ok=>{feedback.textContent=(ok?'✓ ¡Correcto!':'✗ No era esa.')+(q.explanation?' '+q.explanation:'');};
+ if(q.mode==='choice'){const shuffled=q.options.map((label,i)=>({label,i}));for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}for(const x of shuffled)body.append(b(x.label,'secondary full',()=>reveal(x.i===q.correct)));}
+ else if(q.mode==='number'){const guess=input('','Tu estimación');guess.type='number';guess.step='any';body.append(guess,b('Comprobar','primary full',()=>{if(!guess.value.trim())return;const error=Math.abs(Number(guess.value)-Number(q.correct));feedback.textContent='Respuesta: '+q.correct+' · Diferencia: '+error.toLocaleString('es-ES')+(q.explanation?' · '+q.explanation:'');}));}
+ else{let order=q.options.slice().sort(()=>Math.random()-.5);const list=h('div','pack-edit-list');function paint(){list.replaceChildren();order.forEach((x,i)=>{const row=h('div','pack-edit-head'),up=b('↑','secondary',()=>{if(i){[order[i-1],order[i]]=[order[i],order[i-1]];paint();}}),down=b('↓','secondary',()=>{if(i<order.length-1){[order[i+1],order[i]]=[order[i],order[i+1]];paint();}});up.disabled=i===0;down.disabled=i===order.length-1;row.append(h('span','',x),up,down);list.append(row);});}paint();body.append(list,b('Comprobar orden','primary full',()=>reveal(order.every((x,i)=>x===q.options[i]))));}body.append(feedback);
+ }
  function renderEditor(){
  if(!ed.isConnected)return;shell.replaceChildren();inlineError=null;saveButton=null;
  const steps=h('div','pack-tabs');for(const [i,label] of ['1 · Pack','2 · Preguntas','3 · Revisar'].entries()){const t=b(label,'secondary',()=>go(i));t.setAttribute('aria-pressed',String(step===i));steps.append(t);}progress=h('p','pack-selected');shell.append(steps,progress);
@@ -72,7 +89,7 @@ export async function openLibrary({api,notify,user,selection=null,onChange=()=>{
  for(let i=0;i<4;i++){const row=h('div','pack-edit-head'),opt=bind(input(q.options[i]||'','Respuesta '+String.fromCharCode(65+i),160),v=>q.options[i]=v);if(q.mode==='choice'){const correct=b(q.correct===i?'✓ Correcta':'Marcar','secondary',()=>{q.correct=i;persist();renderEditor();});correct.setAttribute('aria-pressed',String(q.correct===i));row.append(correct);}else{row.append(h('b','',String(i+1)));const up=b('↑','ghost',()=>{if(i){[q.options[i-1],q.options[i]]=[q.options[i],q.options[i-1]];persist();renderEditor();}});up.disabled=i===0;row.append(up);}row.append(opt);answers.append(row);}
  }
  const explanation=bind(input(q.explanation||'','Dato curioso o explicación de la solución',500),v=>q.explanation=v);card.append(field('Explicación al revelar (opcional)',explanation));inlineError=h('p','pack-status');card.append(inlineError);shell.append(card);
- const actions=h('div','pack-actions');actions.append(b('＋ Opciones','secondary',()=>add('choice')),b('＋ Ordenar','secondary',()=>add('order')),b('＋ Estimar','secondary',()=>add('number')));shell.append(actions,b('Revisar pack →','primary full',()=>go(2)));
+ const actions=h('div','pack-actions');actions.append(b('＋ Opciones','secondary',()=>add('choice')),b('＋ Ordenar','secondary',()=>add('order')),b('＋ Estimar','secondary',()=>add('number')));shell.append(actions,b('Importar varias preguntas','secondary full',importQuestions),b('▶ Probar esta pregunta','secondary full',tryQuestion),b('Revisar pack →','primary full',()=>go(2)));
  }else{
  const errors=allErrors(),meta=metaError();shell.append(h('h3','','Vista previa · '+(model.title||'Sin nombre')),h('p','sub',model.description||'Sin descripción'),h('p','sub',vis[model.visibility]+' · '+model.questions.length+' preguntas'));
  const stats=h('div','pack-actions');for(const [mode,label] of [['choice','Opciones'],['order','Ordenar'],['number','Estimar']])stats.append(h('span','pack-count',label+': '+model.questions.filter(q=>q.mode===mode).length));shell.append(stats);
