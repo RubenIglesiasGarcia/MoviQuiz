@@ -2,6 +2,7 @@ import {actionBeat,actionMeta,beatDuration} from '/arcade-rules.js';
 import {syncArcadeStage} from '/generated/character3d.js';
 import {mountCoinGame} from '/coin-play.js';
 import {playSound} from '/effects.js';
+import {arcadeQuip} from '/arcade-humor.js';
 let lastPadRoom='',lastPadPreference=null;
 const h=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e;};
 const btn=(cls,text,fn)=>{const b=h('button',cls,text);b.type='button';b.onclick=fn;return b;};
@@ -44,7 +45,7 @@ export function mountArcadeGame(parent,{state,playerId,play,send,offset,reveal,r
   if(showZone){const w=beat.window||350;zone.style.left=Math.max(0,(beat.center-w)/duration*100)+'%';zone.style.width=(Math.min(duration,beat.center+w)-Math.max(0,beat.center-w))/duration*100+'%';}
   const locked=attempt===b.index||p?.lastBeat===b.index;
   for(const button of buttons){button.disabled=!active||locked;button.classList.toggle('cue',false);}
-  if(active&&p?.lastBeat===b.index&&locked){setText(hint,p.lastPoints>0?'+'+p.lastPoints+' PTS'+(p.combo>1?' · COMBO ×'+p.combo:''):'¡FALLO! Sigue jugando.');if(lastFeedback!==b.index){lastFeedback=b.index;if(play)playSound(p.lastPoints>0?'locked':'wrong');wrap.dataset.hit=p.lastPoints>0?'yes':'no';wrap.dataset.feedback=p.lastPoints>=150?'perfect':p.lastPoints>0?'hit':'miss';vibrate(p.lastPoints>0?[20,25,35]:65);}}else{delete wrap.dataset.hit;delete wrap.dataset.feedback;}
+  if(active&&p?.lastBeat===b.index&&locked){setText(hint,arcadeQuip(kind,p.lastPoints,b.index)+(p.lastPoints>0?' · +'+p.lastPoints+' PTS'+(p.combo>1?' · ×'+p.combo:''):' · Sigue jugando'));if(lastFeedback!==b.index){lastFeedback=b.index;if(play)playSound(p.lastPoints>0?'locked':'wrong');wrap.dataset.hit=p.lastPoints>0?'yes':'no';wrap.dataset.feedback=p.lastPoints>=150?'perfect':p.lastPoints>0?'hit':'miss';vibrate(p.lastPoints>0?[20,25,35]:65);}}else{delete wrap.dataset.hit;delete wrap.dataset.feedback;}
   if(finished)setText(hint,play?'Has conseguido '+(p?.hits||0)+' aciertos de '+a.plan.beats.length:'¡Reto terminado!');
   if(!play){const standings=[...current.players].sort((x,y)=>(a.players[y.id]?.score||0)-(a.players[x.id]?.score||0));const sig=JSON.stringify(standings.map(x=>[x.id,a.players[x.id]?.score,a.players[x.id]?.combo]));if(sig!==signature){signature=sig;live.replaceChildren(...standings.map((x,i)=>{const n=h('div','arcade-live-player');n.append(h('b','',String(i+1)+'. '+x.name),h('strong','',String(a.players[x.id]?.score||0)),h('small','',(a.players[x.id]?.combo||0)>1?'×'+a.players[x.id].combo:''));return n;}));}}
   frame=requestAnimationFrame(draw);
