@@ -169,7 +169,7 @@ body.tv-mode .screen .round-intro{min-height:58vh;gap:2vh}.screen[data-round-sta
 .mode-setup .mode-ticket small{grid-area:description;min-width:0;font-size:13px;line-height:1.35;overflow-wrap:anywhere}
 .mode-setup .mode-selected{right:9px;top:10px}
 }
-.sort-tile{touch-action:pan-y;-webkit-user-select:none;user-select:none}
+.sort-tile{touch-action:none;-webkit-user-select:none;user-select:none}
 .sort-grip{touch-action:none;min-height:42px}
 .sort-up,.sort-down{touch-action:manipulation}
 .sort-wrap{min-width:0;overflow-anchor:none}
@@ -419,7 +419,7 @@ body.order-controller #round #answers.order-controls{display:flex;flex-direction
 body.order-controller .sort-hint{margin:0;font-size:11px;line-height:1.15}
 body.order-controller .sort-wrap{flex:1 1 0;min-height:0;overflow:auto;overscroll-behavior:contain;overflow-anchor:none;touch-action:pan-y}
 body.order-controller .sortable-list{gap:4px;margin:0;overflow-anchor:none}
-body.order-controller .sortable-list .sort-tile{min-height:44px;padding:2px 4px;gap:4px;grid-template-columns:18px 30px minmax(0,1fr) 40px 40px;touch-action:pan-y}
+body.order-controller .sortable-list .sort-tile{min-height:44px;padding:2px 4px;gap:4px;grid-template-columns:18px 30px minmax(0,1fr) 40px 40px;touch-action:none}
 body.order-controller .sort-grip{touch-action:none;min-height:40px}
 body.order-controller .sort-up,body.order-controller .sort-down{min-height:40px;padding:2px 0;touch-action:manipulation}
 body.order-controller .sort-label{font-size:clamp(12px,3.5vw,15px);line-height:1.15}
@@ -523,3 +523,6 @@ body.tv-mode .screen .question-media-image{height:clamp(80px,24vh,250px)}
 .arcade-coins[data-variant=sofa] .coin-stick{border-color:var(--territory-color,#efb3e5)}.arcade-coins[data-variant=sofa] .coin-knob{background:radial-gradient(circle at 30% 20%,#fff,var(--territory-color,#efb3e5) 65%,#382451)}.arcade-coins[data-variant=sofa] .coin-time-track i{background:linear-gradient(90deg,#c7a5ff,#ff9dc9)}
 
 .arcade-award{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 10px;padding:5px 9px;border:1px solid #ffd55a45;background:#ffd55a12;border-radius:9px;line-height:1.15;max-width:100%;text-align:center;font-size:clamp(11px,1.65vh,18px);overflow-wrap:anywhere}.arcade-award b{color:#ffd55a;letter-spacing:.05em;font-size:.82em}.arcade-award span{color:#fff1d3;min-width:0;font-weight:700}.arcade-hint{overflow-wrap:anywhere}
+
+/* Full-row drag on touch: the label, number and grip all start the same gesture. Scroll via the list gaps or drag-edge auto-scroll. */
+.sort-tile .sort-position,.sort-tile .sort-label{touch-action:none;cursor:grab;-webkit-touch-callout:none}

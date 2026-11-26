@@ -6,6 +6,10 @@ export function moveItem(items,from,to){
 export function insertionIndex(center,centers){
  const index=centers.findIndex(y=>center<y);return index===-1?centers.length:index;
 }
+// The full answer tile is a drag surface, except its independent arrow buttons.
+export function canStartOrderDrag(e){
+ return e.button===0&&!e.target?.closest?.('.sort-up,.sort-down');
+}
 export function makeOrderList(options,onChange){
  const list=document.createElement('div');list.className='sortable-list';list.setAttribute('aria-label','Orden de las respuestas');
  const wrap=document.createElement('div');wrap.className='sort-wrap';
@@ -85,7 +89,7 @@ export function makeOrderList(options,onChange){
   grip.onkeydown=e=>{if(e.key==='ArrowUp'||e.key==='ArrowDown'){e.preventDefault();move(id,order.indexOf(id)+(e.key==='ArrowUp'?-1:1));grip.focus({preventScroll:true});}};
   row.append(pos,grip,content,up,down);rows.set(id,row);
   row.addEventListener('pointerdown',e=>{
-   if(drag||e.button!==0||grip.disabled||e.target.closest('.sort-up,.sort-down')||(e.pointerType!=='mouse'&&!e.target.closest('.sort-grip')))return;
+   if(drag||grip.disabled||!canStartOrderDrag(e))return;
    if(e.cancelable)e.preventDefault();
    drag={id,pointer:e.pointerId,startX:e.clientX,startY:e.clientY,x:e.clientX,y:e.clientY,active:false,original:[...order]};
    try{list.setPointerCapture(e.pointerId);}catch{drag=null;}
