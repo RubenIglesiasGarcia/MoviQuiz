@@ -12,3 +12,8 @@ jobs:
       - run: npm run check
       - run: node --check public/sw.js && node --check icons.js
       - run: npm test
+
+      - name: Verify Cloudflare Worker bundle (no deployment)
+        run: npx wrangler deploy --dry-run --outdir /tmp/mobiquiz-worker-build
+        env:
+          WRANGLER_SEND_METRICS: 'false'
