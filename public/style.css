@@ -449,3 +449,10 @@ body.order-controller .sortable-list .sort-tile{min-height:40px}
 .pack-picker .pack-summary{margin:0;font-size:12px;font-weight:600;line-height:1.45;overflow-wrap:anywhere}
 .pack-picker[data-custom=true] .pack-customize{border-color:#77e2b2;color:#a9efd1}
 @media(max-width:360px){.pack-picker{padding:9px}.pack-picker .pack-customize{padding:5px 6px;gap:4px}.pack-picker .pack-customize svg{width:14px;height:14px}.pack-picker-head .setup-section-label{letter-spacing:.07em}}
+
+/* Ordering: a lifted card follows the pointer while its slot remains in the grid. */
+.sortable-list{position:relative;isolation:isolate}
+.sortable-list .sort-placeholder{opacity:.3;border:2px dashed #ffd55a;background:#1c1833;box-shadow:none}
+.sortable-list .sort-placeholder>*{visibility:hidden}
+.sortable-list .sort-float{box-sizing:border-box;position:fixed;z-index:1000;margin:0;pointer-events:none;opacity:1;touch-action:none;will-change:transform;transition:none!important;background:linear-gradient(145deg,#514374,#302448);border:2px solid #ffd55a;box-shadow:0 12px 24px #11091fa8,0 0 0 2px #ffd55a33;cursor:grabbing}
+.sortable-list .sort-float .sort-grip{color:#ffd55a}
