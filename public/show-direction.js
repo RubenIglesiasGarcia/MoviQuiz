@@ -79,6 +79,8 @@ const sonnyRules={
  'solo-bonus':['Un bonus, por la cara.','Acierta para sumar puntos extra.']
 };
 const sonnyJokes={
+ soloWrong:['Un pequeño fallo para ti, un gran momento para mi cara de decepción.','Esto no ha salido en el tutorial, ¿verdad?','No pasa nada. Yo tampoco me sé dónde dejé mi ratón de juguete.','El plan era bueno. La respuesta no tanto.'],
+ soloRight:['Eso es. Te dejo quedarte en el plató.','La neurona está trabajando horas extra.','Bien jugado. Casi a mi nivel.'],
  zero:['Mi cara cuando nadie acierta. En fin, siguiente.','Cuatro opciones y habéis conseguido esquivarlas todas.','El conocimiento ha abandonado el chat.','Me voy a hacer el dormido, como si no hubiera visto esto.','Ni con siete vidas. Y mira que lo he intentado.'],
  all:['¡Cine! No tengo ni una sola queja.','Señoras y señores, tenemos un equipo de élite.','Me estáis quitando el trabajo.','Todos han acertado. Esto parece sospechosamente organizado.'],
  lead:['Tenemos nuevo líder. La corona no venía con garantía.','Cambio de líder. Se ha desbloqueado el drama.','El marcador acaba de hacer un giro de guion.'],
@@ -105,6 +107,8 @@ export function sonnyMoment(state,previousLeader=null){
  if(p.some(x=>x.stolen>0))type='steal';
  else if(previousLeader&&leader?.id!==previousLeader&&leader)type='lead';
  else if(p.some((x,j)=>(x.previousRank??j)-j>=2))type='comeback';
+ else if(normal&&s.solo&&p.length===1&&p[0].reaction==='wrong'&&i%2===0){type='soloWrong';mood='shock';}
+ else if(normal&&s.solo&&p.length===1&&correct===1&&i%3===1){type='soloRight';mood='celebrate';}
  else if(normal&&p.length>1&&correct===0){type='zero';mood='shock';}
  else if(normal&&p.length>1&&correct===p.length){type='all';mood='celebrate';}
  else if(p.some(x=>x.fast&&x.reaction==='correct')){type='fast';mood='celebrate';}
