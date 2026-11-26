@@ -463,3 +463,11 @@ body.tv-mode .screen .question-art{height:clamp(64px,16vh,190px);object-fit:cove
 body.order-controller #round .question-art{height:clamp(36px,8vh,68px);height:clamp(36px,8dvh,68px);margin:0;flex-shrink:0}
 @media(max-height:580px){body.order-controller #round .question-art{height:32px}}
 @media(max-width:550px){.game-controller .question-art{height:clamp(48px,10vh,85px)}}
+
+.local-audio-dialog{width:min(440px,calc(100% - 24px));max-height:85dvh;overflow:auto;padding:20px;border:2px solid #ffd55a;border-radius:16px;background:#2d2047;color:#fff1d3;box-shadow:0 12px 40px #10091e99}
+.local-audio-dialog::backdrop{background:#10091eb3}
+.local-audio-dialog h2{font-size:clamp(20px,5vw,28px);margin:0 0 10px}
+.local-audio-dialog .local-audio-controls{display:grid;gap:8px;margin:14px 0}
+.local-audio-dialog .secondary[aria-pressed=true]{border-color:#77e2b2;color:#bcf9dc}
+.local-audio-dialog .secondary[aria-pressed=false]{opacity:.8}
+.local-audio-dialog>.ghost{margin-top:8px}
