@@ -1032,7 +1032,7 @@ const themes=[
         "category": "Pokémon",
         "mode": "order",
         "difficulty": "Difícil",
-        "prompt": "Ordena estos Pokémon por número nacional.",
+        "prompt": "Ordena estos otros Pokémon por número de la Pokédex Nacional.",
         "options": [
           "Pikachu",
           "Meowth",
@@ -1626,7 +1626,7 @@ const themes=[
         "category": "Digimon",
         "mode": "order",
         "difficulty": "Muy difícil",
-        "prompt": "Ordena las series por estreno japonés.",
+        "prompt": "Ordena estas cuatro series de anime por su primer estreno en Japón.",
         "options": [
           "Frontier",
           "Savers",

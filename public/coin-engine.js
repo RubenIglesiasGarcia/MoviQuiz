@@ -1,4 +1,5 @@
 // Server-authoritative continuous movement; no frame-rate or client position trust.
+import {arenaHazard} from './arena-events.js';
 export const COIN_DURATION=30000,COIN_LEAD=3500,COIN_LEASE=550,COIN_MIN_INPUT=160;
 export const COIN_BOUNDS={x:6,z:4};
 export const COIN_BLOCKS=[{x:-2.1,z:0,w:.95,d:2.35},{x:2.1,z:0,w:.95,d:2.35},{x:0,z:-2.4,w:1.8,d:.65},{x:0,z:2.4,w:1.8,d:.65}];
@@ -65,7 +66,7 @@ function paintTerritory(action,ids,time,dt){
  }
 }
 export function startCoins(action){
- const ids=Object.keys(action.players).sort(),count=ids.length;action.world={tick:action.started+action.plan.lead,taken:{},...(action.plan.variant==='territory'?{owners:{},claimedAt:{}}:action.plan.variant==='sofa'?{holder:null,lastAward:0}:{})};
+ const ids=Object.keys(action.players).sort(),count=ids.length;action.world={tick:action.started+action.plan.lead,taken:{},...(action.plan.variant==='territory'?{owners:{},claimedAt:{}}:['sofa','lava','bomb'].includes(action.plan.variant)?{holder:null,lastAward:0,bombCycle:-1,passAt:0}:{})};
  ids.forEach((id,i)=>{const a=2*Math.PI*i/Math.max(1,count),p=action.players[id];Object.assign(p,{x:Math.cos(a)*5.05,z:Math.sin(a)*3.15,vx:0,vz:0,until:0,lastControl:0,boostUntil:0,boostReady:0,score:0,hits:0,attempts:0,colorIndex:i,repaints:0,bumps:0,bumped:0,safeUntil:0,bumpReady:0,bumpedAt:0});});
 }
 export function advanceCoins(action,now){
@@ -79,6 +80,7 @@ export function advanceCoins(action,now){
   }
   if(action.plan.variant==='territory'){paintTerritory(action,ids,time,dt);world.tick=time;continue;}
   if(action.plan.variant==='sofa'){scoreSofa(action,ids,time,elapsed);world.tick=time;continue;}
+  if(['lava','bomb'].includes(action.plan.variant)){arenaHazard(action,ids,time,elapsed);world.tick=time;continue;}
   // Resolve contested pickups by nearest player; stable tie-break, no input order advantage.
   for(const c of action.plan.coins){if(c.at>elapsed||world.taken[c.id]||elapsed-c.at>=10000)continue;let winner=null,best=.48*.48;
    for(const id of ids){const p=action.players[id],d=(p.x-c.x)**2+(p.z-c.z)**2;if(p.attempts>0&&d<best){winner=p;best=d;}}

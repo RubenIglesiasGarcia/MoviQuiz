@@ -7,7 +7,7 @@ const styles={
  bluff:['#c4acff','EL FARSANTE','No te fíes de las apariencias.'],hot:['#ff9b73','PATATA CALIENTE','Que no te pille el reloj.'],
  pie:['#ff9db7','TARTAZO','Acierta y elige tu objetivo.'],draw:['#79d9ef','DIBUJA COMO PUEDAS','Una pista puede cambiarlo todo.'],
  dash:['#79d9ef','CARRERA DE VALLAS','El ritmo lo es todo.'],dodge:['#c4acff','LLUVIA DE METEORITOS','Encuentra el hueco y esquiva.'],
- hoops:['#ffbf73','CANASTA ESTELAR','Apunta al instante perfecto.'],coins:['#ffdb78','FIEBRE DEL ORO','Cada moneda cuenta.'],territory:['#ff9db7','GUERRA DE COLORES','Conquista el terreno de tus rivales.'],sofa:['#efb3e5','REY DEL SOFÁ','Aquí no se reserva asiento.'],
+ hoops:['#ffbf73','CANASTA ESTELAR','Apunta al instante perfecto.'],coins:['#ffdb78','FIEBRE DEL ORO','Cada moneda cuenta.'],territory:['#ff9db7','GUERRA DE COLORES','Conquista el terreno de tus rivales.'],lava:['#ff955d','EL SUELO ES LAVA','¡Corre, que te quemas!'],bomb:['#e7bf70','PAQUETE SOSPECHOSO','Aquí no se aceptan devoluciones.'],sofa:['#efb3e5','REY DEL SOFÁ','Aquí no se reserva asiento.'],
  memory:['#c4acff','MEMORIA RELÁMPAGO','Graba cada símbolo en tu memoria.'],odd:['#76e3d2','EL INTRUSO','Uno de ellos no encaja.'],
  reflex:['#76e3d2','LUZ VERDE','No te adelantes a la señal.'],count:['#8ecbff','CUENTA ATRÁS','Observa antes de contar.'],
  'number-hunt':['#79d9ef','ESCALERA EXPRÉS','El orden es la clave.'],custom:['#c4acff','RONDA DE AMIGOS','Aquí nadie tiene ventaja.']
@@ -69,6 +69,7 @@ const sonnyRules={
  hoops:['Baloncesto sin tener que salir del sofá.','Pulsad en el momento justo para encestar.'],
  coins:['Aquí sí se viene a por el dinero.','Recoged monedas y evitad los obstáculos.'],
  territory:['La diplomacia ha abandonado el chat.','Conquistad la mayor cantidad de territorio.'],
+ lava:['¡Mis patitas no están preparadas!','Corre a la zona que no se enciende.'],bomb:['Eso no parece un paquete de atún.','Pasa el paquete a un rival antes de que explote.'],
  sofa:['Mi especialidad, por fin.','Conseguid ocupar el sofá y conservad vuestro sitio.'],
  memory:['Memoria de pez no, por favor.','Memorizad los símbolos y reproducidlos.'],
  odd:['Uno de estos elementos no ha leído el grupo de WhatsApp.','Encontrad el elemento diferente.'],
