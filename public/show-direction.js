@@ -94,6 +94,7 @@ export function sonnyMoment(state,previousLeader=null){
  const s=state||{},q=s.question||{},p=s.players||[],i=Math.max(0,s.index||0),key=q.party||'classic',leader=p[0],normal=s.kind!=='arcade',correct=p.filter(x=>x.reaction==='correct').length;
  if(s.phase==='lobby')return {text:'Soy Sonny. Bienvenidos a MobiQuiz. Preparad los mandos y dejad las excusas fuera.',mood:'smug'};
  if(s.phase==='finished')return {text:line(sonnyJokes.finish,i),mood:'celebrate'};
+ if(s.phase==='question'&&s.partyStage==='intro'&&key==='warmup'&&q.multiplier===2)return {text:'¡Lluvia de puntos! Esta pregunta vale el doble. Que no se diga que no aviso.',mood:'celebrate',section:true};
  if(s.phase==='question'&&s.partyStage==='intro'&&(s.introDuration||3000)>=3000){const [a,b]=sonnyRules[key]||sonnyRules.classic;return {text:a+' '+b,mood:key==='final'?'celebrate':'smug',section:true};}
  if(s.phase!=='reveal')return null;
  let type=null,mood='smug';
