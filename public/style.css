@@ -604,3 +604,16 @@ body.tv-mode .screen .question-media-image{height:clamp(80px,24vh,250px)}
 .finale-curtain strong{animation:mq-finale-glow 1.3s ease-in-out infinite alternate}
 @keyframes mq-finale-glow{from{filter:drop-shadow(0 0 4px #ffd55a33)}to{filter:drop-shadow(0 0 18px #ffd55a88)}}
 @media(prefers-reduced-motion:reduce){.finale-curtain strong{animation:none}}
+
+/* Compact local host, including solo mode; no extra renderer during active answers. */
+.local-sonny{display:flex;align-items:center;gap:12px;padding:8px 12px;margin-bottom:12px;border:1px solid #b99651;border-radius:14px;background:linear-gradient(115deg,#36234f,#21162e);min-width:0;box-shadow:inset 0 0 0 1px #ffd55a12}
+.local-sonny-portrait{position:relative;display:grid;place-items:center;flex:0 0 76px;height:90px;overflow:hidden;border-radius:12px;background:radial-gradient(ellipse at 50% 38%,#8161bb,#291c42 75%)}
+.local-sonny-portrait .character3d{position:absolute;inset:0;width:100%;height:100%;display:block}
+.local-sonny-portrait.has-3d .sonny-fallback{display:none}
+.sonny-fallback{font-size:38px}
+.local-sonny-copy{display:grid;gap:5px;flex:1;min-width:0}
+.local-sonny-copy .presenter-name{font-size:11px;letter-spacing:.1em;color:#ffd55a;font-weight:850}
+.local-sonny-copy .presenter-speech{font-weight:750;font-size:clamp(13px,2vw,17px);overflow-wrap:anywhere;color:#fff1d3}
+.local-sonny-copy .sonny-inline{padding:0;border:none;background:none;box-shadow:none}
+.local-sonny-copy .voice-presenter-copy span{font-size:clamp(13px,2vw,17px)}
+@media(max-width:420px){.local-sonny{gap:8px;padding:6px 8px;margin-bottom:8px}.local-sonny-portrait{flex-basis:62px;height:76px}}
