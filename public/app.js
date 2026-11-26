@@ -80,7 +80,7 @@ async function shareResultCard(snapshot){
  const grad=c.createLinearGradient(0,0,1080,1350);grad.addColorStop(0,'#38225f');grad.addColorStop(1,'#151026');c.fillStyle=grad;c.fillRect(0,0,1080,1350);
  c.strokeStyle='#f3c76a';c.lineWidth=9;c.strokeRect(36,36,1008,1278);c.textAlign='center';c.textBaseline='middle';
  const text=(value,y,size,color='#fff1d3',max=900)=>{c.fillStyle=color;c.font='800 '+size+'px system-ui,sans-serif';c.fillText(String(value),540,y,max);};
- text('MobiQuiz',115,88,'#ffd55a');text('EL PLATÓ DE SONNY',200,32,'#d6c1ff');text(snapshot.solo?'RETO COMPLETADO':'RESULTADOS DEL CONCURSO',300,38);
+ text('MobiQuiz',115,88,'#ffd55a');text('EL PLATÓ DE '+hostName(state).toUpperCase(),200,32,'#d6c1ff');text(snapshot.solo?'RETO COMPLETADO':'RESULTADOS DEL CONCURSO',300,38);
  const top=snapshot.players[0],tied=snapshot.players.filter(p=>p.score===top?.score);text(tied.length>1?'¡VICTORIA COMPARTIDA!':snapshot.solo?'¡BIEN JUGADO!':'¡TENEMOS CAMPEÓN!',395,52,'#ffd55a');
  text(tied.length>1?tied.map(p=>p.name).join(' · '):top?.name||'Sin ganador',485,76);text((top?.score||0).toLocaleString('es-ES')+' PUNTOS',580,57,'#ffd55a');
  snapshot.players.slice(0,5).forEach((p,i)=>{const y=710+i*85;c.fillStyle=i===0?'#503771':'#302246';c.fillRect(95,y-30,890,72);c.fillStyle='#fff1d3';c.font='700 32px system-ui';c.textAlign='left';c.fillText(String(1+snapshot.players.filter(x=>x.score>p.score).length)+'  '+p.name,125,y+5,620);c.textAlign='right';c.fillText(p.score.toLocaleString('es-ES'),955,y+5,180);c.textAlign='center';});

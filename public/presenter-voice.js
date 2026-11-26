@@ -61,7 +61,15 @@ export async function updateRecordedPresenter(s,offset,mountCharacter,enabled=tr
  // Captions have a normal expiry. Active speech is cleaned up by its own end event.
  const clearCaption=()=>{if(token!==generation)return;if(utterance){stopTimer=setTimeout(clearCaption,250);return;}active?.banner?.remove();active=null;root.dataset.mqPresenting='0';delete root.dataset.mqSonnyMood;};
  stopTimer=setTimeout(clearCaption,duration);
- if(s.presenter==='dogs'){if(!enabled||!presenterEnabled())return;root.dataset.mqDogSpeaker=moment.speaker;const start=performance.now();const length=Math.min(remaining-150,Math.max(1700,Math.min(4400,moment.text.length*27)));let nextBark=0;const barkTick=now=>{if(token!==generation)return;const elapsed=now-start;if(elapsed>=length){endSpeech();return;}const amount=.15+.7*Math.abs(Math.sin(elapsed/72));root.style.setProperty('--mq-mouth',String(amount));portrait.dataset.mouth=String(amount);const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth=String(amount);if(elapsed>=nextBark){nextBark=elapsed+(moment.speaker==='mei'?450:680);if(enabled&&presenterEnabled())playSound(moment.speaker==='mei'?'mei-bark':'parker-bark');}frame=requestAnimationFrame(barkTick);};root.dataset.mqSpeaking='1';frame=requestAnimationFrame(barkTick);return;}
+ if(s.presenter==='dogs'){
+ const lines=[moment,...(moment.reply?[moment.reply]:[])],budget=Math.min(remaining-120,lines.length===2?6800:4500),weights=lines.map(l=>Math.max(25,l.text.length)),total=weights.reduce((a,b)=>a+b,0);let index=0,nextBark=0,segmentStart=performance.now();
+ const canSpeak=enabled&&presenterEnabled(),durationFor=i=>lines.length===1?budget:Math.max(1200,budget*weights[i]/total);
+ const showLine=()=>{const l=lines[index];root.dataset.mqDogSpeaker=l.speaker;copy.firstChild.textContent=l.speaker.toUpperCase()+' · EN DIRECTO';copy.lastChild.textContent=l.text;};
+ showLine();if(canSpeak)root.dataset.mqSpeaking='1';
+ const barkTick=now=>{if(token!==generation)return;let elapsed=now-segmentStart;if(elapsed>=durationFor(index)){if(index+1>=lines.length){endSpeech();return;}index++;segmentStart=now;nextBark=0;showLine();elapsed=0;}const l=lines[index],amount=canSpeak?.15+.7*Math.abs(Math.sin(elapsed/72)):0;root.style.setProperty('--mq-mouth',String(amount));portrait.dataset.mouth=String(amount);const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth=String(amount);if(elapsed>=nextBark){nextBark=elapsed+(l.speaker==='mei'?510:700);if(canSpeak&&presenterEnabled())playSound(l.speaker==='mei'?'mei-bark':elapsed>1400&&Math.floor(elapsed/700)%3===2?'parker-growl':'parker-bark');}frame=requestAnimationFrame(barkTick);};
+ frame=requestAnimationFrame(barkTick);return;
+ }
+
  if(!enabled||!presenterEnabled()||typeof SpeechSynthesisUtterance==='undefined'||!globalThis.speechSynthesis)return;
  // Only local installed voices: a TV without one still shows the full caption.
  try{
