@@ -1,3 +1,4 @@
+import {validClip} from './public/media-challenge.js';
 import {illustrate,validArtwork} from './question-art.js';
 import {difficultyIds} from './public/difficulty.js';
 export const questions=[
@@ -25,7 +26,7 @@ export function validateQuestions(raw){
   if(q.mode==='text'&&(typeof c!=='string'||!c.trim()))throw Error('Falta la respuesta de texto.');
   if(q.mode==='order'&&(!Array.isArray(c)||c.length!==options.length||new Set(c).size!==c.length||c.some(n=>!Number.isInteger(n)||n<0||n>=options.length)))throw Error('Orden correcto inválido.');
   let media;
-  if(q.media){const url=String(q.media.url||'');if(!['image','audio','video'].includes(q.media.type)||!(/^(https:\/\/|\/(?!\/))/.test(url)))throw Error('Usa un medio HTTPS o local.');media={type:q.media.type,url};}
+  if(q.media){const url=String(q.media.url||'');if(!['image','audio','video','animation'].includes(q.media.type)||!(/^(https:\/\/|\/(?!\/))/.test(url))||(q.media.type==='animation'&&!validClip(url)))throw Error('Usa un medio HTTPS o local.');media={type:q.media.type,url,...(q.media.type==='image'&&q.media.effect==='pixel'?{effect:'pixel'}:{})};}
   return {id:String(i+1),prompt,category,mode:q.mode,options,correct:c,tolerance:q.tolerance??0,media,...(!media&&validArtwork(q.illustration)?{illustration:q.illustration}:{}),seconds:Math.min(120,Math.max(5,Math.round(Number(q.seconds)||20))),difficulty:difficultyIds.includes(q.difficulty)?q.difficulty:'Media',explanation:String(q.explanation||'').slice(0,500)};
  });
 }
