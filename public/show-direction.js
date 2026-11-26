@@ -49,3 +49,63 @@ export function roundBeat(state){
  const title=last?'¡LA ÚLTIMA!':opening?'¡QUE EMPIECE EL SHOW!':special?scene.title:quick?['¡SIGUIENTE!','¡VAMOS ALLÁ!','¡OTRA MÁS!','¡AL LÍO!'][index%4]:scene.title;
  return {title,quick,special,caption:last?'Un último esfuerzo.':special?scene.subtitle:variants[index%variants.length]};
 }
+
+const sonnyRules={
+ classic:['El que sabe, sabe. El que no, disimula.','Elegid una de las respuestas antes de que acabe el tiempo.'],
+ warmup:['Vamos a ver si las neuronas han venido con vosotros.','Acertad y sumad puntos para arrancar.'],
+ 'order-round':['Hoy toca poner un poquito de orden en vuestras vidas.','Colocad los cuatro elementos en el orden correcto.'],
+ estimate:['La calculadora se ha quedado fuera del plató.','Escribid una cifra; cuanto más os acerquéis, mejor.'],
+ buzzer:['Se viene el pulsador. No os flipéis.','Pulsad cuando lo tengáis claro; fallar resta puntos.'],
+ steal:['Se viene una amistad rota.','El acierto más rápido roba puntos al rival mejor situado.'],
+ final:['Ahora sí, momento cine.','Las respuestas de la final valen más puntos.'],
+ wager:['El que no arriesga no gana. El que arriesga sin saber, tampoco.','Elegid los puntos que queréis apostar antes de responder.'],
+ bluff:['Fuente: me lo acabo de inventar.','Inventad una respuesta creíble y luego descubrid la auténtica.'],
+ hot:['La patata quema. Literalmente no, que es un videojuego.','Responded y pasad la patata antes de que se agote el tiempo.'],
+ pie:['Esto no es una pastelería, pero casi.','Acertad y elegid a quién lanzar una tarta.'],
+ draw:['Picasso, si estás viendo esto, perdón.','Una persona dibuja; las demás intentan adivinar.'],
+ dash:['Hoy el cardio es obligatorio.','Saltad y esquivad las vallas a tiempo.'],
+ dodge:['El suelo no es lava, pero el cielo está regular.','Esquivad los meteoritos.'],
+ hoops:['Baloncesto sin tener que salir del sofá.','Pulsad en el momento justo para encestar.'],
+ coins:['Aquí sí se viene a por el dinero.','Recoged monedas y evitad los obstáculos.'],
+ territory:['La diplomacia ha abandonado el chat.','Conquistad la mayor cantidad de territorio.'],
+ sofa:['Mi especialidad, por fin.','Conseguid ocupar el sofá y conservad vuestro sitio.'],
+ memory:['Memoria de pez no, por favor.','Memorizad los símbolos y reproducidlos.'],
+ odd:['Uno de estos elementos no ha leído el grupo de WhatsApp.','Encontrad el elemento diferente.'],
+ reflex:['Quietos. No os adelantéis.','Esperad la señal verde y pulsad lo más rápido posible.'],
+ count:['Los números no muerden. Creo.','Observad y contad los elementos.'],
+ 'number-hunt':['Orden y rapidez, una combinación peligrosa.','Pulsad los números en el orden indicado.'],
+ custom:['Vuestros amigos han preparado esto. Yo no me responsabilizo.','Responded a la pregunta personalizada.'],
+ 'solo-bonus':['Un bonus, por la cara.','Acierta para sumar puntos extra.']
+};
+const sonnyJokes={
+ zero:['Mi cara cuando nadie acierta. En fin, siguiente.','Cuatro opciones y habéis conseguido esquivarlas todas.','El conocimiento ha abandonado el chat.','Me voy a hacer el dormido, como si no hubiera visto esto.','Ni con siete vidas. Y mira que lo he intentado.'],
+ all:['¡Cine! No tengo ni una sola queja.','Señoras y señores, tenemos un equipo de élite.','Me estáis quitando el trabajo.','Todos han acertado. Esto parece sospechosamente organizado.'],
+ lead:['Tenemos nuevo líder. La corona no venía con garantía.','Cambio de líder. Se ha desbloqueado el drama.','El marcador acaba de hacer un giro de guion.'],
+ comeback:['La remontada era real, no un montaje.','Ese regreso no estaba en el guion.','Plot twist: esto todavía no ha terminado.'],
+ fast:['Ha contestado antes de que yo terminara de pestañear.','Ese pulsador acaba de superar el límite de velocidad.','Reflejos de gato. Y eso lo digo yo.'],
+ steal:['Eso no ha sido un robo, ha sido una mudanza de puntos.','El grupo de WhatsApp va a estar interesante.','Los puntos no desaparecen: cambian de bolsillo.'],
+ close:['Esto está más apretado que yo en una caja de zapatos.','Ni el VAR puede decidir quién va a ganar.','El final va a necesitar palomitas.'],
+ normal:['Bueno, se ha intentado. Y eso ya es contenido.','Aquí nadie se relaja, ni yo.','Procedo a juzgaros en silencio.','Es momento de recuperar la dignidad.','Todavía hay margen para la épica.','No digo nada, pero las pruebas están ahí.'],
+ streak:['Tenemos a alguien en modo jefe final.','Esa racha ya empieza a dar miedo.','Alguien se ha leído el manual entero.'],
+ finish:['Hasta aquí el espectáculo. Yo me voy a por una siesta.','La corona tiene dueño. El resto, a entrenar.','Gracias por jugar. Recordad que perder también da experiencia.']
+};
+const line=(xs,i)=>xs[((i%xs.length)+xs.length)%xs.length];
+export function sonnyMoment(state,previousLeader=null){
+ const s=state||{},q=s.question||{},p=s.players||[],i=Math.max(0,s.index||0),key=q.party||'classic',leader=p[0],normal=s.kind!=='arcade',correct=p.filter(x=>x.reaction==='correct').length;
+ if(s.phase==='lobby')return {text:'Soy Sonny. Bienvenidos a MobiQuiz. Preparad los mandos y dejad las excusas fuera.',mood:'smug'};
+ if(s.phase==='finished')return {text:line(sonnyJokes.finish,i),mood:'celebrate'};
+ if(s.phase==='question'&&s.partyStage==='intro'&&(s.introDuration||3000)>=3000){const [a,b]=sonnyRules[key]||sonnyRules.classic;return {text:a+' '+b,mood:key==='final'?'celebrate':'smug',section:true};}
+ if(s.phase!=='reveal')return null;
+ let type=null,mood='smug';
+ if(p.some(x=>x.stolen>0))type='steal';
+ else if(previousLeader&&leader?.id!==previousLeader&&leader)type='lead';
+ else if(p.some((x,j)=>(x.previousRank??j)-j>=2))type='comeback';
+ else if(normal&&p.length>1&&correct===0){type='zero';mood='shock';}
+ else if(normal&&p.length>1&&correct===p.length){type='all';mood='celebrate';}
+ else if(p.some(x=>x.fast&&x.reaction==='correct')){type='fast';mood='celebrate';}
+ else if(p.some(x=>x.reaction==='correct'&&(x.career?.streak||0)>=4))type='streak';
+ else if(p.length>1&&Math.abs(p[0].score-p[1].score)<=150&&i%3===1)type='close';
+ else if(i%3===2)type='normal';
+ if(!type)return null;
+ return {text:line(sonnyJokes[type],i),mood};
+}
