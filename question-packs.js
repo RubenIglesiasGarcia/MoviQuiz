@@ -1,3 +1,4 @@
+import {builtinPack,memePack} from './community-packs.js';
 import {validateQuestions} from './game.js';
 import {difficultyIds} from './public/difficulty.js';
 export const categoryKey=c=>String(c||'General').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase().replace(/^deportes?$/,'deporte').replace(/^cine( y tv)?$/,'cine').replace(/^cultura( general)?$/,'cultura').replace(/^musica( y sonido)?$/,'musica');
@@ -24,10 +25,11 @@ const error=(msg,status=400)=>response({error:msg},status);
 export async function packAPI(env,u,path,data={}){
  if(!u)return error('Identifícate primero.',401);
  const db=env.DB;
- if(path==='list'){const mine=await db.prepare('SELECT id,owner,title,description,visibility,count,updated FROM question_packs WHERE owner=? ORDER BY updated DESC LIMIT 50').bind(u.id).all();const community=await db.prepare("SELECT id,owner,title,description,visibility,count,updated FROM question_packs WHERE visibility='public' AND owner<>? AND NOT EXISTS(SELECT 1 FROM question_pack_reports WHERE pack_id=question_packs.id AND reporter=?) ORDER BY updated DESC LIMIT 100").bind(u.id,u.id).all();return response({mine:mine.results.map(x=>meta(x,u)),community:community.results.map(x=>meta(x,u))});}
+ if(path==='list'){const mine=await db.prepare('SELECT id,owner,title,description,visibility,count,updated FROM question_packs WHERE owner=? ORDER BY updated DESC LIMIT 50').bind(u.id).all();const community=await db.prepare("SELECT id,owner,title,description,visibility,count,updated FROM question_packs WHERE visibility='public' AND owner<>? AND NOT EXISTS(SELECT 1 FROM question_pack_reports WHERE pack_id=question_packs.id AND reporter=?) ORDER BY updated DESC LIMIT 100").bind(u.id,u.id).all();return response({mine:mine.results.map(x=>meta(x,u)),community:[memePack,...community.results.filter(x=>x.id!==memePack.id).map(x=>meta(x,u))]});}
  if(path==='save'){let pack;try{pack=validatePack(data);}catch(e){return error(e.message);}if(pack.visibility==='public'&&u.guest)return error('Publicar en la comunidad requiere una cuenta de Google.',403);let id=data.id;if(id){if(!packId(id))return error('Código inválido.');const row=await db.prepare('SELECT owner FROM question_packs WHERE id=?').bind(id).first();if(row?.owner!==u.id)return error('No puedes modificar ese pack.',403);}else{const count=await db.prepare('SELECT COUNT(*) n FROM question_packs WHERE owner=?').bind(u.id).first();if(count.n>=50)return error('Límite de 50 packs por cuenta.');id=Array.from(crypto.getRandomValues(new Uint8Array(12)),x=>x.toString(16).padStart(2,'0')).join('');}
  const now=Date.now();await db.prepare('INSERT INTO question_packs(id,owner,title,description,visibility,questions,count,updated) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET title=excluded.title,description=excluded.description,visibility=excluded.visibility,questions=excluded.questions,count=excluded.count,updated=excluded.updated WHERE question_packs.owner=excluded.owner').bind(id,u.id,pack.title,pack.description,pack.visibility,JSON.stringify(pack.questions),pack.questions.length,now).run();return response({pack:meta({id,owner:u.id,...pack,count:pack.questions.length,updated:now},u)});}
  if(!packId(data.id))return error('Código de pack inválido.');
+ const built=builtinPack(data.id);if(built){if(path==='lookup')return response({pack:memePack});return error('Este pack del catálogo no se puede modificar.',403);}
  const row=await db.prepare('SELECT * FROM question_packs WHERE id=?').bind(data.id).first();if(!visible(row,u))return error('Pack no disponible.',404);
  if(path==='lookup')return response({pack:meta(row,u)});
  if(path==='edit'){if(row.owner!==u.id)return error('Solo el autor puede editarlo.',403);return response({pack:{...meta(row,u),questions:JSON.parse(row.questions)}});}
@@ -39,7 +41,7 @@ export async function loadPackSelection(env,u,selection){
  if(!selection||typeof selection!=='object'||Array.isArray(selection)||typeof selection.standard!=='boolean'||!Array.isArray(selection.packIds)||selection.packIds.length>5||selection.packIds.some(id=>!packId(id)))throw Error('Selección de packs inválida.');
  const categories=selection.categories===null?null:Array.isArray(selection.categories)&&selection.categories.length<=30&&selection.categories.every(c=>typeof c==='string'&&c.length<=60)?[...new Set(selection.categories.map(categoryKey))]:undefined;
  if(categories===undefined)throw Error('Selección de categorías inválida.');
- const ids=[...new Set(selection.packIds)],questions=[];for(const id of ids){const row=await env.DB.prepare('SELECT * FROM question_packs WHERE id=?').bind(id).first();if(!visible(row,u))throw Error('Algún pack ya no está disponible.');questions.push(...JSON.parse(row.questions));}
+ const ids=[...new Set(selection.packIds)],questions=[];for(const id of ids){const built=builtinPack(id);if(built){questions.push(...built.questions);continue;}const row=await env.DB.prepare('SELECT * FROM question_packs WHERE id=?').bind(id).first();if(!visible(row,u))throw Error('Algún pack ya no está disponible.');questions.push(...JSON.parse(row.questions));}
  if(!selection.standard&&!ids.length)throw Error('Activa al menos un pack o las preguntas estándar.');
  return {standard:selection.standard,categories,questions};
 }

@@ -456,3 +456,10 @@ body.order-controller .sortable-list .sort-tile{min-height:40px}
 .sortable-list .sort-placeholder>*{visibility:hidden}
 .sortable-list .sort-float{box-sizing:border-box;position:fixed;z-index:1000;margin:0;pointer-events:none;opacity:1;touch-action:none;will-change:transform;transition:none!important;background:linear-gradient(145deg,#514374,#302448);border:2px solid #ffd55a;box-shadow:0 12px 24px #11091fa8,0 0 0 2px #ffd55a33;cursor:grabbing}
 .sortable-list .sort-float .sort-grip{color:#ffd55a}
+
+/* Context art stays compact on controllers; original answer media keeps its own layout. */
+.question-art{display:block;width:100%;height:clamp(56px,13vh,132px);object-fit:cover;object-position:center;border:1px solid #a991d64a;border-radius:12px;flex:0 0 auto;min-width:0}
+body.tv-mode .screen .question-art{height:clamp(64px,16vh,190px);object-fit:cover}
+body.order-controller #round .question-art{height:clamp(36px,8vh,68px);height:clamp(36px,8dvh,68px);margin:0;flex-shrink:0}
+@media(max-height:580px){body.order-controller #round .question-art{height:32px}}
+@media(max-width:550px){.game-controller .question-art{height:clamp(48px,10vh,85px)}}

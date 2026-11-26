@@ -67,7 +67,7 @@ const rooms=new Map();
 function code(){let c;do{c=randomBytes(3).toString('hex').toUpperCase();}while(rooms.has(c));return c;}
 function publicState(r){
   const q=r.questions[r.index], reveal=r.phase==='reveal'||r.phase==='finished';
-  const question=q?{id:q.id,category:q.category,mode:q.mode,prompt:q.prompt,options:q.options,media:q.media,seconds:q.seconds,difficulty:q.difficulty,...(reveal?{correct:q.correct,tolerance:q.tolerance,explanation:q.explanation}: {})}:null;
+  const question=q?{id:q.id,category:q.category,mode:q.mode,prompt:q.prompt,options:q.options,media:q.media,illustration:q.illustration,seconds:q.seconds,difficulty:q.difficulty,...(reveal?{correct:q.correct,tolerance:q.tolerance,explanation:q.explanation}: {})}:null;
   return {code:r.code,solo:r.solo,hostPlays:r.hostPlays,phase:r.phase,index:r.index,total:r.questions.length,question,deadline:r.deadline,serverNow:Date.now(),players:[...r.players.values()].map(p=>({id:p.publicId,name:p.name,score:p.score,answered:r.answers.has(p.userId),...(reveal?{last:r.answers.get(p.userId)?.points||0}: {})})).sort((a,b)=>b.score-a.score),answered:r.answers.size};
 }
 function broadcast(r){io.to(r.code).emit('state',publicState(r));}

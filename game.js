@@ -1,3 +1,4 @@
+import {illustrate,validArtwork} from './question-art.js';
 import {difficultyIds} from './public/difficulty.js';
 export const questions=[
  {id:'q1',category:'Cultura general',mode:'choice',prompt:'¿Cuál es el planeta más grande del sistema solar?',options:['Marte','Júpiter','Saturno','Neptuno'],correct:1,seconds:20,difficulty:'Fácil',explanation:'Júpiter es el planeta de mayor tamaño.'},
@@ -8,7 +9,7 @@ export const questions=[
  {id:'q6',category:'Deportes',mode:'number',prompt:'¿Cuántos jugadores de un equipo de voleibol de pista están en el campo?',correct:6,tolerance:0,seconds:20,difficulty:'Fácil'},
  {id:'q7',category:'Historia',mode:'order',prompt:'Ordena estos acontecimientos del más antiguo al más reciente.',options:['Llegada a la Luna','Caída del Muro de Berlín','Inicio de la Segunda Guerra Mundial','Invención de la imprenta de Gutenberg'],correct:[3,2,0,1],seconds:35,difficulty:'Difícil'},
  {id:'q8',category:'Cine y TV',mode:'text',prompt:'¿Cómo se llama el vaquero protagonista de Toy Story?',correct:'Woody',seconds:20,difficulty:'Fácil'}
-];
+].map(illustrate);
 export function validateQuestions(raw){
  if(!Array.isArray(raw)||!raw.length||raw.length>100)throw Error('Añade entre 1 y 100 preguntas.');
  return raw.map((q,i)=>{
@@ -25,7 +26,7 @@ export function validateQuestions(raw){
   if(q.mode==='order'&&(!Array.isArray(c)||c.length!==options.length||new Set(c).size!==c.length||c.some(n=>!Number.isInteger(n)||n<0||n>=options.length)))throw Error('Orden correcto inválido.');
   let media;
   if(q.media){const url=String(q.media.url||'');if(!['image','audio','video'].includes(q.media.type)||!(/^(https:\/\/|\/(?!\/))/.test(url)))throw Error('Usa un medio HTTPS o local.');media={type:q.media.type,url};}
-  return {id:String(i+1),prompt,category,mode:q.mode,options,correct:c,tolerance:q.tolerance??0,media,seconds:Math.min(120,Math.max(5,Math.round(Number(q.seconds)||20))),difficulty:difficultyIds.includes(q.difficulty)?q.difficulty:'Media',explanation:String(q.explanation||'').slice(0,500)};
+  return {id:String(i+1),prompt,category,mode:q.mode,options,correct:c,tolerance:q.tolerance??0,media,...(!media&&validArtwork(q.illustration)?{illustration:q.illustration}:{}),seconds:Math.min(120,Math.max(5,Math.round(Number(q.seconds)||20))),difficulty:difficultyIds.includes(q.difficulty)?q.difficulty:'Media',explanation:String(q.explanation||'').slice(0,500)};
  });
 }
 const norm=s=>String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase().replace(/\s+/g,' ');
