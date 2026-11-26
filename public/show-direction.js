@@ -115,7 +115,7 @@ export function sonnyMoment(state,previousLeader=null){
  else if(p.some(x=>x.fast&&x.reaction==='correct')){type='fast';mood='celebrate';}
  else if(p.some(x=>x.reaction==='correct'&&(x.career?.streak||0)>=4))type='streak';
  else if(p.length>1&&Math.abs(p[0].score-p[1].score)<=150&&i%3===1)type='close';
- else if(i%2===0||s.kind==='arcade')type='normal';
+ else type='normal';
  if(!type)return null;
  return {text:line(sonnyJokes[type],i+sonnySeed(s)),mood};
 }
@@ -137,11 +137,11 @@ export function showEventInfo(s){
    if(t<7800)return idle;slot=Math.floor((t-7800)/10500);start=7800+slot*10500;choice=(seed+slot+(s.phase==='finished'?2:0))%catActs.length;
   }else if(s.phase==='reveal'){
    // Short reactions near the beginning of the results, and only when time allows.
-   if(t<550||t>4200||remaining<450)return idle;start=550;choice=(seed+index)%catActs.length;
+   const long=Number(s.revealUntil||0)-Number(s.revealStarted||0)>=8500;start=long?5100:550;if(t<start||remaining<450)return idle;choice=(seed+index)%catActs.length;
   }else if(s.phase==='question'&&s.partyStage==='intro'&&(s.introDuration||0)<2000){
    start=100;choice=(seed+index)%3===0?5:6;
   }else return idle;
   const item=catActs[choice],duration=s.phase==='question'?Math.min(850,item.duration):s.phase==='reveal'?Math.min(2300,item.duration):item.duration;
   if(t<start||t>=start+duration)return idle;
-  return {act:item.act,progress:(t-start)/duration,sound:item.sound,key:[s.matchId,s.phase,index,slot,item.act].join(':')};
+  return {act:item.act,progress:(t-start)/duration,duration,sound:item.sound,key:[s.matchId,s.phase,index,slot,item.act].join(':')};
  }
