@@ -1,5 +1,6 @@
 // Sonny's live captions and optional device-local speech. No voice cloning or remote speech API.
-import {sonnyMoment} from './show-direction.js';
+import {presenterMoment,hostName,finaleLines} from './hosts.js';
+import {playSound} from './effects.js';
 import {sonnyVoicePlan} from './sonny-speech.js';
 let manifestPromise=null,audio=null,active=null,frame=0,eventKey='',lastLeader=null,lastId=0,matchKey='',generation=0,stopTimer=0,utterance=null,pendingTimer=0;
 const seen=new Set();
@@ -10,7 +11,7 @@ const node=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.classNa
 export const presenterEnabled=()=>localStorage.getItem('mq.voice')!=='off';
 export const presenterSpeaking=()=>!!active&&document.documentElement.dataset.mqSpeaking==='1';
 export function preloadPresenter(){try{globalThis.speechSynthesis?.getVoices();}catch{}return Promise.resolve(null);}
-export function stopPresenter(){generation++;cancelAnimationFrame(frame);clearTimeout(stopTimer);clearTimeout(pendingTimer);if(utterance){try{globalThis.speechSynthesis?.cancel();}catch{}utterance=null;}if(audio)audio.pause();active?.banner?.remove();active=null;document.documentElement.style.removeProperty('--mq-mouth');document.documentElement.dataset.mqSpeaking='0';document.documentElement.dataset.mqVoicePending='0';document.documentElement.dataset.mqPresenting='0';delete document.documentElement.dataset.mqSonnyMood;const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth='0';}
+export function stopPresenter(){generation++;cancelAnimationFrame(frame);clearTimeout(stopTimer);clearTimeout(pendingTimer);if(utterance){try{globalThis.speechSynthesis?.cancel();}catch{}utterance=null;}if(audio)audio.pause();active?.banner?.remove();active=null;document.documentElement.style.removeProperty('--mq-mouth');document.documentElement.dataset.mqSpeaking='0';document.documentElement.dataset.mqVoicePending='0';document.documentElement.dataset.mqPresenting='0';delete document.documentElement.dataset.mqSonnyMood;delete document.documentElement.dataset.mqDogSpeaker;const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth='0';}
 export function setPresenterEnabled(value){localStorage.setItem('mq.voice',value?'on':'off');if(!value)stopPresenter();else preloadPresenter();}
 const choice=ids=>{const available=ids.filter(id=>id!==lastId);return (available.length?available:ids)[Math.floor(Math.random()*(available.length||ids.length))];};
 export function selectPresenterClip(s,previousLeader){
@@ -37,29 +38,30 @@ export function selectPresenterClip(s,previousLeader){
 export async function updateRecordedPresenter(s,offset,mountCharacter,enabled=true){
  if(!s)return;
  const match=[s.code,s.matchId].join(':');if(match!==matchKey){stopPresenter();matchKey=match;lastLeader=null;seen.clear();eventKey='';}
- const key=[match,s.phase,s.index,s.partyStage==='intro'?'intro':''].join(':');
+ const slot=s.phase==='finished'?Math.max(0,Math.floor((Date.now()+offset-(s.finishedAt||Date.now()))/8500)):0;const key=[match,s.phase,s.index,s.partyStage==='intro'?'intro':'',slot].join(':');
  clearTimeout(pendingTimer);if(key===eventKey)return;
- const moment=sonnyMoment(s,lastLeader);
+ const moment=presenterMoment(s,lastLeader,slot);
  // Never interrupt an already-started sentence merely because the game moved on.
  // If another announcement is due, retry only while this same phase is still current.
  if(utterance&&active&&presenterEnabled()&&enabled){clearTimeout(pendingTimer);pendingTimer=setTimeout(()=>{if(eventKey===key)return;updateRecordedPresenter(s,offset,mountCharacter,enabled);},150);return;}
  eventKey=key;stopPresenter();if(s.phase==='reveal'&&s.players?.[0])lastLeader=s.players[0].id;
  if(!moment||seen.has(key))return;seen.add(key);
- const deadline=s.phase==='reveal'?s.revealUntil:s.phase==='question'?s.deadline:Date.now()+offset+7500;
+ const deadline=s.phase==='reveal'?s.revealUntil:s.phase==='question'?s.deadline:s.phase==='finished'&&s.finishedAt?s.finishedAt+(slot+1)*8500:Date.now()+offset+7500;
  const remaining=deadline-Date.now()-offset;if(remaining<950)return;
  const target=s.phase==='reveal'?document.querySelector('.tv-results-overlay[open] .result-show-footer')||document.querySelector('.round-results[open] .result-show-footer'):document.querySelector('#presenter-line')||document.querySelector('#app.screen');
  if(!target)return;
- const banner=node('div','voice-presenter sonny-caption'),portrait=node('div','voice-presenter-avatar'),fallback=node('span','voice-presenter-fallback','🐈‍⬛'),copy=node('div','voice-presenter-copy');
- portrait.dataset.mood=moment.mood;portrait.append(fallback);copy.append(node('strong','','SONNY · EN DIRECTO'),node('span','',moment.text));banner.append(portrait,copy);
+ const banner=node('div','voice-presenter sonny-caption'),portrait=node('div','voice-presenter-avatar'),fallback=node('span','voice-presenter-fallback',s.presenter==='dogs'?'🐕 🐕':'🐈‍⬛'),copy=node('div','voice-presenter-copy');
+ portrait.dataset.mood=moment.mood;portrait.append(fallback);copy.append(node('strong','',(moment.speaker||hostName(s)).toUpperCase()+' · EN DIRECTO'),node('span','',moment.text));banner.append(portrait,copy);
  if(target.id==='presenter-line'){banner.classList.add('sonny-inline');}target.prepend(banner);
  active={banner,moment};const root=document.documentElement;root.dataset.mqPresenting='1';root.dataset.mqSonnyMood=moment.mood;
  // The actual presenter already lives in the studio. Only use a separate portrait during results.
- if(s.phase==='reveal')try{mountCharacter(portrait,{presenter:true},'idle');}catch{}
+ if(s.phase==='reveal')try{mountCharacter(portrait,{presenter:true,hostType:s.presenter},'idle');}catch{}
  const token=generation,plan=sonnyVoicePlan(moment.text,remaining),duration=Math.max(850,remaining-120);
  const endSpeech=()=>{if(token!==generation)return;utterance=null;cancelAnimationFrame(frame);root.dataset.mqSpeaking='0';root.dataset.mqVoicePending='0';root.style.removeProperty('--mq-mouth');portrait.dataset.mouth='0';const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth='0';};
  // Captions have a normal expiry. Active speech is cleaned up by its own end event.
  const clearCaption=()=>{if(token!==generation)return;if(utterance){stopTimer=setTimeout(clearCaption,250);return;}active?.banner?.remove();active=null;root.dataset.mqPresenting='0';delete root.dataset.mqSonnyMood;};
  stopTimer=setTimeout(clearCaption,duration);
+ if(s.presenter==='dogs'){root.dataset.mqDogSpeaker=moment.speaker;const start=performance.now();const length=Math.min(remaining-150,Math.max(1700,Math.min(4400,moment.text.length*27)));let nextBark=0;const barkTick=now=>{if(token!==generation)return;const elapsed=now-start;if(elapsed>=length){endSpeech();return;}const amount=.15+.7*Math.abs(Math.sin(elapsed/72));root.style.setProperty('--mq-mouth',String(amount));portrait.dataset.mouth=String(amount);const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth=String(amount);if(elapsed>=nextBark){nextBark=elapsed+(moment.speaker==='mei'?450:680);if(enabled&&presenterEnabled())playSound(moment.speaker==='mei'?'mei-bark':'parker-bark');}frame=requestAnimationFrame(barkTick);};root.dataset.mqSpeaking='1';frame=requestAnimationFrame(barkTick);return;}
  if(!enabled||!presenterEnabled()||typeof SpeechSynthesisUtterance==='undefined'||!globalThis.speechSynthesis)return;
  // Only local installed voices: a TV without one still shows the full caption.
  try{

@@ -1,4 +1,4 @@
-import {sonnyMoment} from './public/show-direction.js';
+import {presenterMoment} from './public/hosts.js';
 import {sonnyIntroWindow} from './public/sonny-speech.js';
 import {buzzerPenalty} from './public/buzzer-rules.js';
 import {illustrate} from './question-art.js';
@@ -31,7 +31,7 @@ export function shuffle(xs,random=Math.random){const a=[...xs];for(let i=a.lengt
 export function normalizeKind(k){return ['classic','party','arcade'].includes(k)?k:'classic';}
 export function normalizeDifficulty(d){return normalizeLevel(d);}
 export function spreadCategories(items){const buckets=new Map();for(const q of items){const key=q.category.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/s$/,'');if(!buckets.has(key))buckets.set(key,[]);buckets.get(key).push(q);}const out=[];let last=null;while(buckets.size){const ranked=[...buckets].sort((a,b)=>b[1].length-a[1].length),[key,group]=ranked.find(([key])=>key!==last)||ranked[0];out.push(group.shift());last=key;if(!group.length)buckets.delete(key);}return out;}
-function readable(q){const length=q.prompt.length+(q.options||[]).reduce((n,x)=>n+String(x).length,0);return {...q,seconds:q.seconds+Math.min(8,Math.max(0,Math.ceil((length-110)/40)))};}
+function readable(q){const length=q.prompt.length+(q.options||[]).reduce((n,x)=>n+String(x).length,0);return {...q,seconds:Math.max(q.difficulty==='Muy difícil'?30:5,q.seconds)+Math.min(8,Math.max(0,Math.ceil((length-110)/40)))};}
 function mixOptions(q){if(!['choice','fast','order'].includes(q.mode))return q;let indices=shuffle(q.options.map((_,i)=>i));if(q.mode==='order'&&q.correct.every((x,i)=>indices[i]===x))indices=[...indices.slice(1),indices[0]];return {...q,options:indices.map(i=>q.options[i]),correct:q.mode==='order'?q.correct.map(i=>indices.indexOf(i)):indices.indexOf(q.correct)};}
 function selectionCategory(c){return String(c||'General').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/^deportes?$/,'deporte').replace(/^cine( y tv)?$/,'cine').replace(/^cultura( general)?$/,'cultura').replace(/^musica( y sonido)?$/,'musica');}
 const isMystery=q=>q.media?.effect==='pixel'||q.media?.type==='animation'||q.media?.type==='video';
@@ -88,7 +88,7 @@ export function appendTieBreak(r){
 }
 
 export const INTRO_MS=3000;
-export function prepareRound(r,now=Date.now()){r.partyStage='intro';r.started=now;r.showEvent=chooseShowEvent(r);r.introDuration=r.showEvent||r.questions[r.index]?.party==='tiebreak'?6500:r.questions[r.index]?.party==='warmup'&&r.questions[r.index]?.multiplier===2?4000:r.index>0&&r.questions[r.index-1]?.party===r.questions[r.index]?.party?1200:r.kind==='party'||r.kind==='arcade'?6500:INTRO_MS;const speech=sonnyMoment({...r,question:r.questions[r.index],players:Object.values(r.players||{})});r.introDuration=sonnyIntroWindow(speech?.text,r.introDuration);r.deadline=now+r.introDuration;r.roundEnd=r.deadline;r.buzzer=null;r.hotHolder=null;r.hotTarget=null;r.drawer=null;r.action=null;r.strokes=[];r.bets={};r.bluffs={};r.votes={};r.pies={};r.bluffOptions=[];}
+export function prepareRound(r,now=Date.now()){r.partyStage='intro';r.started=now;r.showEvent=chooseShowEvent(r);r.introDuration=r.showEvent||r.questions[r.index]?.party==='tiebreak'?6500:r.questions[r.index]?.party==='warmup'&&r.questions[r.index]?.multiplier===2?4000:r.index>0&&r.questions[r.index-1]?.party===r.questions[r.index]?.party?1200:r.kind==='party'||r.kind==='arcade'?6500:INTRO_MS;const speech=presenterMoment({...r,question:r.questions[r.index],players:Object.values(r.players||{})});r.introDuration=sonnyIntroWindow(speech?.text,r.introDuration);r.deadline=now+r.introDuration;r.roundEnd=r.deadline;r.buzzer=null;r.hotHolder=null;r.hotTarget=null;r.drawer=null;r.action=null;r.strokes=[];r.bets={};r.bluffs={};r.votes={};r.pies={};r.bluffOptions=[];}
 export function begin(r,now=Date.now()){const q=r.questions[r.index];r.partyStage=q.party==='wager'?'bet':q.party==='buzzer'?'buzz':'answer';r.bets={};r.buzzer=null;r.started=now;r.clueStarted=now;r.clueFrozenAt=null;r.deadline=now+(r.partyStage==='bet'?12:r.partyStage==='buzz'?25:q.seconds)*1000;r.roundEnd=r.deadline;r.hotHolder=null;r.hotTarget=null;r.pies={};r.bluffOptions=[];r.bluffs={};r.votes={};if(q.party==='bluff')startBluff(r,now);if(q.party==='hot')startHot(r,now);startArcade(r,q,now);if(q.party==='draw'){r.drawGuesses={};beginDrawing(r,now);}}
 export function betLimit(p){return Math.min(500,Math.max(0,p.score));}
 export function lockBets(r,now=Date.now()){r.partyStage='answer';r.started=now;r.deadline=now+r.questions[r.index].seconds*1000;r.roundEnd=r.deadline;}
