@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 // Original stylized model: tall ears, black coat, yellow-green eyes, purple tuxedo.
 export function createSonny(){
- const root=new THREE.Group(),torso=new THREE.Group(),head=new THREE.Group(),arms=[],legs=[],eyes=[];
+ const root=new THREE.Group(),torso=new THREE.Group(),head=new THREE.Group(),arms=[],legs=[],eyes=[],ears=[];
  const mat=(color,roughness=.68,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
  const fur=mat(0x151421,.73),soft=mat(0x252433,.8),ear=mat(0x69404a),jacket=mat(0x552b82,.76),lapel=mat(0x21172d),gold=mat(0xf3bd45,.34,.38),cream=mat(0xffead3),iris=mat(0xd0d34b,.34),pupil=mat(0x080b14,.3),shine=mat(0xffffff,.24),mouthMat=mat(0x080810),tongueMat=mat(0xc67183);
  const add=(p,g,m,x=0,y=0,z=0)=>{const o=new THREE.Mesh(g,m);o.position.set(x,y,z);p.add(o);return o;};
@@ -24,7 +24,7 @@ export function createSonny(){
  plate(torso,gold,[[.19,1.32],[.28,1.32],[.25,1.40]],.272);
  sphere(head,fur,0,0,0,.49,.49,.40);sphere(head,soft,0,-.19,.19,.34,.25,.25);
  for(const side of [-1,1]){
-  const e=new THREE.Group();e.position.set(side*.34,.32,-.015);e.rotation.z=-side*.22;head.add(e);
+  const e=new THREE.Group();e.position.set(side*.34,.32,-.015);e.rotation.z=-side*.22;head.add(e);ears.push(e);
   const shape=new THREE.Shape();shape.moveTo(-.19,-.10);shape.quadraticCurveTo(-.11,.23,-.035,.53);shape.quadraticCurveTo(.015,.61,.07,.50);shape.quadraticCurveTo(.21,.17,.20,-.10);shape.closePath();
   const g=new THREE.ExtrudeGeometry(shape,{depth:.10,bevelEnabled:true,bevelSize:.035,bevelThickness:.035,bevelSegments:2,steps:1,curveSegments:10});add(e,g,fur,0,0,-.07);
   const inner=sphere(e,ear,.015,.20,.055,.095,.24,.032);inner.rotation.z=-side*.07;
@@ -45,16 +45,44 @@ export function createSonny(){
  sphere(head,gold,.48,.04,.02,.06,.14,.13);sphere(head,lapel,.52,.04,.02,.045,.10,.10);
  tube(head,gold,[[.53,.02,.04],[.49,-.18,.28],[.28,-.23,.47]],.018);sphere(head,lapel,.28,-.23,.47,.05,.04,.04);
  const mic=new THREE.Group();arms[1].add(mic);add(mic,new THREE.CylinderGeometry(.05,.05,.25,12),lapel,.02,-.60,.12);sphere(mic,gold,.02,-.47,.12,.075,.088,.075);
- return {root,torso,head,arms,legs,eyes,mouth,lip,teeth,tongue,tail,personality:'cool',host:true};
+ // A small prop made of genuine 3D strands; it shares the stage lights.
+ const yarn=new THREE.Group();root.add(yarn);yarn.visible=false;
+ const wool=mat(0xc64b88,.98),thread=mat(0xe67aa8,.95),darkThread=mat(0x9e356a,.99);
+ sphere(yarn,wool,0,0,0,.185,.185,.185);
+ for(let i=0;i<7;i++){const strand=new THREE.Group();strand.rotation.set(i*.76,i*.94,i*.43);yarn.add(strand);for(const offset of [-.034,.034]){const radius=Math.sqrt(.183*.183-offset*offset);const ring=add(strand,new THREE.TorusGeometry(radius,.012,6,26),i%2?thread:darkThread,0,0,offset);}}
+ const loose=tube(yarn,thread,[[.16,-.03,.03],[.26,-.07,.06],[.31,-.17,.09],[.43,-.19,.03]],.012);
+ return {root,torso,head,arms,legs,eyes,ears,mouth,lip,teeth,tongue,tail,yarn,loose,personality:'cool',host:true};
 }
-export function animateSonny(model,time,{motion=true,speaking=false,amount=0,mood='idle'}={}){
- const {head,arms,tail,root,eyes}=model,t=time,amp=motion?1:0;
- root.position.y=amp*.018*Math.sin(t*2.2);head.rotation.set(-amount*.055,amp*.08*Math.sin(t*.9),amp*.06*Math.sin(t*1.5));
+export function animateSonny(model,time,{motion=true,speaking=false,amount=0,mood='idle',act='idle',progress=0}={}){
+ const {head,arms,tail,root,eyes,ears,yarn,torso,legs,mouth,lip,teeth,tongue}=model,t=time,amp=motion?1:0;
+ const behavior=motion&&!speaking?act:'idle',p=Math.max(0,Math.min(1,progress)),ease=Math.min(1,p*7,(1-p)*7),wave=Math.sin(p*Math.PI*6);
+ root.position.y=amp*.018*Math.sin(t*2.2);root.rotation.z=0;torso.rotation.set(0,0,0);head.position.y=2.05;head.rotation.set(-amount*.055,amp*.08*Math.sin(t*.9),amp*.06*Math.sin(t*1.5));
  arms[0].rotation.set(-amount*.28,0,-.28-amount*.53);arms[1].rotation.set(-.65-amount*.34,0,.24+amount*.24);
+ legs.forEach(l=>l.rotation.set(0,0,0));yarn.visible=false;
  if(mood==='shock'){head.rotation.x=-.13;arms[0].rotation.z=-.82;arms[1].rotation.z=.73;}
  if(mood==='celebrate'){arms[0].rotation.z=-1.12-amp*.15*Math.sin(t*5);head.rotation.z=amp*.11*Math.sin(t*4);}
  if(mood==='smug'){head.rotation.z=-.12;arms[0].rotation.z=-.51;}
  tail.rotation.y=amp*.32*Math.sin(t*1.9);tail.rotation.z=amp*.10*Math.sin(t*1.4);
- const blink=motion?Math.pow(Math.max(0,Math.cos(t*1.4)),90):0;
+ ears.forEach((ear,i)=>{const side=i===0?-1:1;ear.rotation.z=-side*.22+amp*.045*Math.sin(t*2+i);ear.rotation.x=amp*.055*Math.sin(t*1.5+i);});
+ let blink=motion?Math.pow(Math.max(0,Math.cos(t*1.4)),90):0,jaw=null;
+ if(behavior==='yarn'){
+  yarn.visible=true;yarn.position.set(.32*Math.sin(p*Math.PI*4),1.10+.25*Math.abs(Math.sin(p*Math.PI*4)),.45);yarn.rotation.set(p*9,p*13,p*10);
+  head.rotation.x=.28*ease;head.rotation.y=.42*Math.sin(p*Math.PI*4)*ease;arms[0].rotation.set(-1.1*ease,0,-.70- .38*wave*ease);arms[1].rotation.set(-1.0*ease,0,.72-.38*wave*ease);
+  tail.rotation.y=.55*Math.sin(p*13);ears.forEach((e,i)=>e.rotation.x=-.17*ease);
+ }else if(behavior==='groom'){
+  head.rotation.x=.45*ease;head.rotation.z=.20*ease;arms[0].rotation.set(-.72*ease,0,(-.28+3.02*ease));arms[0].rotation.x-=.16*wave*ease;
+  blink=Math.max(blink,.78*ease);jaw=.18+.5*Math.max(0,wave)*ease;
+ }else if(behavior==='purr'){
+  head.rotation.z=-.14*ease;head.rotation.x=.12*ease;arms[0].rotation.z=-.23;blink=Math.max(blink,.88*ease);torso.rotation.z=.018*Math.sin(p*45)*ease;tail.rotation.y=.16*Math.sin(p*8);
+ }else if(behavior==='meow'){
+  head.rotation.x=-.16*ease;jaw=Math.sin(Math.PI*p)*.8;arms[0].rotation.z=-.62*ease;ears.forEach(e=>e.rotation.x=-.15*ease);
+ }else if(behavior==='stretch'){
+  arms[0].rotation.z=-.28-2.05*ease;arms[1].rotation.z=.24+2.05*ease;root.position.y+=.09*ease;head.rotation.x=-.20*ease;blink=Math.max(blink,.90*ease);jaw=.6*ease;tail.rotation.z=.32*ease;
+ }else if(behavior==='sleep'){
+  head.rotation.x=.24*ease;head.rotation.z=.24*ease;blink=Math.max(blink,.95*ease);torso.rotation.z=.035*Math.sin(p*10);tail.rotation.y=.1*Math.sin(p*6);
+ }else if(behavior==='ear'){
+  ears[0].rotation.z+=Math.sin(p*15)*.22*ease;head.rotation.y=.25*ease;tail.rotation.y=.45*ease;
+ }
  for(const [eye,y] of eyes)eye.scale.y=y*(1-.9*blink);
+ if(jaw!==null){mouth.scale.y=.025+.10*jaw;lip.scale.y=mouth.scale.y+.018;teeth.visible=jaw>.44;tongue.visible=behavior==='groom'?jaw>.33:jaw>.55;tongue.position.y=-.22-mouth.scale.y*.45;}
 }
