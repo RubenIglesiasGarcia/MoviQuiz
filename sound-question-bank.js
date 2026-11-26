@@ -24,7 +24,7 @@ export const soundQuestions=[
   "category": "Música y sonido",
   "difficulty": "Muy fácil",
   "mode": "choice",
-  "prompt": "¿Qué objeto hace este sonido repetitivo de tic-tac?",
+  "prompt": "¿Qué objeto cotidiano produce este sonido?",
   "options": [
    "Reloj",
    "Guitarra",
@@ -104,7 +104,7 @@ export const soundQuestions=[
   "category": "Música y sonido",
   "difficulty": "Fácil",
   "mode": "choice",
-  "prompt": "¿Qué sonido doméstico imita esta secuencia de tres pitidos iguales al terminar?",
+  "prompt": "¿Qué electrodoméstico puede avisarte así al terminar?",
   "options": [
    "Aviso de microondas",
    "Reloj de péndulo",
@@ -144,7 +144,7 @@ export const soundQuestions=[
   "category": "Música y sonido",
   "difficulty": "Fácil",
   "mode": "choice",
-  "prompt": "¿Qué medio de transporte imita esta combinación de traqueteo y silbato?",
+  "prompt": "¿Qué medio de transporte se está imitando?",
   "options": [
    "Tren",
    "Bicicleta",
@@ -264,7 +264,7 @@ export const soundQuestions=[
   "category": "Música y sonido",
   "difficulty": "Media",
   "mode": "choice",
-  "prompt": "¿Qué señal internacional representa esta secuencia de tres cortos, tres largos y tres cortos?",
+  "prompt": "¿Qué señal internacional se escucha en esta secuencia?",
   "options": [
    "SOS",
    "OK",
@@ -284,7 +284,7 @@ export const soundQuestions=[
   "category": "Música y sonido",
   "difficulty": "Media",
   "mode": "choice",
-  "prompt": "¿Qué efecto sonoro se imita con repeticiones cada vez más débiles?",
+  "prompt": "¿Qué efecto sonoro está presente en la muestra?",
   "options": [
    "Eco",
    "Distorsión",
@@ -304,7 +304,7 @@ export const soundQuestions=[
   "category": "Música y sonido",
   "difficulty": "Difícil",
   "mode": "choice",
-  "prompt": "¿Qué intervalo musical separa los dos tonos (el segundo tiene el doble de frecuencia)?",
+  "prompt": "¿Qué intervalo musical separa los dos tonos que suenan sucesivamente?",
   "options": [
    "Octava justa",
    "Segunda menor",
@@ -324,7 +324,7 @@ export const soundQuestions=[
   "category": "Música y sonido",
   "difficulty": "Difícil",
   "mode": "choice",
-  "prompt": "¿Qué intervalo forman estas dos notas, Do y Sol?",
+  "prompt": "¿Qué intervalo musical se escucha en este ejemplo de dos notas?",
   "options": [
    "Quinta justa",
    "Cuarta justa",
@@ -344,7 +344,7 @@ export const soundQuestions=[
   "category": "Música y sonido",
   "difficulty": "Difícil",
   "mode": "choice",
-  "prompt": "¿Qué patrón se oye al alternar golpes de bombo y caja en cuatro tiempos?",
+  "prompt": "¿Qué patrón rítmico se escucha?",
   "options": [
    "Acento de caja en segundo y cuarto tiempo",
    "Caja solo en primer tiempo",
@@ -404,7 +404,7 @@ export const soundQuestions=[
   "category": "Música y sonido",
   "difficulty": "Muy difícil",
   "mode": "choice",
-  "prompt": "¿Qué tipo de onda periódica produce el sonido digital con armónicos impares característico de esta muestra?",
+  "prompt": "¿Qué tipo de onda periódica se está escuchando?",
   "options": [
    "Cuadrada",
    "Senoidal pura",
@@ -424,7 +424,7 @@ export const soundQuestions=[
   "category": "Música y sonido",
   "difficulty": "Muy difícil",
   "mode": "choice",
-  "prompt": "¿Qué fenómeno produce el pulso lento al superponer tonos de 440 y 444 Hz?",
+  "prompt": "¿Qué fenómeno acústico se reconoce en esta señal de dos tonos cercanos?",
   "options": [
    "Batimiento acústico",
    "Reverberación",
@@ -484,7 +484,7 @@ export const soundQuestions=[
   "category": "Música y sonido",
   "difficulty": "Muy difícil",
   "mode": "choice",
-  "prompt": "¿Qué intervalo separa un Do de un Mi bemol en esta secuencia?",
+  "prompt": "¿Qué intervalo musical separa estas dos notas repetidas?",
   "options": [
    "Tercera menor",
    "Tercera mayor",

@@ -17,7 +17,9 @@ export function arcadeAward(state){
  let pick,label,detail;
  if(variant==='sofa'){pick=unique('bumps',2);if(pick){label='SIN RESERVA';detail=pick.p.bumps+' empujones con turbo';}}
  else if(variant==='territory'){pick=unique('repaints',3);if(pick){label='PINTOR DE BROCHA GORDA';detail=pick.p.repaints+' casillas robadas';}}
+ else if(variant==='bomb'){pick=unique('bumps',2);if(pick){label='REPARTIDOR SOSPECHOSO';detail=pick.p.bumps+' paquetes entregados';}}
+ else if(variant==='lava'){pick=unique('hits',3);if(pick){label='PIES DE AMIANTO';detail=pick.p.hits+' segundos a salvo';}}
  else if(kind!=='coins'){pick=unique('bestCombo',3);if(pick){label='EN MODO LEYENDA';detail='Combo de '+pick.p.bestCombo;}}
- if(!pick){pick=unique('score',1);if(!pick)return null;label=variant==='sofa'?'DUEÑO DEL SALÓN':variant==='territory'?'REY DEL RODILLO':kind==='coins'?'ASPIRADORA DE MONEDAS':kind==='dash'?'PIERNAS DE GOMA':kind==='dodge'?'TURISTA GALÁCTICO':'MUÑECA DE ORO';detail=Math.round(pick.p.score).toLocaleString('es-ES')+' puntos';}
+ if(!pick){pick=unique('score',1);if(!pick)return null;label=variant==='lava'?'PIES DE AMIANTO':variant==='bomb'?'NO SE ACEPTAN DEVOLUCIONES':variant==='sofa'?'DUEÑO DEL SALÓN':variant==='territory'?'REY DEL RODILLO':kind==='coins'?'ASPIRADORA DE MONEDAS':kind==='dash'?'PIERNAS DE GOMA':kind==='dodge'?'TURISTA GALÁCTICO':'MUÑECA DE ORO';detail=Math.round(pick.p.score).toLocaleString('es-ES')+' puntos';}
  return {label,name:pick.person.name,detail};
 }

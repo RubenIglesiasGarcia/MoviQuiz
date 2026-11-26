@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {roomOffset} from '../public/room-clock.js';test('fresh room resets skew and packet jitter is bounded',()=>{assert.equal(roomOffset(0,10000,9000,true),1000);assert.equal(roomOffset(1000,10000,8600),1035);assert.equal(roomOffset(1000,10000,9400),965);assert.equal(roomOffset(1000,10000,6000),4000);});

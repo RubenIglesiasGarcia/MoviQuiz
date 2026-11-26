@@ -27,6 +27,6 @@ export function presenterMoment(s,previousLeader,awardIndex=0){
  if(!original||normalizePresenter(s.presenter)==='sonny')return original;
  const i=Math.max(0,s.index||0),speaker=s.phase==='lobby'?'parker':s.phase==='reveal'?(i%2?'parker':'mei'):(i%2?'mei':'parker');
  const phrase=(speaker==='parker'?scared:wild)[(i+(s.phase==='reveal'?2:0))%6];
- const rule=s.phase==='question'&&s.partyStage==='intro'?original.text.slice(original.text.indexOf('. ')+2):s.phase==='lobby'?'¡Bienvenidos al plató!':original.text;
+ const split=original.text.indexOf('. ');const rule=s.phase==='question'&&s.partyStage==='intro'?(split>=0?original.text.slice(split+2):original.text):s.phase==='lobby'?'¡Bienvenidos al plató!':original.text;
  return {speaker,mood:speaker==='parker'?'shock':'celebrate',text:phrase+' '+rule,section:original.section};
 }
