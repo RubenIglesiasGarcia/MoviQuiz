@@ -9,10 +9,10 @@ const levels=['Muy fácil','Fácil','Media','Difícil','Muy difícil'];
 const user={id:'tester',guest:true};
 const env={DB:null};
 
-test('five official packs have distinct IDs and playable content at every difficulty',()=>{
- assert.equal(officialPacks.length,5);
- assert.equal(new Set(officialPacks.map(p=>p.id)).size,5);
- assert.equal(officialPacks.reduce((n,p)=>n+p.count,0),170);
+test('six official packs have distinct IDs and playable content at every difficulty',()=>{
+ assert.equal(officialPacks.length,6);
+ assert.equal(new Set(officialPacks.map(p=>p.id)).size,6);
+ assert.equal(officialPacks.reduce((n,p)=>n+p.count,0),210);
  for(const meta of officialPacks){
   assert.match(meta.id,/^[a-f0-9]{24}$/);
   assert.equal(meta.builtin,true);
@@ -37,7 +37,7 @@ test('five official packs have distinct IDs and playable content at every diffic
 
 test('official packs can be combined without D1 reads',async()=>{
  const source=await loadPackSelection(env,user,{standard:false,categories:null,packIds:officialPacks.map(p=>p.id)});
- assert.equal(source.questions.length,170);
+ assert.equal(source.questions.length,210);
  assert.equal(source.standard,false);
 });
 
