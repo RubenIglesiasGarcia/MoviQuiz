@@ -594,3 +594,13 @@ body.tv-mode .screen .question-media-image{height:clamp(80px,24vh,250px)}
 .round-intro[data-event] .intro-title{animation:mq-event-pop .48s cubic-bezier(.2,.8,.25,1) both}
 @keyframes mq-event-pop{from{opacity:.5;transform:scale(.9) rotate(-2deg)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.round-intro[data-event] .intro-title{animation:none}}
+
+/* Finale: a short television-only curtain, never an extra server waiting phase. */
+.broadcast-finale[data-ceremony="staged"]{position:relative;isolation:isolate}
+.finale-curtain{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2vh;padding:3vh 2vw;text-align:center;border-radius:inherit;background:radial-gradient(ellipse at 50% 42%,#684188,#281a43 65%,#151026);color:#fff1d3}
+.finale-curtain strong{font-family:'Bungee',sans-serif;font-size:clamp(23px,4vw,60px);line-height:1.15;color:#ffd55a}
+.finale-kicker{font-weight:850;color:#e5c6ff;letter-spacing:.18em}
+.finale-curtain p{font-size:clamp(14px,2.4vh,25px)}
+.finale-curtain strong{animation:mq-finale-glow 1.3s ease-in-out infinite alternate}
+@keyframes mq-finale-glow{from{filter:drop-shadow(0 0 4px #ffd55a33)}to{filter:drop-shadow(0 0 18px #ffd55a88)}}
+@media(prefers-reduced-motion:reduce){.finale-curtain strong{animation:none}}
