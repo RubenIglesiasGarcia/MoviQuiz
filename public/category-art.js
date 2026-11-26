@@ -1,6 +1,7 @@
 import {levels} from './difficulty.js';
 const normalize=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const groups=[
+ ['memes','#ffadf2',/meme|internet|tiktok|redes sociales/,'M4 5h16v12H9l-5 4V5M8 10h.1M16 10h.1M9 13q3 3 6 0'],
  ['science','#aeeed1',/ciencia|tecnologia/,'M12 3v6l-6 10q-1 2 2 2h8q3 0 2-2L12 9M9 3h6M8 16h8M10 19h.1'],
  ['geo','#8ed8ff',/geografia/,'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18M3 12h18M12 3c-5 4-5 14 0 18M12 3c5 4 5 14 0 18'],
  ['film','#ffb1ba',/cine|television|\btv\b/,'M3 9h18v11H3zM3 9l-1-5 18-3 1 5zM7 3l3 5M14 2l3 5M10 12l5 3-5 3z'],

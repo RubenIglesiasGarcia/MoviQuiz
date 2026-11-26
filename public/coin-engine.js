@@ -15,7 +15,7 @@ export function blocked(x,z,r=.23){return COIN_BLOCKS.some(b=>Math.abs(x-b.x)<b.
 // A shared arena variant: every contestant can repaint rivals' tiles, not just collect pickups.
 // Owner indices are round-local, never account IDs.
 export const TERRITORY_TILE_POINTS=35;
-export function territoryColor(index){return index<8?['#79c9ff','#ff9b9c','#ffd55a','#77e2b2','#dab7ff','#ffab65','#82f0f0','#ef84cd'][index]:`hsl(${Math.round(index*137.508)%360} 85% 65%)`;}
+export function territoryColor(index){return index<8?['#79c9ff','#ff9b9c','#ffd55a','#77e2b2','#dab7ff','#ffab65','#82f0f0','#ef84cd'][index]:`hsl(${Math.round(index*137.508)%360}, 85%, 65%)`;}
 export function territoryPlan(){
  const tiles=[];
  for(let ix=0;ix<12;ix++)for(let iz=0;iz<8;iz++){

@@ -516,3 +516,6 @@ body.tv-mode .screen .question-media-image{height:clamp(80px,24vh,250px)}
 .arcade-coins[data-variant=territory] .coin-knob{background:radial-gradient(circle at 30% 20%,#fff,var(--territory-color,#a88bff) 65%,#382451);border-color:var(--territory-color,#a88bff)}
 .arcade-coins[data-variant=territory] .coin-time-track i{background:linear-gradient(90deg,#b8a1ff,#ff9db7)}
 .result-streak{font-weight:800;font-size:clamp(11px,1.7vh,19px);color:#ffdc83;text-align:center;max-width:100%;overflow-wrap:anywhere}
+
+/* Community packs: thematic covers, compact favorite control, consistent card heights. */
+.pack-cover{position:relative;overflow:hidden;border-radius:9px;aspect-ratio:3.6;background:#231a35;border:1px solid #9b82c34f}.pack-cover img{width:100%;height:100%;display:block;object-fit:cover}.pack-cover .pack-favorite{position:absolute;top:5px;right:5px;width:38px;height:38px;display:grid;place-items:center;border:1px solid #c5a5f7;border-radius:50%;background:#221732e8;color:#fff1d3;font-size:25px;line-height:1;padding:0}.pack-cover .pack-favorite[aria-pressed=true]{color:#ffd55a;border-color:#ffd55a}.pack-favorite:focus-visible{outline:2px solid #fff;outline-offset:2px}.pack-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}@media(min-width:620px){.pack-tabs{grid-template-columns:repeat(4,minmax(0,1fr))}}
