@@ -1,3 +1,4 @@
+import {soundWave} from './sound-clues.js';
 import {normalizePresenter} from './public/hosts.js';
 import { DurableObject } from 'cloudflare:workers';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
@@ -31,6 +32,7 @@ export default {async fetch(req,env){const url=new URL(req.url),p=url.pathname;t
  if(!p.startsWith('/api/'))return env.ASSETS.fetch(req);
  if(req.method==='GET'&&p==='/api/config')return json({googleClientId:env.GOOGLE_CLIENT_ID||'',castAppId:env.CAST_APP_ID||''});
  if(req.method==='GET'&&p==='/api/sample-audio')return audio();
+ if(req.method==='GET'&&p.startsWith('/api/sound-clue/')){const b=soundWave(p.slice('/api/sound-clue/'.length));return b?new Response(b,{headers:{'Content-Type':'audio/wav','Cache-Control':'public,max-age=86400'}}):fail('Pista no encontrada.',404);}
  if(req.method==='POST'&&req.headers.get('Origin')&&req.headers.get('Origin')!==url.origin)return fail('Origen no permitido.',403);
  if(req.method==='POST'&&p==='/api/guest'){const name=String((await body(req)).name||'').trim().slice(0,24);return name?json(await session(env,{id:'guest:'+hex(32),name,guest:true})):fail('Introduce tu nombre.');}
  if(req.method==='POST'&&p==='/api/google'){if(!env.GOOGLE_CLIENT_ID)return fail('Google todavía no está configurado.',503);try{const {credential}=await body(req);const {payload}=await jwtVerify(credential,jwks,{issuer:['https://accounts.google.com','accounts.google.com'],audience:env.GOOGLE_CLIENT_ID,algorithms:['RS256']});if(!payload.sub)throw Error();return json(await session(env,{id:'google:'+payload.sub,name:String(payload.name||'Jugador').slice(0,40),guest:false}));}catch{return fail('No se pudo verificar la cuenta de Google.',401);}}

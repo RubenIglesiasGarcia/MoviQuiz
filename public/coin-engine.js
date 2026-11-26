@@ -83,7 +83,7 @@ export function advanceCoins(action,now){
   if(['lava','bomb'].includes(action.plan.variant)){arenaHazard(action,ids,time,elapsed);world.tick=time;continue;}
   // Resolve contested pickups by nearest player; stable tie-break, no input order advantage.
   for(const c of action.plan.coins){if(c.at>elapsed||world.taken[c.id]||elapsed-c.at>=10000)continue;let winner=null,best=.48*.48;
-   for(const id of ids){const p=action.players[id],d=(p.x-c.x)**2+(p.z-c.z)**2;if(p.attempts>0&&d<best){winner=p;best=d;}}
+   for(const id of ids){const p=action.players[id],d=(p.x-c.x)**2+(p.z-c.z)**2;if(p.attempts>0&&p.until>time&&d<best){winner=p;best=d;}}
    if(winner){world.taken[c.id]=true;winner.score+=c.value;winner.hits++;}
   }
   world.tick=time;
