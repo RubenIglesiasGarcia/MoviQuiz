@@ -260,12 +260,12 @@ export const freshChoices=[
   "category": "Videojuegos",
   "difficulty": "Muy difícil",
   "mode": "choice",
-  "prompt": "¿Qué estudio desarrolló Return of the Obra Dinn?",
+  "prompt": "¿Qué desarrollador independiente creó Return of the Obra Dinn?",
   "options": [
    "Lucas Pope",
-   "Playdead",
-   "Frictional Games",
-   "Remedy Entertainment"
+   "Jonathan Blow",
+   "Toby Fox",
+   "Eric Barone"
   ],
   "correct": 0,
   "seconds": 30
