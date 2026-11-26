@@ -1,8 +1,9 @@
 // Shared deterministic arcade timing. The server grades all input with its own clock.
-import {coinPlan,territoryPlan,startCoins,controlCoins,finishCoins} from './coin-engine.js';
+import {coinPlan,territoryPlan,sofaPlan,startCoins,controlCoins,finishCoins} from './coin-engine.js';
 export const actionKinds=['dash','dodge','hoops'];
-export const isAction=kind=>kind==='coins'||kind==='territory'||actionKinds.includes(kind);
+export const isAction=kind=>kind==='coins'||kind==='territory'||kind==='sofa'||actionKinds.includes(kind);
 export const actionMeta={
+ sofa:{title:'REY DEL SOFÁ',subtitle:'¡El sofá es tuyo! Acércate al trono, mantén el puesto y usa el turbo para apartar a tus rivales. ¡Cambia de sitio cada 8 segundos!',category:'Agilidad'},
  territory:{title:'GUERRA DE COLORES',subtitle:'Pinta el suelo de tu color, roba las casillas de tus rivales y usa el turbo. Gana quien controla más terreno al acabar.',category:'Agilidad'},
  coins:{title:'FIEBRE DEL ORO',subtitle:'Muévete libremente, esquiva las barreras y recoge más monedas que tus rivales.',category:'Agilidad'},
  dash:{title:'CARRERA DE VALLAS',subtitle:'Esquiva por los lados o salta la valla en el momento justo.',steps:12,interval:1750,category:'Agilidad'},
@@ -10,7 +11,7 @@ export const actionMeta={
  hoops:{title:'CANASTA ESTELAR',subtitle:'Lanza cuando el indicador atraviese la zona verde.',steps:10,interval:1900,category:'Deportes'}
 };
 export function makeActionPlan(kind,random=Math.random){
- if(kind==='territory')return territoryPlan();if(kind==='coins')return coinPlan(random);const m=actionMeta[kind];if(!m)throw Error('Prueba desconocida.');
+ if(kind==='sofa')return sofaPlan(random);if(kind==='territory')return territoryPlan();if(kind==='coins')return coinPlan(random);const m=actionMeta[kind];if(!m)throw Error('Prueba desconocida.');
  let prev='',repeat=0;
  const beats=Array.from({length:m.steps},(_,i)=>{
   const level=Math.min(3,Math.floor(i*4/m.steps)),duration=m.interval-level*130;

@@ -16,6 +16,34 @@ export function blocked(x,z,r=.23){return COIN_BLOCKS.some(b=>Math.abs(x-b.x)<b.
 // Owner indices are round-local, never account IDs.
 export const TERRITORY_TILE_POINTS=35;
 export function territoryColor(index){return index<8?['#79c9ff','#ff9b9c','#ffd55a','#77e2b2','#dab7ff','#ffab65','#82f0f0','#ef84cd'][index]:`hsl(${Math.round(index*137.508)%360}, 85%, 65%)`;}
+// The sofa moves four times. Stay close, and use turbo to bump active rivals.
+export const SOFA_PERIOD=8000,SOFA_RADIUS=1.05,SOFA_POINTS=35;
+export function sofaPlan(random=Math.random){
+ const spots=[{x:0,z:0},{x:-4.5,z:-2.4},{x:4.5,z:2.4},{x:-4.5,z:2.4},{x:4.5,z:-2.4}];
+ const rest=spots.slice(1);for(let i=rest.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[rest[i],rest[j]]=[rest[j],rest[i]];}
+ return {kind:'coins',variant:'sofa',version:1,lead:COIN_LEAD,duration:32000,interval:32000,beats:[],coins:[],spots:[spots[0],...rest.slice(0,3)]};
+}
+export function sofaSpot(plan,elapsed){return plan.spots[Math.min(plan.spots.length-1,Math.max(0,Math.floor(elapsed/SOFA_PERIOD)))];}
+function shoveSofa(action,ids,time){
+ for(const id of ids){const p=action.players[id];if(p.boostUntil<=time||p.until<=time||(p.bumpReady||0)>time)continue;
+  let target=null,closest=.76;
+  for(const other of ids){if(other===id)continue;const q=action.players[other],dx=q.x-p.x,dz=q.z-p.z,d=Math.hypot(dx,dz);
+   if(q.until<=time||q.safeUntil>time||d<.001||d>=closest||dx*p.vx+dz*p.vz<=0)continue;target=q;closest=d;}
+  if(!target)continue;
+  const dx=(target.x-p.x)/closest,dz=(target.z-p.z)/closest;let moved=0;
+  for(let k=0;k<8;k++){const x=clamp(target.x+dx*.16,-5.76,5.76),z=clamp(target.z+dz*.16,-3.76,3.76);if(blocked(x,z)||Math.hypot(x-target.x,z-target.z)<.03)break;target.x=x;target.z=z;moved++;}
+  if(moved){p.bumpReady=time+500;p.bumps=(p.bumps||0)+1;target.safeUntil=time+1100;target.bumped=(target.bumped||0)+1;target.bumpedAt=time;}
+ }
+}
+function scoreSofa(action,ids,time,elapsed){
+ const world=action.world,spot=sofaSpot(action.plan,elapsed);shoveSofa(action,ids,time);
+ let holder=null,best=SOFA_RADIUS;
+ for(const id of ids){const p=action.players[id];if(!p.attempts||p.until<=time||(p.safeUntil>time&&time-(p.bumpedAt||0)<250))continue;
+  const d=Math.hypot(p.x-spot.x,p.z-spot.z);if(d<best-.0001){best=d;holder=p;}else if(Math.abs(d-best)<.0001){holder=null;}}
+ world.holder=holder?.colorIndex??null;
+ const beat=Math.floor(elapsed/500);
+ if(beat>world.lastAward){world.lastAward=beat;if(holder){holder.hits++;holder.score+=SOFA_POINTS;}}
+}
 export function territoryPlan(){
  const tiles=[];
  for(let ix=0;ix<12;ix++)for(let iz=0;iz<8;iz++){
@@ -37,8 +65,8 @@ function paintTerritory(action,ids,time,dt){
  }
 }
 export function startCoins(action){
- const ids=Object.keys(action.players).sort(),count=ids.length;action.world={tick:action.started+action.plan.lead,taken:{},...(action.plan.variant==='territory'?{owners:{},claimedAt:{}}:{})};
- ids.forEach((id,i)=>{const a=2*Math.PI*i/Math.max(1,count),p=action.players[id];Object.assign(p,{x:Math.cos(a)*5.05,z:Math.sin(a)*3.15,vx:0,vz:0,until:0,lastControl:0,boostUntil:0,boostReady:0,score:0,hits:0,attempts:0,colorIndex:i,repaints:0});});
+ const ids=Object.keys(action.players).sort(),count=ids.length;action.world={tick:action.started+action.plan.lead,taken:{},...(action.plan.variant==='territory'?{owners:{},claimedAt:{}}:action.plan.variant==='sofa'?{holder:null,lastAward:0}:{})};
+ ids.forEach((id,i)=>{const a=2*Math.PI*i/Math.max(1,count),p=action.players[id];Object.assign(p,{x:Math.cos(a)*5.05,z:Math.sin(a)*3.15,vx:0,vz:0,until:0,lastControl:0,boostUntil:0,boostReady:0,score:0,hits:0,attempts:0,colorIndex:i,repaints:0,bumps:0,bumped:0,safeUntil:0,bumpReady:0,bumpedAt:0});});
 }
 export function advanceCoins(action,now){
  const world=action.world;if(!world)return;
@@ -50,6 +78,7 @@ export function advanceCoins(action,now){
    if(moving>0){const x=clamp(p.x+p.vx*distance,-COIN_BOUNDS.x+.24,COIN_BOUNDS.x-.24),z=clamp(p.z+p.vz*distance,-COIN_BOUNDS.z+.24,COIN_BOUNDS.z-.24);if(!blocked(x,p.z))p.x=x;if(!blocked(p.x,z))p.z=z;}
   }
   if(action.plan.variant==='territory'){paintTerritory(action,ids,time,dt);world.tick=time;continue;}
+  if(action.plan.variant==='sofa'){scoreSofa(action,ids,time,elapsed);world.tick=time;continue;}
   // Resolve contested pickups by nearest player; stable tie-break, no input order advantage.
   for(const c of action.plan.coins){if(c.at>elapsed||world.taken[c.id]||elapsed-c.at>=10000)continue;let winner=null,best=.48*.48;
    for(const id of ids){const p=action.players[id],d=(p.x-c.x)**2+(p.z-c.z)**2;if(p.attempts>0&&d<best){winner=p;best=d;}}
