@@ -89,13 +89,13 @@ export function premiumStudio(scene,theme){
  instanced(scene,new THREE.BoxGeometry(1,1,1),cool,panels);
  const rail=ring(scene,warm,0,4.7,-.6,5.9,.045);rail.rotation.x=Math.PI/2;
  const audience=[];for(let r=0;r<3;r++)for(let i=0;i<22;i++){const theta=(i-10.5)*.109;audience.push([Math.sin(theta)*(6.8+r*.3),.48+r*.48,-Math.cos(theta)*5.7-r*.25,.15,.22,.15]);}
- instanced(scene,new THREE.SphereGeometry(1,8,6),standard(0x5e427e,.85),audience);
+ const crowd=instanced(scene,new THREE.SphereGeometry(1,8,6),standard(0x5e427e,.85),audience),crowdDummy=new THREE.Object3D();let lastCrowd=-1;for(let i=0;i<audience.length;i++)crowd.setColorAt(i,new THREE.Color([0xa28bc9,0x735d9b,0x595c90,0xb888ad][i%4]));crowd.instanceColor.needsUpdate=true;
  const lights=[];for(let i=0;i<9;i++){const x=(i-4)*1.4;box(scene,metal,x,4.65,-4.9,.55,.28,.38);lights.push([x,4.62,-4.68,.18,.12,.04]);}
  instanced(scene,new THREE.SphereGeometry(1,12,8),warm,lights);
  // Low-cost translucent light shafts: additive, no volumetric ray marching.
  const beamMat=new THREE.MeshBasicMaterial({color:0xb9a0ff,transparent:true,opacity:.045,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending});
  const beams=[];for(const x of [-4.2,-2.8,2.8,4.2]){const b=add(scene,new THREE.ConeGeometry(1.35,5.5,16,1,true),beamMat,x,2.0,-3.6);b.rotation.z=x*.04;beams.push(b);}
- const target=new THREE.Color();return {animate(t,celebrate,accent='#b9a0ff'){beams.forEach((b,i)=>{b.rotation.z=(i-1.5)*.11+Math.sin(t*.5+i)*.12;});beamMat.opacity=celebrate?.085:.042;target.set(accent);beamMat.color.lerp(target,.045);cool.emissive.lerp(target,.035);}};
+ const target=new THREE.Color();return {animate(t,celebrate,accent='#b9a0ff'){if(Math.floor(t*12)!==lastCrowd){lastCrowd=Math.floor(t*12);audience.forEach((v,i)=>{crowdDummy.position.set(v[0],v[1]+(celebrate?.16:.027)*Math.abs(Math.sin(t*(celebrate?8:2)+i*.71)),v[2]);crowdDummy.scale.set(v[3],v[4],v[5]);crowdDummy.rotation.set(0,0,Math.sin(t*3+i)*.08);crowdDummy.updateMatrix();crowd.setMatrixAt(i,crowdDummy.matrix);});crowd.instanceMatrix.needsUpdate=true;}beams.forEach((b,i)=>{b.rotation.z=(i-1.5)*.11+Math.sin(t*.5+i)*.12;});beamMat.opacity=celebrate?.085:.042;target.set(accent);beamMat.color.lerp(target,.045);cool.emissive.lerp(target,.035);}};
 }
 export function premiumArcade(scene,kind,width){
  const metal=standard(0x22223d,.44,.4),edge=glow(kind==='dash'?0x7bd5ff:kind==='dodge'?0x9f8dff:0xffb866,1.1),gold=glow(0xffdf80,1);
