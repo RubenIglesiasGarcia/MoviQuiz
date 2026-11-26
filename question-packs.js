@@ -38,7 +38,7 @@ export async function packAPI(env,u,path,data={}){
  return error('Acción desconocida.',404);
 }
 export async function loadPackSelection(env,u,selection){
- if(!selection||typeof selection!=='object'||Array.isArray(selection)||typeof selection.standard!=='boolean'||!Array.isArray(selection.packIds)||selection.packIds.length>5||selection.packIds.some(id=>!packId(id)))throw Error('Selección de packs inválida.');
+ if(!selection||typeof selection!=='object'||Array.isArray(selection)||typeof selection.standard!=='boolean'||!Array.isArray(selection.packIds)||selection.packIds.length>10||selection.packIds.some(id=>!packId(id)))throw Error('Selección de packs inválida.');
  const categories=selection.categories===null?null:Array.isArray(selection.categories)&&selection.categories.length<=30&&selection.categories.every(c=>typeof c==='string'&&c.length<=60)?[...new Set(selection.categories.map(categoryKey))]:undefined;
  if(categories===undefined)throw Error('Selección de categorías inválida.');
  const ids=[...new Set(selection.packIds)],questions=[];for(const id of ids){const built=builtinPack(id);if(built){questions.push(...built.questions);continue;}const row=await env.DB.prepare('SELECT * FROM question_packs WHERE id=?').bind(id).first();if(!visible(row,u))throw Error('Algún pack ya no está disponible.');questions.push(...JSON.parse(row.questions));}
