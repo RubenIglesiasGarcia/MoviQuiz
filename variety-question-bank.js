@@ -2867,8 +2867,8 @@ export const varietyEstimates=[
  {
   "id": "variety-number-2-0",
   "category": "Historia",
-  "prompt": "¿En qué año cayó el muro de Berlín?",
-  "correct": 1989,
+  "prompt": "¿En qué año se inauguró el Eurotúnel entre Francia y el Reino Unido?",
+  "correct": 1994,
   "tolerance": 0,
   "estimateScale": 6,
   "difficulty": "Media",
