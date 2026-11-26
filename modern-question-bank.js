@@ -1846,12 +1846,12 @@ export const modernOrders=[
   "id": "modern-order-2",
   "difficulty": "Muy fácil",
   "category": "Videojuegos",
-  "prompt": "Ordena las generaciones de PlayStation por lanzamiento.",
+  "prompt": "Ordena estas consolas domésticas por su primer lanzamiento.",
   "options": [
-   "PS2",
-   "PS3",
-   "PS4",
-   "PS5"
+   "NES",
+   "PlayStation",
+   "Wii",
+   "Nintendo Switch"
   ],
   "correct": [
    0,
@@ -1926,11 +1926,11 @@ export const modernOrders=[
   "id": "modern-order-6",
   "difficulty": "Fácil",
   "category": "Música",
-  "prompt": "Ordena estos álbumes por fecha de publicación.",
+  "prompt": "Ordena estos álbumes de artistas pop por su lanzamiento original.",
   "options": [
-   "1989 (Taylor Swift)",
+   "The Fame",
+   "Teenage Dream",
    "SOUR",
-   "MOTOMAMI",
    "BRAT"
   ],
   "correct": [
@@ -2086,11 +2086,11 @@ export const modernOrders=[
   "id": "modern-order-14",
   "difficulty": "Difícil",
   "category": "Cine y TV",
-  "prompt": "Ordena por estreno estas películas de ciencia ficción.",
+  "prompt": "Ordena estas películas de ciencia ficción por su estreno.",
   "options": [
    "Interstellar",
    "Arrival",
-   "Dune (2021)",
+   "Annihilation",
    "Dune: Parte dos"
   ],
   "correct": [
@@ -2126,12 +2126,12 @@ export const modernOrders=[
   "id": "modern-order-16",
   "difficulty": "Muy difícil",
   "category": "Tecnología",
-  "prompt": "Ordena los estándares USB por publicación.",
+  "prompt": "Ordena estas tecnologías de almacenamiento por su introducción comercial.",
   "options": [
-   "USB 1.0",
-   "USB 2.0",
-   "USB 3.0",
-   "USB4"
+   "Disquete de 8 pulgadas",
+   "CD-ROM",
+   "DVD-ROM",
+   "Blu-ray"
   ],
   "correct": [
    0,

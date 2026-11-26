@@ -1567,12 +1567,12 @@ export const freshOrders=[
   "category": "Deportes",
   "difficulty": "Muy fácil",
   "mode": "order",
-  "prompt": "Ordena estas distancias de menor a mayor.",
+  "prompt": "Ordena estas pruebas de natación en un individual de estilos.",
   "options": [
-   "50 m",
-   "100 m",
-   "400 m",
-   "1.500 m"
+   "Mariposa",
+   "Espalda",
+   "Braza",
+   "Libre"
   ],
   "correct": [
    0,
@@ -1727,12 +1727,12 @@ export const freshOrders=[
   "category": "Deportes",
   "difficulty": "Media",
   "mode": "order",
-  "prompt": "Ordena las ediciones de verano de los Juegos Olímpicos.",
+  "prompt": "Ordena estas ciudades por los Juegos Olímpicos de verano que acogieron.",
   "options": [
-   "Pekín 2008",
-   "Londres 2012",
-   "Río 2016",
-   "Tokio 2020"
+   "Pekín",
+   "Londres",
+   "Río de Janeiro",
+   "Tokio"
   ],
   "correct": [
    0,
@@ -1747,12 +1747,12 @@ export const freshOrders=[
   "category": "Tecnología",
   "difficulty": "Difícil",
   "mode": "order",
-  "prompt": "Ordena estos estándares de red móvil por generación.",
+  "prompt": "Ordena estos navegadores por primera publicación.",
   "options": [
-   "2G",
-   "3G",
-   "4G",
-   "5G"
+   "Netscape Navigator",
+   "Internet Explorer",
+   "Firefox",
+   "Google Chrome"
   ],
   "correct": [
    0,

@@ -144,57 +144,727 @@ const rows=[
 ["Muy difícil","Literatura","¿Quién escribió el libro de relatos Ficciones?","Jorge Luis Borges","Julio Cortázar","Adolfo Bioy Casares","Juan Rulfo"]
 ];export const bank=rows.map(([difficulty,category,prompt,...options],i)=>({id:'bank-'+i,difficulty,category,prompt,options,correct:0,mode:'choice',seconds:difficulty==='Muy fácil'?18:difficulty==='Muy difícil'?30:difficulty==='Difícil'?25:20}));
 
-export const orderBank=[["Muy fácil","Cultura general","Ordena estos números de menor a mayor.","2","8","15","30"],["Muy fácil","Cultura general","Ordena estos meses desde el comienzo del año.","Enero","Marzo","Julio","Diciembre"],["Muy fácil","Cultura general","Ordena estos días de la semana a partir del lunes.","Lunes","Martes","Jueves","Viernes"],["Muy fácil","Naturaleza","Ordena por tamaño típico adulto, de menor a mayor.","Hormiga","Ratón","Elefante","Ballena azul"],["Muy fácil","Cultura general","Ordena estas unidades de longitud de menor a mayor.","Milímetro","Centímetro","Metro","Kilómetro"],["Muy fácil","Cultura general","Ordena estas etapas de la vida de más joven a más mayor.","Bebé","Niño","Adolescente","Adulto"],["Fácil","Geografía","Ordena estos países por superficie, de menor a mayor.","Portugal","España","Francia metropolitana","Rusia"],["Fácil","Ciencia","Ordena por distancia al Sol, de más cercano a más lejano.","Mercurio","Tierra","Júpiter","Neptuno"],["Fácil","Cultura general","Ordena estas duraciones de menor a mayor.","Segundo","Minuto","Hora","Día"],["Fácil","Historia","Ordena estos inventos por fecha, del más antiguo al más reciente.","Imprenta de Gutenberg","Teléfono","Avión de los Wright","World Wide Web"],["Fácil","Cine y TV","Ordena estas películas por estreno original.","Blancanieves (Disney)","El rey león (1994)","Shrek","Frozen"],["Fácil","Deportes","Ordena estos Juegos Olímpicos de verano cronológicamente.","Barcelona","Sídney","Londres 2012","París 2024"],["Media","Historia","Ordena estos hechos del siglo XX cronológicamente.","Inicio de la Primera Guerra Mundial","Crac de 1929","Fin de la Segunda Guerra Mundial","Llegada del Apolo 11 a la Luna"],["Media","Geografía","Ordena estas capitales europeas de sur a norte.","Atenas","Madrid","París","Oslo"],["Media","Ciencia","Ordena por número atómico de menor a mayor.","Carbono","Oxígeno","Sodio","Hierro"],["Media","Videojuegos","Ordena estas consolas por su primer lanzamiento mundial.","NES / Famicom","Super Nintendo","PlayStation","Nintendo Switch"],["Media","Música","Ordena estos compositores por año de nacimiento.","Bach","Mozart","Beethoven","Chopin"],["Media","Deportes","Ordena estos Mundiales masculinos de fútbol por año.","México 1986","Francia 1998","Alemania 2006","Brasil 2014"],["Difícil","Historia","Ordena estos tratados por fecha de firma.","Tordesillas","Westfalia","Utrecht","Versalles (1919)"],["Difícil","Ciencia","Ordena estos elementos por número atómico creciente.","Magnesio","Cloro","Cobre","Plata"],["Difícil","Arte","Ordena estos pintores por año de nacimiento.","Leonardo da Vinci","Rembrandt","Francisco de Goya","Claude Monet"],["Difícil","Literatura","Ordena estas novelas por primera publicación.","Frankenstein","Moby Dick","Drácula","1984"],["Difícil","Geografía","Ordena estas montañas por altitud, de menor a mayor.","Teide","Mont Blanc","Kilimanjaro","Everest"],["Difícil","Cine y TV","Ordena estos clásicos del cine por estreno original.","Metrópolis (1927)","Ciudadano Kane","Vértigo","Pulp Fiction"],["Muy difícil","Historia","Ordena estas batallas por fecha, de antigua a reciente.","Maratón","Gaugamela","Actium","Manzikert"],["Muy difícil","Ciencia","Ordena estos metales por número atómico.","Escandio","Titanio","Molibdeno","Wolframio"],["Muy difícil","Literatura","Ordena estas obras por primera publicación.","Madame Bovary","En busca del tiempo perdido (primer tomo)","Ulises (Joyce)","Pedro Páramo"],["Muy difícil","Música","Ordena estas obras por su estreno público.","La flauta mágica","La consagración de la primavera","Wozzeck","Turangalîla"],["Muy difícil","Geografía","Ordena estas capitales por latitud, de sur a norte.","Wellington","Buenos Aires","El Cairo","Reikiavik"],["Muy difícil","Arte","Ordena estos arquitectos por año de nacimiento.","Gian Lorenzo Bernini","Francesco Borromini","Antoni Gaudí","Le Corbusier"],
-["Muy fácil","Cultura general","Ordena estas cantidades de menor a mayor.","1","5","20","100"],
-["Muy fácil","Cultura general","Ordena estas comidas según el momento habitual del día.","Desayuno","Comida","Merienda","Cena"],
-["Muy fácil","Ciencia","Ordena estas cantidades de agua de menor a mayor.","1 gota","1 vaso","1 cubo","1 piscina olímpica"],
-["Muy fácil","Naturaleza","Ordena estas etapas del desarrollo de una mariposa.","Huevo","Oruga","Crisálida","Mariposa adulta"],
-["Muy fácil","Cultura general","Ordena estas fechas del mismo año.","2 de enero","3 de marzo","15 de agosto","24 de diciembre"],
-["Fácil","Historia","Ordena estas edades históricas de la más antigua a la más reciente.","Edad Antigua","Edad Media","Edad Moderna","Edad Contemporánea"],
-["Fácil","Ciencia","Ordena estas temperaturas en grados Celsius de menor a mayor.","−20 °C","0 °C","25 °C","100 °C"],
-["Fácil","Deportes","Ordena estas distancias de atletismo de menor a mayor.","100 m","400 m","1.500 m","10.000 m"],
-["Fácil","Geografía","Ordena estas ciudades españolas de sur a norte.","Málaga","Madrid","Valladolid","Santander"],
-["Fácil","Cine y TV","Ordena estas películas por el año de estreno original.","Regreso al futuro","Jurassic Park","Titanic","Avatar (2009)"],
-["Media","Historia","Ordena estos presidentes de EE. UU. por el inicio de su mandato.","John F. Kennedy","Richard Nixon","Ronald Reagan","Barack Obama"],
-["Media","Ciencia","Ordena estas capas de la atmósfera desde la superficie hacia el espacio.","Troposfera","Estratosfera","Mesosfera","Termosfera"],
-["Media","Videojuegos","Ordena estas sagas por el estreno de su primer videojuego.","Pac-Man","The Legend of Zelda","Pokémon","Minecraft"],
-["Media","Música","Ordena estos álbumes por el año de lanzamiento.","Thriller","Nevermind","OK Computer","Random Access Memories"],
-["Media","Geografía","Ordena estos ríos por su longitud aproximada de menor a mayor.","Tajo","Rin","Danubio","Nilo"],
-["Difícil","Historia","Ordena estos monarcas españoles por el comienzo de su reinado.","Carlos I","Felipe III","Carlos III","Alfonso XIII"],
-["Difícil","Ciencia","Ordena por frecuencia creciente estas regiones del espectro electromagnético.","Microondas","Infrarrojo","Ultravioleta","Rayos X"],
-["Difícil","Literatura","Ordena estas obras por su primera publicación.","Don Quijote (primera parte)","Los viajes de Gulliver","Orgullo y prejuicio","Los miserables"],
-["Difícil","Arte","Ordena estas obras por su fecha aproximada de creación.","La última cena (Leonardo)","Las meninas","La libertad guiando al pueblo","Guernica"],
-["Difícil","Deportes","Ordena estos países por el año de su primer Mundial masculino de fútbol ganado.","Uruguay","Italia","Alemania","Brasil"],
-["Muy difícil","Ciencia","Ordena estos elementos por número atómico creciente.","Galio","Kriptón","Indio","Xenón"],
-["Muy difícil","Historia","Ordena estas dinastías chinas por fecha de inicio.","Han","Tang","Song","Ming"],
-["Muy difícil","Literatura","Ordena estos libros por su primera publicación.","La educación sentimental","Los hermanos Karamázov","La metamorfosis","El proceso"],
-["Muy difícil","Música","Ordena estas óperas por año de estreno.","Las bodas de Fígaro","El barbero de Sevilla (Rossini)","Rigoletto","Carmen"],
-["Muy difícil","Geografía","Ordena estas islas por superficie, de menor a mayor.","Córcega","Sicilia","Irlanda","Islandia"],
-["Muy fácil","Cultura general","Ordena estos números de mayor a menor.","100","25","9","2"],
-["Muy fácil","Ciencia","Ordena estas masas de menor a mayor.","1 gramo","100 gramos","1 kilogramo","1 tonelada"],
-["Muy fácil","Cultura general","Ordena estos meses de enero a diciembre.","Febrero","Abril","Septiembre","Noviembre"],
-["Muy fácil","Deportes","Ordena por cantidad de jugadores de un equipo en pista, de menor a mayor.","Tenis individual","Vóley playa","Baloncesto","Fútbol"],
-["Muy fácil","Naturaleza","Ordena las fases de crecimiento de una planta con flor.","Semilla","Germinación","Planta joven","Floración"],
-["Fácil","Cine y TV","Ordena estas películas de Pixar por su estreno original.","Toy Story","Buscando a Nemo","Ratatouille","Coco"],
-["Fácil","Ciencia","Ordena estos planetas por distancia media al Sol.","Venus","Marte","Saturno","Urano"],
-["Fácil","Historia","Ordena estos años del más antiguo al más reciente.","1789","1812","1914","2000"],
-["Fácil","Gastronomía","Ordena estas cantidades de líquido de menor a mayor.","50 ml","250 ml","1 litro","5 litros"],
-["Fácil","Música","Ordena estas notas de una misma octava de grave a aguda.","Do","Mi","Sol","Si"],
-["Media","Deportes","Ordena por el año de su primera medalla de oro olímpica en baloncesto masculino.","Estados Unidos","Unión Soviética","Yugoslavia","Argentina"],
-["Media","Historia","Ordena estas primeras llegadas y expediciones por fecha.","Colón al Caribe","Primera vuelta al mundo completada","Expedición al Polo Sur de Amundsen","Llegada del Apolo 11 a la Luna"],
-["Media","Ciencia","Ordena estos elementos por número atómico creciente.","Hidrógeno","Nitrógeno","Neón","Calcio"],
-["Media","Geografía","Ordena estos países por superficie total de menor a mayor.","Bélgica","Grecia","Suecia","Canadá"],
-["Media","Cine y TV","Ordena estas películas de animación según su estreno original.","Bambi","La sirenita (Disney)","Monstruos, S. A.","Del revés"],
-["Difícil","Literatura","Ordena estas novelas por fecha de publicación original.","Cándido","Orgullo y prejuicio","Jane Eyre","El gran Gatsby"],
-["Difícil","Ciencia","Ordena estos planetas por diámetro ecuatorial de menor a mayor.","Mercurio","Marte","Venus","Tierra"],
-["Difícil","Música","Ordena estas óperas de Mozart por su estreno.","Idomeneo","Las bodas de Fígaro","Don Giovanni","La flauta mágica"],
-["Difícil","Historia","Ordena estos acontecimientos de más antiguo a más reciente.","Caída de Constantinopla","Inicio de la Reforma de Lutero","Paz de Westfalia","Revolución francesa"],
-["Difícil","Geografía","Ordena estos países por superficie total de menor a mayor.","Nepal","Chile","Kazajistán","Australia"],
-["Muy difícil","Ciencia","Ordena estos elementos por número atómico creciente.","Itrio","Paladio","Cerio","Hafnio"],
-["Muy difícil","Arte","Ordena por año de nacimiento a estos artistas.","Sandro Botticelli","Caravaggio","Édouard Manet","Pablo Picasso"],
-["Muy difícil","Historia","Ordena estos acontecimientos por fecha.","Edicto de Milán","Coronación imperial de Carlomagno","Batalla de Hastings","Paz de Augsburgo"],
-["Muy difícil","Literatura","Ordena estas obras por primera publicación.","Las penas del joven Werther","Rojo y negro","Crimen y castigo","La señora Dalloway"],
-["Muy difícil","Geografía","Ordena estas capitales de oeste a este por longitud.","Lisboa","Madrid","Roma","Bucarest"]
+export const orderBank=[
+ [
+  "Muy fácil",
+  "Naturaleza",
+  "Ordena estos animales por su tamaño adulto típico.",
+  "Mosca",
+  "Conejo",
+  "Oveja",
+  "Elefante"
+ ],
+ [
+  "Muy fácil",
+  "Cultura general",
+  "Ordena estos meses desde el comienzo del año.",
+  "Enero",
+  "Marzo",
+  "Julio",
+  "Diciembre"
+ ],
+ [
+  "Muy fácil",
+  "Cultura general",
+  "Ordena estos días de la semana a partir del lunes.",
+  "Lunes",
+  "Martes",
+  "Jueves",
+  "Viernes"
+ ],
+ [
+  "Muy fácil",
+  "Naturaleza",
+  "Ordena por tamaño típico adulto, de menor a mayor.",
+  "Hormiga",
+  "Ratón",
+  "Elefante",
+  "Ballena azul"
+ ],
+ [
+  "Muy fácil",
+  "Cultura general",
+  "Ordena estas unidades de longitud de menor a mayor.",
+  "Milímetro",
+  "Centímetro",
+  "Metro",
+  "Kilómetro"
+ ],
+ [
+  "Muy fácil",
+  "Cultura general",
+  "Ordena estas etapas de la vida de más joven a más mayor.",
+  "Bebé",
+  "Niño",
+  "Adolescente",
+  "Adulto"
+ ],
+ [
+  "Fácil",
+  "Geografía",
+  "Ordena estos países por superficie, de menor a mayor.",
+  "Portugal",
+  "España",
+  "Francia metropolitana",
+  "Rusia"
+ ],
+ [
+  "Fácil",
+  "Ciencia",
+  "Ordena por distancia al Sol, de más cercano a más lejano.",
+  "Mercurio",
+  "Tierra",
+  "Júpiter",
+  "Neptuno"
+ ],
+ [
+  "Fácil",
+  "Cultura general",
+  "Ordena estas duraciones de menor a mayor.",
+  "Segundo",
+  "Minuto",
+  "Hora",
+  "Día"
+ ],
+ [
+  "Fácil",
+  "Historia",
+  "Ordena estos inventos por fecha, del más antiguo al más reciente.",
+  "Imprenta de Gutenberg",
+  "Teléfono",
+  "Avión de los Wright",
+  "World Wide Web"
+ ],
+ [
+  "Fácil",
+  "Cine y TV",
+  "Ordena estas películas por estreno original.",
+  "Blancanieves (Disney)",
+  "El rey león",
+  "Shrek",
+  "Frozen"
+ ],
+ [
+  "Fácil",
+  "Deportes",
+  "Ordena estas sedes de Juegos Olímpicos de verano celebrados entre 1990 y 2024.",
+  "Barcelona",
+  "Sídney",
+  "Londres",
+  "París"
+ ],
+ [
+  "Media",
+  "Historia",
+  "Ordena estos hechos del siglo XX cronológicamente.",
+  "Inicio de la Primera Guerra Mundial",
+  "Crac de 1929",
+  "Fin de la Segunda Guerra Mundial",
+  "Llegada del Apolo 11 a la Luna"
+ ],
+ [
+  "Media",
+  "Geografía",
+  "Ordena estas capitales europeas de sur a norte.",
+  "Atenas",
+  "Madrid",
+  "París",
+  "Oslo"
+ ],
+ [
+  "Media",
+  "Ciencia",
+  "Ordena por número atómico de menor a mayor.",
+  "Carbono",
+  "Oxígeno",
+  "Sodio",
+  "Hierro"
+ ],
+ [
+  "Media",
+  "Videojuegos",
+  "Ordena estas consolas por su primer lanzamiento mundial.",
+  "NES / Famicom",
+  "Super Nintendo",
+  "PlayStation",
+  "Nintendo Switch"
+ ],
+ [
+  "Media",
+  "Música",
+  "Ordena estos compositores por año de nacimiento.",
+  "Bach",
+  "Mozart",
+  "Beethoven",
+  "Chopin"
+ ],
+ [
+  "Media",
+  "Deportes",
+  "Ordena estos países por su Mundial masculino de fútbol entre 1980 y 2015.",
+  "México",
+  "Francia",
+  "Alemania",
+  "Brasil"
+ ],
+ [
+  "Difícil",
+  "Historia",
+  "Ordena estos tratados por fecha de firma.",
+  "Tordesillas",
+  "Westfalia",
+  "Utrecht",
+  "Versalles"
+ ],
+ [
+  "Difícil",
+  "Ciencia",
+  "Ordena estos elementos por número atómico creciente.",
+  "Magnesio",
+  "Cloro",
+  "Cobre",
+  "Plata"
+ ],
+ [
+  "Difícil",
+  "Arte",
+  "Ordena estos pintores por año de nacimiento.",
+  "Leonardo da Vinci",
+  "Rembrandt",
+  "Francisco de Goya",
+  "Claude Monet"
+ ],
+ [
+  "Difícil",
+  "Literatura",
+  "Ordena estas novelas por primera publicación.",
+  "Frankenstein",
+  "Moby Dick",
+  "Drácula",
+  "1984"
+ ],
+ [
+  "Difícil",
+  "Geografía",
+  "Ordena estas montañas por altitud, de menor a mayor.",
+  "Teide",
+  "Mont Blanc",
+  "Kilimanjaro",
+  "Everest"
+ ],
+ [
+  "Difícil",
+  "Cine y TV",
+  "Ordena estos clásicos del cine por estreno original.",
+  "Metrópolis",
+  "Ciudadano Kane",
+  "Vértigo",
+  "Pulp Fiction"
+ ],
+ [
+  "Muy difícil",
+  "Historia",
+  "Ordena estas batallas por fecha, de antigua a reciente.",
+  "Maratón",
+  "Gaugamela",
+  "Actium",
+  "Manzikert"
+ ],
+ [
+  "Muy difícil",
+  "Ciencia",
+  "Ordena estos metales por número atómico.",
+  "Escandio",
+  "Titanio",
+  "Molibdeno",
+  "Wolframio"
+ ],
+ [
+  "Muy difícil",
+  "Literatura",
+  "Ordena estas obras por primera publicación.",
+  "Madame Bovary",
+  "En busca del tiempo perdido (primer tomo)",
+  "Ulises (Joyce)",
+  "Pedro Páramo"
+ ],
+ [
+  "Muy difícil",
+  "Música",
+  "Ordena estas obras por su estreno público.",
+  "La flauta mágica",
+  "La consagración de la primavera",
+  "Wozzeck",
+  "Turangalîla"
+ ],
+ [
+  "Muy difícil",
+  "Geografía",
+  "Ordena estas capitales por latitud, de sur a norte.",
+  "Wellington",
+  "Buenos Aires",
+  "El Cairo",
+  "Reikiavik"
+ ],
+ [
+  "Muy difícil",
+  "Arte",
+  "Ordena estos arquitectos por año de nacimiento.",
+  "Gian Lorenzo Bernini",
+  "Francesco Borromini",
+  "Antoni Gaudí",
+  "Le Corbusier"
+ ],
+ [
+  "Muy fácil",
+  "Ciencia",
+  "Ordena estos objetos por su tamaño habitual.",
+  "Grano de arroz",
+  "Pelota de tenis",
+  "Bicicleta",
+  "Autobús"
+ ],
+ [
+  "Muy fácil",
+  "Cultura general",
+  "Ordena estas comidas según el momento habitual del día.",
+  "Desayuno",
+  "Comida",
+  "Merienda",
+  "Cena"
+ ],
+ [
+  "Muy fácil",
+  "Ciencia",
+  "Ordena estas cantidades de agua de menor a mayor.",
+  "1 gota",
+  "1 vaso",
+  "1 cubo",
+  "1 piscina olímpica"
+ ],
+ [
+  "Muy fácil",
+  "Naturaleza",
+  "Ordena estas etapas del desarrollo de una mariposa.",
+  "Huevo",
+  "Oruga",
+  "Crisálida",
+  "Mariposa adulta"
+ ],
+ [
+  "Muy fácil",
+  "Cultura general",
+  "Ordena estas celebraciones dentro de un año natural.",
+  "Reyes Magos",
+  "San Valentín",
+  "Halloween",
+  "Nochebuena"
+ ],
+ [
+  "Fácil",
+  "Historia",
+  "Ordena estas edades históricas de la más antigua a la más reciente.",
+  "Edad Antigua",
+  "Edad Media",
+  "Edad Moderna",
+  "Edad Contemporánea"
+ ],
+ [
+  "Fácil",
+  "Ciencia",
+  "Ordena por temperatura típica estas situaciones.",
+  "Interior de un congelador",
+  "Nevera",
+  "Habitación templada",
+  "Agua hirviendo"
+ ],
+ [
+  "Fácil",
+  "Deportes",
+  "Ordena estas pruebas de atletismo por distancia recorrida, de menor a mayor.",
+  "Carrera de cien metros lisos",
+  "Vuelta completa a la pista",
+  "Media maratón",
+  "Maratón"
+ ],
+ [
+  "Fácil",
+  "Geografía",
+  "Ordena estas ciudades españolas de sur a norte.",
+  "Málaga",
+  "Madrid",
+  "Valladolid",
+  "Santander"
+ ],
+ [
+  "Fácil",
+  "Cine y TV",
+  "Ordena estas películas por el año de estreno original.",
+  "Regreso al futuro",
+  "Jurassic Park",
+  "Titanic",
+  "Avatar"
+ ],
+ [
+  "Media",
+  "Historia",
+  "Ordena estos presidentes de EE. UU. por el inicio de su mandato.",
+  "John F. Kennedy",
+  "Richard Nixon",
+  "Ronald Reagan",
+  "Barack Obama"
+ ],
+ [
+  "Media",
+  "Ciencia",
+  "Ordena estas capas de la atmósfera desde la superficie hacia el espacio.",
+  "Troposfera",
+  "Estratosfera",
+  "Mesosfera",
+  "Termosfera"
+ ],
+ [
+  "Media",
+  "Videojuegos",
+  "Ordena estas sagas por el estreno de su primer videojuego.",
+  "Pac-Man",
+  "The Legend of Zelda",
+  "Pokémon",
+  "Minecraft"
+ ],
+ [
+  "Media",
+  "Música",
+  "Ordena estos álbumes por el año de lanzamiento.",
+  "Thriller",
+  "Nevermind",
+  "OK Computer",
+  "Random Access Memories"
+ ],
+ [
+  "Media",
+  "Geografía",
+  "Ordena estos ríos por su longitud aproximada de menor a mayor.",
+  "Tajo",
+  "Rin",
+  "Danubio",
+  "Nilo"
+ ],
+ [
+  "Difícil",
+  "Historia",
+  "Ordena estos monarcas españoles por el comienzo de su reinado.",
+  "Carlos I",
+  "Felipe III",
+  "Carlos III",
+  "Alfonso XIII"
+ ],
+ [
+  "Difícil",
+  "Ciencia",
+  "Ordena por frecuencia creciente estas regiones del espectro electromagnético.",
+  "Microondas",
+  "Infrarrojo",
+  "Ultravioleta",
+  "Rayos X"
+ ],
+ [
+  "Difícil",
+  "Literatura",
+  "Ordena estas obras por su primera publicación.",
+  "Don Quijote (primera parte)",
+  "Los viajes de Gulliver",
+  "Orgullo y prejuicio",
+  "Los miserables"
+ ],
+ [
+  "Difícil",
+  "Arte",
+  "Ordena estas obras por su fecha aproximada de creación.",
+  "La última cena (Leonardo)",
+  "Las meninas",
+  "La libertad guiando al pueblo",
+  "Guernica"
+ ],
+ [
+  "Difícil",
+  "Deportes",
+  "Ordena estos países por el año de su primer Mundial masculino de fútbol ganado.",
+  "Uruguay",
+  "Italia",
+  "Alemania",
+  "Brasil"
+ ],
+ [
+  "Muy difícil",
+  "Ciencia",
+  "Ordena estos elementos por número atómico creciente.",
+  "Galio",
+  "Kriptón",
+  "Indio",
+  "Xenón"
+ ],
+ [
+  "Muy difícil",
+  "Historia",
+  "Ordena estas dinastías chinas por fecha de inicio.",
+  "Han",
+  "Tang",
+  "Song",
+  "Ming"
+ ],
+ [
+  "Muy difícil",
+  "Literatura",
+  "Ordena estos libros por su primera publicación.",
+  "La educación sentimental",
+  "Los hermanos Karamázov",
+  "La metamorfosis",
+  "El proceso"
+ ],
+ [
+  "Muy difícil",
+  "Música",
+  "Ordena estas óperas por año de estreno.",
+  "Las bodas de Fígaro",
+  "El barbero de Sevilla (Rossini)",
+  "Rigoletto",
+  "Carmen"
+ ],
+ [
+  "Muy difícil",
+  "Geografía",
+  "Ordena estas islas por superficie, de menor a mayor.",
+  "Córcega",
+  "Sicilia",
+  "Irlanda",
+  "Islandia"
+ ],
+ [
+  "Muy fácil",
+  "Naturaleza",
+  "Ordena estos animales por tamaño adulto típico, de mayor a menor.",
+  "Ballena azul",
+  "Jirafa",
+  "Perro doméstico mediano",
+  "Ratón"
+ ],
+ [
+  "Muy fácil",
+  "Ciencia",
+  "Ordena por masa aproximada estos objetos cotidianos.",
+  "Clip de papel",
+  "Manzana",
+  "Maleta llena",
+  "Coche"
+ ],
+ [
+  "Muy fácil",
+  "Cultura general",
+  "Ordena estos meses de enero a diciembre.",
+  "Febrero",
+  "Abril",
+  "Septiembre",
+  "Noviembre"
+ ],
+ [
+  "Muy fácil",
+  "Deportes",
+  "Ordena por cantidad de jugadores de un equipo en pista, de menor a mayor.",
+  "Tenis individual",
+  "Vóley playa",
+  "Baloncesto",
+  "Fútbol"
+ ],
+ [
+  "Muy fácil",
+  "Naturaleza",
+  "Ordena las fases de crecimiento de una planta con flor.",
+  "Semilla",
+  "Germinación",
+  "Planta joven",
+  "Floración"
+ ],
+ [
+  "Fácil",
+  "Cine y TV",
+  "Ordena estas películas de Pixar por su estreno original.",
+  "Toy Story",
+  "Buscando a Nemo",
+  "Ratatouille",
+  "Coco"
+ ],
+ [
+  "Fácil",
+  "Ciencia",
+  "Ordena estos planetas por distancia media al Sol.",
+  "Venus",
+  "Marte",
+  "Saturno",
+  "Urano"
+ ],
+ [
+  "Fácil",
+  "Historia",
+  "Ordena estos acontecimientos históricos de más antiguo a más reciente.",
+  "Construcción de las pirámides de Guiza",
+  "Caída del Imperio romano de Occidente",
+  "Llegada de Colón a América",
+  "Primer vuelo de los hermanos Wright"
+ ],
+ [
+  "Fácil",
+  "Gastronomía",
+  "Ordena estos recipientes por su capacidad habitual.",
+  "Cucharilla de café",
+  "Taza de desayuno",
+  "Botella de vino",
+  "Garrafa de agua"
+ ],
+ [
+  "Fácil",
+  "Música",
+  "Ordena estas notas de una misma octava de grave a aguda.",
+  "Do",
+  "Mi",
+  "Sol",
+  "Si"
+ ],
+ [
+  "Media",
+  "Deportes",
+  "Ordena por el año de su primera medalla de oro olímpica en baloncesto masculino.",
+  "Estados Unidos",
+  "Unión Soviética",
+  "Yugoslavia",
+  "Argentina"
+ ],
+ [
+  "Media",
+  "Historia",
+  "Ordena estas primeras llegadas y expediciones por fecha.",
+  "Colón al Caribe",
+  "Primera vuelta al mundo completada",
+  "Expedición al Polo Sur de Amundsen",
+  "Llegada del Apolo 11 a la Luna"
+ ],
+ [
+  "Media",
+  "Ciencia",
+  "Ordena estos elementos por número atómico creciente.",
+  "Hidrógeno",
+  "Nitrógeno",
+  "Neón",
+  "Calcio"
+ ],
+ [
+  "Media",
+  "Geografía",
+  "Ordena estos países por superficie total de menor a mayor.",
+  "Bélgica",
+  "Grecia",
+  "Suecia",
+  "Canadá"
+ ],
+ [
+  "Media",
+  "Cine y TV",
+  "Ordena estas películas de animación según su estreno original.",
+  "Bambi",
+  "La sirenita (Disney)",
+  "Monstruos, S. A.",
+  "Del revés"
+ ],
+ [
+  "Difícil",
+  "Literatura",
+  "Ordena estas novelas por fecha de publicación original.",
+  "Cándido",
+  "Orgullo y prejuicio",
+  "Jane Eyre",
+  "El gran Gatsby"
+ ],
+ [
+  "Difícil",
+  "Ciencia",
+  "Ordena estos planetas por diámetro ecuatorial de menor a mayor.",
+  "Mercurio",
+  "Marte",
+  "Venus",
+  "Tierra"
+ ],
+ [
+  "Difícil",
+  "Música",
+  "Ordena estas óperas de Mozart por su estreno.",
+  "Idomeneo",
+  "Las bodas de Fígaro",
+  "Don Giovanni",
+  "La flauta mágica"
+ ],
+ [
+  "Difícil",
+  "Historia",
+  "Ordena estos acontecimientos de más antiguo a más reciente.",
+  "Caída de Constantinopla",
+  "Inicio de la Reforma de Lutero",
+  "Paz de Westfalia",
+  "Revolución francesa"
+ ],
+ [
+  "Difícil",
+  "Geografía",
+  "Ordena estos países por superficie total de menor a mayor.",
+  "Nepal",
+  "Chile",
+  "Kazajistán",
+  "Australia"
+ ],
+ [
+  "Muy difícil",
+  "Ciencia",
+  "Ordena estos elementos por número atómico creciente.",
+  "Itrio",
+  "Paladio",
+  "Cerio",
+  "Hafnio"
+ ],
+ [
+  "Muy difícil",
+  "Arte",
+  "Ordena por año de nacimiento a estos artistas.",
+  "Sandro Botticelli",
+  "Caravaggio",
+  "Édouard Manet",
+  "Pablo Picasso"
+ ],
+ [
+  "Muy difícil",
+  "Historia",
+  "Ordena estos acontecimientos por fecha.",
+  "Edicto de Milán",
+  "Coronación imperial de Carlomagno",
+  "Batalla de Hastings",
+  "Paz de Augsburgo"
+ ],
+ [
+  "Muy difícil",
+  "Literatura",
+  "Ordena estas obras por primera publicación.",
+  "Las penas del joven Werther",
+  "Rojo y negro",
+  "Crimen y castigo",
+  "La señora Dalloway"
+ ],
+ [
+  "Muy difícil",
+  "Geografía",
+  "Ordena estas capitales de oeste a este por longitud.",
+  "Lisboa",
+  "Madrid",
+  "Roma",
+  "Bucarest"
+ ]
 ].map(([difficulty,category,prompt,...options],i)=>({id:'order-'+i,difficulty,category,prompt,mode:'order',options,correct:options.map((_,j)=>j),seconds:30}));
 export const estimateBank=[["Muy fácil","Cultura general","¿Cuántos minutos hay en dos horas?",120],["Muy fácil","Deportes","¿Cuántos jugadores suman los dos equipos de fútbol al comenzar con sus alineaciones completas?",22],["Muy fácil","Ciencia","¿Cuántos milímetros tiene un centímetro?",10],["Muy fácil","Cultura general","¿Cuántos días tiene un año no bisiesto?",365],["Muy fácil","Cultura general","¿Cuántas horas hay en tres días?",72],["Muy fácil","Naturaleza","¿Cuántas patas tienen cinco arañas?",40],["Fácil","Ciencia","¿Cuántos huesos tiene típicamente el esqueleto de una persona adulta?",206],["Fácil","Cultura general","¿Cuántas piezas suman ambos jugadores al comenzar una partida de ajedrez?",32],["Fácil","Deportes","¿Cuántos metros mide una maratón oficial?",42195],["Fácil","Cultura general","¿Cuántas casillas tiene un tablero de ajedrez?",64],["Fácil","Música","¿Cuántas cuerdas tiene un violín estándar?",4],["Fácil","Historia","¿En qué año llegó el ser humano a la Luna por primera vez?",1969],["Media","Ciencia","¿Cuántos segundos hay en un día completo?",86400],["Media","Historia","¿En qué año se inauguró la Torre Eiffel?",1889],["Media","Geografía","¿Cuántos metros mide el Kilimanjaro sobre el nivel del mar?",5895],["Media","Deportes","¿Cuántos metros mide una vuelta de una pista estándar de atletismo al aire libre?",400],["Media","Cultura general","¿Cuántas cartas tiene una baraja francesa estándar sin comodines?",52],["Media","Ciencia","¿A cuántos kilómetros por segundo viaja aproximadamente la luz en el vacío? (redondea al entero)",299792],["Difícil","Historia","¿En qué año se inauguró el canal de Suez?",1869],["Difícil","Ciencia","¿Cuántos minutos tarda aproximadamente la luz del Sol en llegar a la Tierra a distancia media? (admite decimales)",8.32],["Difícil","Geografía","¿Cuántos kilómetros mide aproximadamente el diámetro ecuatorial terrestre?",12756],["Difícil","Música","¿En qué año nació Ludwig van Beethoven?",1770],["Difícil","Deportes","¿En qué año se disputó el primer Mundial masculino de fútbol?",1930],["Difícil","Ciencia","¿Cuántos elementos químicos tenían nombre oficial reconocido por la IUPAC en 2025?",118],["Muy difícil","Ciencia","¿Cuántos metros por segundo es la velocidad de la luz en el vacío?",299792458],["Muy difícil","Historia","¿En qué año se produjo la batalla de Manzikert?",1071],["Muy difícil","Geografía","¿Cuántos metros mide el K2 sobre el nivel del mar?",8611],["Muy difícil","Literatura","¿En qué año se publicó por primera vez Orlando furioso?",1516],["Muy difícil","Ciencia","¿Cuántos kilómetros hay aproximadamente de media entre la Tierra y la Luna?",384400],["Muy difícil","Música","¿En qué año se estrenó La consagración de la primavera?",1913],
 ["Muy fácil","Cultura general","¿Cuántos minutos hay en media hora?",30,3],

@@ -2294,13 +2294,13 @@ export const varietyOrders=[
  },
  {
   "id": "variety-order-0-2",
-  "category": "Ciencia",
-  "prompt": "Ordena estos intervalos de tiempo desde el menor al mayor.",
+  "category": "Naturaleza",
+  "prompt": "Ordena estos animales por tamaño adulto típico, de menor a mayor.",
   "options": [
-   "15 segundos",
-   "2 minutos",
-   "3 horas",
-   "1 día"
+   "Mariquita",
+   "Gato",
+   "Caballo",
+   "Jirafa"
   ],
   "correct": [
    0,
@@ -2334,13 +2334,13 @@ export const varietyOrders=[
  },
  {
   "id": "variety-order-0-4",
-  "category": "Deportes",
-  "prompt": "Ordena estos puestos de una clasificación desde el mejor al peor.",
+  "category": "Cultura general",
+  "prompt": "Ordena estas acciones habituales al cruzar un semáforo peatonal en rojo.",
   "options": [
-   "Primero",
-   "Tercero",
-   "Quinto",
-   "Décimo"
+   "Detenerse en la acera",
+   "Esperar la luz verde",
+   "Comprobar que los vehículos se han detenido",
+   "Cruzar la calle"
   ],
   "correct": [
    0,
@@ -2375,12 +2375,12 @@ export const varietyOrders=[
  {
   "id": "variety-order-1-1",
   "category": "Cine y TV",
-  "prompt": "Ordena por año de estreno las primeras cuatro películas de la saga Shrek.",
+  "prompt": "Ordena estas películas de DreamWorks por su estreno original.",
   "options": [
+   "Hormigaz",
    "Shrek",
-   "Shrek 2",
-   "Shrek tercero",
-   "Shrek: Felices para siempre"
+   "Madagascar",
+   "Cómo entrenar a tu dragón"
   ],
   "correct": [
    0,
@@ -2395,12 +2395,12 @@ export const varietyOrders=[
  {
   "id": "variety-order-1-2",
   "category": "Tecnología",
-  "prompt": "Ordena estas capacidades de almacenamiento de menor a mayor.",
+  "prompt": "Ordena estos soportes por su capacidad típica, de menor a mayor.",
   "options": [
-   "512 MB",
-   "2 GB",
-   "32 GB",
-   "1 TB"
+   "Disquete de 3,5 pulgadas",
+   "CD de datos",
+   "DVD de una capa",
+   "Blu-ray de una capa"
   ],
   "correct": [
    0,
@@ -2435,12 +2435,12 @@ export const varietyOrders=[
  {
   "id": "variety-order-1-4",
   "category": "Música",
-  "prompt": "Ordena estos formatos de discos por diámetro de menor a mayor.",
+  "prompt": "Ordena estas voces habituales de un coro de grave a aguda.",
   "options": [
-   "CD de 12 centímetros",
-   "Single de vinilo de 7 pulgadas",
-   "Vinilo de 10 pulgadas",
-   "LP de 12 pulgadas"
+   "Bajo",
+   "Tenor",
+   "Contralto",
+   "Soprano"
   ],
   "correct": [
    0,
@@ -2495,12 +2495,12 @@ export const varietyOrders=[
  {
   "id": "variety-order-2-2",
   "category": "Historia",
-  "prompt": "Ordena estos hechos de la historia española por año.",
+  "prompt": "Ordena estos hechos de la historia española por fecha.",
   "options": [
    "Constitución de Cádiz",
    "Proclamación de la Primera República",
    "Proclamación de la Segunda República",
-   "Constitución de 1978"
+   "Restauración de la monarquía con Juan Carlos I"
   ],
   "correct": [
    0,
@@ -2535,12 +2535,12 @@ export const varietyOrders=[
  {
   "id": "variety-order-2-4",
   "category": "Música",
-  "prompt": "Ordena estos álbumes de estudio de Adele por fecha de publicación.",
+  "prompt": "Ordena estos álbumes de estudio de Beyoncé por publicación original.",
   "options": [
-   "19",
-   "21",
-   "25",
-   "30"
+   "Dangerously in Love",
+   "I Am... Sasha Fierce",
+   "Lemonade",
+   "Renaissance"
   ],
   "correct": [
    0,
@@ -2595,12 +2595,12 @@ export const varietyOrders=[
  {
   "id": "variety-order-3-2",
   "category": "Tecnología",
-  "prompt": "Ordena estas versiones de Java por publicación inicial.",
+  "prompt": "Ordena estos sistemas operativos por su primera publicación.",
   "options": [
-   "Java 5",
-   "Java 8",
-   "Java 11",
-   "Java 17"
+   "MS-DOS",
+   "Linux (núcleo)",
+   "Mac OS X",
+   "Android"
   ],
   "correct": [
    0,
@@ -2635,12 +2635,12 @@ export const varietyOrders=[
  {
   "id": "variety-order-3-4",
   "category": "Videojuegos",
-  "prompt": "Ordena estos juegos de la saga Resident Evil por lanzamiento original.",
+  "prompt": "Ordena estos juegos de Capcom por lanzamiento original.",
   "options": [
-   "Resident Evil 2 (1998)",
-   "Resident Evil 4 (2005)",
-   "Resident Evil 7",
-   "Resident Evil Village"
+   "Mega Man",
+   "Street Fighter II",
+   "Dino Crisis",
+   "Monster Hunter: World"
   ],
   "correct": [
    0,

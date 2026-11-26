@@ -2087,686 +2087,686 @@ export const deepChoices=[
   }
 ];
 export const deepOrders=[
-  {
-    "id": "deep-order-0",
-    "category": "Cine y TV",
-    "prompt": "Ordena estas películas de Pixar por estreno.",
-    "options": [
-      "Toy Story",
-      "Monstruos S.A.",
-      "Ratatouille",
-      "Del revés"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Media",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-1",
-    "category": "Videojuegos",
-    "prompt": "Ordena estas consolas de Sony por lanzamiento.",
-    "options": [
-      "PlayStation",
-      "PlayStation 2",
-      "PlayStation 3",
-      "PlayStation 4"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Media",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-2",
-    "category": "Deportes",
-    "prompt": "Ordena estos Mundiales de fútbol masculino por año.",
-    "options": [
-      "México 1986",
-      "Francia 1998",
-      "Sudáfrica 2010",
-      "Rusia 2018"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Media",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-3",
-    "category": "Geografía",
-    "prompt": "Ordena estas ciudades de sur a norte.",
-    "options": [
-      "Málaga",
-      "Madrid",
-      "Burgos",
-      "Santander"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Media",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-4",
-    "category": "Ciencia",
-    "prompt": "Ordena estas estructuras de menor a mayor escala.",
-    "options": [
-      "Electrón",
-      "Átomo",
-      "Molécula",
-      "Célula"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Media",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-5",
-    "category": "Gastronomía",
-    "prompt": "Ordena estas fases para preparar pan con levadura.",
-    "options": [
-      "Mezclar ingredientes",
-      "Amasar",
-      "Fermentar",
-      "Hornear"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Media",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-6",
-    "category": "Música",
-    "prompt": "Ordena estos álbumes de Taylor Swift por lanzamiento.",
-    "options": [
-      "Fearless",
-      "Red",
-      "1989",
-      "Folklore"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Media",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-7",
-    "category": "Naturaleza",
-    "prompt": "Ordena el ciclo de vida de una rana desde la puesta.",
-    "options": [
-      "Huevo",
-      "Renacuajo",
-      "Rana joven",
-      "Rana adulta"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Media",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-8",
-    "category": "Tecnología",
-    "prompt": "Ordena estas unidades digitales de menor a mayor.",
-    "options": [
-      "Byte",
-      "Kilobyte",
-      "Megabyte",
-      "Gigabyte"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Media",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-9",
-    "category": "Cultura general",
-    "prompt": "Ordena estas figuras por número de lados.",
-    "options": [
-      "Triángulo",
-      "Pentágono",
-      "Heptágono",
-      "Decágono"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Media",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-10",
-    "category": "Literatura",
-    "prompt": "Ordena las primeras cuatro novelas de Harry Potter.",
-    "options": [
-      "La piedra filosofal",
-      "La cámara secreta",
-      "El prisionero de Azkaban",
-      "El cáliz de fuego"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Media",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-11",
-    "category": "Historia",
-    "prompt": "Ordena estos periodos históricos por comienzo.",
-    "options": [
-      "Edad Antigua",
-      "Edad Media",
-      "Edad Moderna",
-      "Edad Contemporánea"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-12",
-    "category": "Historia",
-    "prompt": "Ordena estos acontecimientos del siglo XX.",
-    "options": [
-      "Revolución rusa",
-      "Crac del 29",
-      "Fundación de la ONU",
-      "Primera llegada humana a la Luna"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-13",
-    "category": "Geografía",
-    "prompt": "Ordena estas ciudades por latitud de sur a norte.",
-    "options": [
-      "Buenos Aires",
-      "Ciudad del Cabo",
-      "Lima",
-      "Quito"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-14",
-    "category": "Cine y TV",
-    "prompt": "Ordena estas películas de Christopher Nolan por estreno.",
-    "options": [
-      "Memento",
-      "El truco final",
-      "Origen",
-      "Dunkerque"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-15",
-    "category": "Videojuegos",
-    "prompt": "Ordena estas entregas de The Legend of Zelda por lanzamiento original.",
-    "options": [
-      "A Link to the Past",
-      "Ocarina of Time",
-      "The Wind Waker",
-      "Breath of the Wild"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-16",
-    "category": "Música",
-    "prompt": "Ordena estos álbumes de Radiohead por estreno.",
-    "options": [
-      "The Bends",
-      "OK Computer",
-      "Kid A",
-      "In Rainbows"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-17",
-    "category": "Deportes",
-    "prompt": "Ordena estos Juegos Olímpicos de verano por fecha.",
-    "options": [
-      "Seúl",
-      "Atlanta",
-      "Atenas 2004",
-      "Londres 2012"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-18",
-    "category": "Ciencia",
-    "prompt": "Ordena estas radiaciones por frecuencia ascendente.",
-    "options": [
-      "Ondas de radio",
-      "Microondas",
-      "Infrarrojo",
-      "Ultravioleta"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-19",
-    "category": "Naturaleza",
-    "prompt": "Ordena estos niveles de clasificación biológica del más amplio al más específico.",
-    "options": [
-      "Reino",
-      "Filo",
-      "Clase",
-      "Orden"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-20",
-    "category": "Tecnología",
-    "prompt": "Ordena estos lenguajes por su primera aparición pública.",
-    "options": [
-      "C",
-      "C++",
-      "Java",
-      "Go"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-21",
-    "category": "Arte",
-    "prompt": "Ordena estos movimientos por inicio histórico aproximado.",
-    "options": [
-      "Renacimiento",
-      "Barroco",
-      "Neoclasicismo",
-      "Impresionismo"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-22",
-    "category": "Historia",
-    "prompt": "Ordena estas batallas por fecha.",
-    "options": [
-      "Maratón",
-      "Cannas",
-      "Actium",
-      "Hastings"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Muy difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-23",
-    "category": "Historia",
-    "prompt": "Ordena estas dinastías chinas por inicio de gobierno.",
-    "options": [
-      "Tang",
-      "Song",
-      "Yuan",
-      "Ming"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Muy difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-24",
-    "category": "Geografía",
-    "prompt": "Ordena estas capitales europeas de oeste a este.",
-    "options": [
-      "Lisboa",
-      "Madrid",
-      "Roma",
-      "Atenas"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Muy difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-25",
-    "category": "Geografía",
-    "prompt": "Ordena estos países por superficie terrestre total, de menor a mayor.",
-    "options": [
-      "Bélgica",
-      "Portugal",
-      "Alemania",
-      "Francia metropolitana"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Muy difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-26",
-    "category": "Ciencia",
-    "prompt": "Ordena estos elementos por número atómico.",
-    "options": [
-      "Litio",
-      "Carbono",
-      "Silicio",
-      "Calcio"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Muy difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-27",
-    "category": "Ciencia",
-    "prompt": "Ordena estas partículas o estructuras por escala de masa típica creciente.",
-    "options": [
-      "Electrón",
-      "Protón",
-      "Núcleo de helio-4",
-      "Átomo de carbono-12"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Muy difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-28",
-    "category": "Cine y TV",
-    "prompt": "Ordena estas películas de Akira Kurosawa por estreno.",
-    "options": [
-      "Rashomon",
-      "Los siete samuráis",
-      "Yojimbo",
-      "Ran"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Muy difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-29",
-    "category": "Videojuegos",
-    "prompt": "Ordena estos juegos de FromSoftware por lanzamiento.",
-    "options": [
-      "Demon's Souls",
-      "Dark Souls",
-      "Bloodborne",
-      "Elden Ring"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Muy difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-30",
-    "category": "Música",
-    "prompt": "Ordena estos discos de electrónica por publicación.",
-    "options": [
-      "Homework",
-      "Discovery",
-      "Human After All",
-      "Random Access Memories"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Muy difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-31",
-    "category": "Arte",
-    "prompt": "Ordena estas obras por fecha de creación aproximada.",
-    "options": [
-      "El nacimiento de Venus",
-      "Las meninas",
-      "La libertad guiando al pueblo",
-      "Guernica"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Muy difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-32",
-    "category": "Tecnología",
-    "prompt": "Ordena estas tecnologías por su lanzamiento público inicial.",
-    "options": [
-      "HTML",
-      "JavaScript",
-      "Git",
-      "Docker"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Muy difícil",
-    "mode": "order",
-    "seconds": 33
-  },
-  {
-    "id": "deep-order-33",
-    "category": "Literatura",
-    "prompt": "Ordena estas obras de ciencia ficción por primera publicación.",
-    "options": [
-      "La máquina del tiempo",
-      "Un mundo feliz",
-      "Fundación (novela)",
-      "Dune"
-    ],
-    "correct": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "difficulty": "Muy difícil",
-    "mode": "order",
-    "seconds": 33
-  }
+ {
+  "id": "deep-order-0",
+  "category": "Cine y TV",
+  "prompt": "Ordena estas películas de Pixar por estreno.",
+  "options": [
+   "Toy Story",
+   "Monstruos S.A.",
+   "Ratatouille",
+   "Del revés"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Media",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-1",
+  "category": "Videojuegos",
+  "prompt": "Ordena estas consolas por su primer lanzamiento mundial.",
+  "options": [
+   "Sega Saturn",
+   "Dreamcast",
+   "Xbox",
+   "Wii U"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Media",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-2",
+  "category": "Deportes",
+  "prompt": "Ordena estos países por el Mundial masculino de fútbol que acogieron entre 1980 y 2020.",
+  "options": [
+   "México",
+   "Francia",
+   "Sudáfrica",
+   "Rusia"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Media",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-3",
+  "category": "Geografía",
+  "prompt": "Ordena estas ciudades de sur a norte.",
+  "options": [
+   "Málaga",
+   "Madrid",
+   "Burgos",
+   "Santander"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Media",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-4",
+  "category": "Ciencia",
+  "prompt": "Ordena estas estructuras de menor a mayor escala.",
+  "options": [
+   "Electrón",
+   "Átomo",
+   "Molécula",
+   "Célula"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Media",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-5",
+  "category": "Gastronomía",
+  "prompt": "Ordena estas fases para preparar pan con levadura.",
+  "options": [
+   "Mezclar ingredientes",
+   "Amasar",
+   "Fermentar",
+   "Hornear"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Media",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-6",
+  "category": "Música",
+  "prompt": "Ordena estos álbumes de Taylor Swift por lanzamiento.",
+  "options": [
+   "Fearless",
+   "Red",
+   "1989",
+   "Folklore"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Media",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-7",
+  "category": "Naturaleza",
+  "prompt": "Ordena el ciclo de vida de una rana desde la puesta.",
+  "options": [
+   "Huevo",
+   "Renacuajo",
+   "Rana joven",
+   "Rana adulta"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Media",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-8",
+  "category": "Tecnología",
+  "prompt": "Ordena estos servicios de mensajería por su lanzamiento original.",
+  "options": [
+   "ICQ",
+   "MSN Messenger",
+   "WhatsApp",
+   "Telegram"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Media",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-9",
+  "category": "Ciencia",
+  "prompt": "Ordena estas figuras por número de vértices.",
+  "options": [
+   "Triángulo",
+   "Rombo",
+   "Hexágono",
+   "Octógono"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Media",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-10",
+  "category": "Literatura",
+  "prompt": "Ordena las primeras cuatro novelas de Harry Potter.",
+  "options": [
+   "La piedra filosofal",
+   "La cámara secreta",
+   "El prisionero de Azkaban",
+   "El cáliz de fuego"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Media",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-11",
+  "category": "Historia",
+  "prompt": "Ordena estos periodos históricos por comienzo.",
+  "options": [
+   "Edad Antigua",
+   "Edad Media",
+   "Edad Moderna",
+   "Edad Contemporánea"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-12",
+  "category": "Historia",
+  "prompt": "Ordena estos acontecimientos del siglo XX.",
+  "options": [
+   "Revolución rusa",
+   "Crac del 29",
+   "Fundación de la ONU",
+   "Primera llegada humana a la Luna"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-13",
+  "category": "Geografía",
+  "prompt": "Ordena estas ciudades por latitud de sur a norte.",
+  "options": [
+   "Buenos Aires",
+   "Ciudad del Cabo",
+   "Lima",
+   "Quito"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-14",
+  "category": "Cine y TV",
+  "prompt": "Ordena estas películas de Christopher Nolan por estreno.",
+  "options": [
+   "Memento",
+   "El truco final",
+   "Origen",
+   "Dunkerque"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-15",
+  "category": "Videojuegos",
+  "prompt": "Ordena estas entregas de The Legend of Zelda por lanzamiento original.",
+  "options": [
+   "A Link to the Past",
+   "Ocarina of Time",
+   "The Wind Waker",
+   "Breath of the Wild"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-16",
+  "category": "Música",
+  "prompt": "Ordena estos álbumes de Radiohead por estreno.",
+  "options": [
+   "The Bends",
+   "OK Computer",
+   "Kid A",
+   "In Rainbows"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-17",
+  "category": "Deportes",
+  "prompt": "Ordena estas sedes por la edición de verano que acogieron entre 1980 y 2020.",
+  "options": [
+   "Seúl",
+   "Atlanta",
+   "Atenas",
+   "Londres"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-18",
+  "category": "Ciencia",
+  "prompt": "Ordena estas radiaciones por frecuencia ascendente.",
+  "options": [
+   "Ondas de radio",
+   "Microondas",
+   "Infrarrojo",
+   "Ultravioleta"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-19",
+  "category": "Naturaleza",
+  "prompt": "Ordena estos niveles de clasificación biológica del más amplio al más específico.",
+  "options": [
+   "Reino",
+   "Filo",
+   "Clase",
+   "Orden"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-20",
+  "category": "Tecnología",
+  "prompt": "Ordena estos lenguajes por su primera aparición pública.",
+  "options": [
+   "C",
+   "C++",
+   "Java",
+   "Go"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-21",
+  "category": "Arte",
+  "prompt": "Ordena estos movimientos por inicio histórico aproximado.",
+  "options": [
+   "Renacimiento",
+   "Barroco",
+   "Neoclasicismo",
+   "Impresionismo"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-22",
+  "category": "Historia",
+  "prompt": "Ordena estas batallas por fecha.",
+  "options": [
+   "Maratón",
+   "Cannas",
+   "Actium",
+   "Hastings"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Muy difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-23",
+  "category": "Historia",
+  "prompt": "Ordena estas dinastías chinas por inicio de gobierno.",
+  "options": [
+   "Tang",
+   "Song",
+   "Yuan",
+   "Ming"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Muy difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-24",
+  "category": "Geografía",
+  "prompt": "Ordena estas capitales europeas de oeste a este.",
+  "options": [
+   "Lisboa",
+   "Madrid",
+   "Roma",
+   "Atenas"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Muy difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-25",
+  "category": "Geografía",
+  "prompt": "Ordena estos países por superficie terrestre total, de menor a mayor.",
+  "options": [
+   "Bélgica",
+   "Portugal",
+   "Alemania",
+   "Francia metropolitana"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Muy difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-26",
+  "category": "Ciencia",
+  "prompt": "Ordena estos elementos por número atómico.",
+  "options": [
+   "Litio",
+   "Carbono",
+   "Silicio",
+   "Calcio"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Muy difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-27",
+  "category": "Ciencia",
+  "prompt": "Ordena estas partículas o estructuras por escala de masa típica creciente.",
+  "options": [
+   "Electrón",
+   "Protón",
+   "Núcleo de helio-4",
+   "Átomo de carbono-12"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Muy difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-28",
+  "category": "Cine y TV",
+  "prompt": "Ordena estas películas de Akira Kurosawa por estreno.",
+  "options": [
+   "Rashomon",
+   "Los siete samuráis",
+   "Yojimbo",
+   "Ran"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Muy difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-29",
+  "category": "Videojuegos",
+  "prompt": "Ordena estos juegos de FromSoftware por lanzamiento.",
+  "options": [
+   "Demon's Souls",
+   "Dark Souls",
+   "Bloodborne",
+   "Elden Ring"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Muy difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-30",
+  "category": "Música",
+  "prompt": "Ordena estos discos de electrónica por publicación.",
+  "options": [
+   "Homework",
+   "Discovery",
+   "Human After All",
+   "Random Access Memories"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Muy difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-31",
+  "category": "Arte",
+  "prompt": "Ordena estas obras por fecha de creación aproximada.",
+  "options": [
+   "El nacimiento de Venus",
+   "Las meninas",
+   "La libertad guiando al pueblo",
+   "Guernica"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Muy difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-32",
+  "category": "Tecnología",
+  "prompt": "Ordena estas tecnologías por su lanzamiento público inicial.",
+  "options": [
+   "HTML",
+   "JavaScript",
+   "Git",
+   "Docker"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Muy difícil",
+  "mode": "order",
+  "seconds": 33
+ },
+ {
+  "id": "deep-order-33",
+  "category": "Literatura",
+  "prompt": "Ordena estas obras de ciencia ficción por primera publicación.",
+  "options": [
+   "La máquina del tiempo",
+   "Un mundo feliz",
+   "Fundación (novela)",
+   "Dune"
+  ],
+  "correct": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "difficulty": "Muy difícil",
+  "mode": "order",
+  "seconds": 33
+ }
 ];
 export const deepEstimates=[
   {

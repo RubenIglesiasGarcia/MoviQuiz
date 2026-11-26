@@ -2157,13 +2157,8 @@ const themes=[
         "category": "Voleibol",
         "mode": "order",
         "difficulty": "Media",
-        "prompt": "Ordena las citas olímpicas de más antigua a reciente.",
-        "options": [
-          "Tokio 1964",
-          "Atlanta 1996",
-          "Pekín 2008",
-          "París 2024"
-        ],
+        "prompt": "Ordena las sedes del debut olímpico del voleibol de pista, el debut del vóley playa y estas dos ediciones posteriores.",
+        "options": ["Tokio","Atlanta","Pekín","París"],
         "correct": [
           0,
           1,
@@ -2688,13 +2683,8 @@ const themes=[
         "category": "Música electrónica moderna",
         "mode": "order",
         "difficulty": "Muy fácil",
-        "prompt": "Ordena estos tempos de menor a mayor.",
-        "options": [
-          "90 BPM",
-          "120 BPM",
-          "140 BPM",
-          "175 BPM"
-        ],
+        "prompt": "Ordena estas indicaciones italianas de tempo, de más lenta a más rápida.",
+        "options": ["Largo","Andante","Allegro","Presto"],
         "correct": [
           0,
           1,
@@ -2772,13 +2762,8 @@ const themes=[
         "category": "Música electrónica moderna",
         "mode": "order",
         "difficulty": "Muy difícil",
-        "prompt": "Ordena estas tecnologías por lanzamiento original.",
-        "options": [
-          "CDJ-1000",
-          "CDJ-2000",
-          "CDJ-2000NXS2",
-          "CDJ-3000"
-        ],
+        "prompt": "Ordena estos equipos de DJ por su primera comercialización.",
+        "options": ["Technics SL-1200 original","Pioneer CDJ-500","Pioneer CDJ-1000","Pioneer DDJ-SX"],
         "correct": [
           0,
           1,
