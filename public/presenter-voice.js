@@ -9,7 +9,7 @@ const node=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.classNa
 export const presenterEnabled=()=>localStorage.getItem('mq.voice')!=='off';
 export const presenterSpeaking=()=>!!active&&document.documentElement.dataset.mqSpeaking==='1';
 export function preloadPresenter(){try{globalThis.speechSynthesis?.getVoices();}catch{}return Promise.resolve(null);}
-export function stopPresenter(){generation++;cancelAnimationFrame(frame);clearTimeout(stopTimer);if(utterance){try{globalThis.speechSynthesis?.cancel();}catch{}utterance=null;}if(audio)audio.pause();active?.banner?.remove();active=null;document.documentElement.style.removeProperty('--mq-mouth');document.documentElement.dataset.mqSpeaking='0';document.documentElement.dataset.mqPresenting='0';delete document.documentElement.dataset.mqSonnyMood;}
+export function stopPresenter(){generation++;cancelAnimationFrame(frame);clearTimeout(stopTimer);if(utterance){try{globalThis.speechSynthesis?.cancel();}catch{}utterance=null;}if(audio)audio.pause();active?.banner?.remove();active=null;document.documentElement.style.removeProperty('--mq-mouth');document.documentElement.dataset.mqSpeaking='0';document.documentElement.dataset.mqPresenting='0';delete document.documentElement.dataset.mqSonnyMood;const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth='0';}
 export function setPresenterEnabled(value){localStorage.setItem('mq.voice',value?'on':'off');if(!value)stopPresenter();else preloadPresenter();}
 const choice=ids=>{const available=ids.filter(id=>id!==lastId);return (available.length?available:ids)[Math.floor(Math.random()*(available.length||ids.length))];};
 export function selectPresenterClip(s,previousLeader){
@@ -51,8 +51,8 @@ export async function updateRecordedPresenter(s,offset,mountCharacter,enabled=tr
  active={banner,moment};const root=document.documentElement;root.dataset.mqPresenting='1';root.dataset.mqSonnyMood=moment.mood;
  // The actual presenter already lives in the studio. Only use a separate portrait during results.
  if(s.phase==='reveal')try{mountCharacter(portrait,{presenter:true},'idle');}catch{}
- const token=generation,duration=Math.min(remaining-120,s.phase==='reveal'?4800:7200);
- const endSpeech=()=>{if(token!==generation)return;root.dataset.mqSpeaking='0';root.style.removeProperty('--mq-mouth');portrait.dataset.mouth='0';};
+ const token=generation,duration=Math.min(remaining-120,s.phase==='reveal'?8000:7200);
+ const endSpeech=()=>{if(token!==generation)return;root.dataset.mqSpeaking='0';root.style.removeProperty('--mq-mouth');portrait.dataset.mouth='0';const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth='0';};
  stopTimer=setTimeout(()=>{if(token===generation)stopPresenter();},duration);
  if(!enabled||!presenterEnabled()||typeof SpeechSynthesisUtterance==='undefined'||!globalThis.speechSynthesis)return;
  // Only local installed voices: a TV without one still shows the full caption.
