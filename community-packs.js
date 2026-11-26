@@ -2791,6 +2791,660 @@ const themes=[
     ]
   }
 ];
+// UEFA historical finals and 2024/25 format: https://www.uefa.com/uefachampionsleague/statistics/all-time/
+themes.push({
+  "id": "6368616d70696f6e73303031",
+  "title": "Fútbol · Champions League",
+  "description": "Finales, clubes, leyendas, remontadas y formato de la Copa de Europa. Historia hasta 2025.",
+  "art": "sport",
+  "questions": [
+    {
+      "id": "ucl-choice-0",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Muy fácil",
+      "prompt": "¿Qué club español juega en el Santiago Bernabéu?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Real Madrid",
+        "Barcelona",
+        "Atlético de Madrid",
+        "Sevilla"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-1",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Muy fácil",
+      "prompt": "¿En qué país juega el Bayern de Múnich?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Alemania",
+        "Italia",
+        "Francia",
+        "Austria"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-2",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Muy fácil",
+      "prompt": "¿Qué club inglés juega en Anfield?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Liverpool",
+        "Chelsea",
+        "Arsenal",
+        "Manchester City"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-3",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Muy fácil",
+      "prompt": "¿Qué club italiano es conocido como los rossoneri?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "AC Milan",
+        "Inter",
+        "Juventus",
+        "Napoli"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-4",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Muy fácil",
+      "prompt": "¿Qué club portugués juega en el Estádio da Luz?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Benfica",
+        "Porto",
+        "Sporting CP",
+        "Braga"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-5",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Muy fácil",
+      "prompt": "¿En qué país juega el Paris Saint-Germain?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Francia",
+        "Bélgica",
+        "Suiza",
+        "Italia"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-6",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Fácil",
+      "prompt": "¿Qué club ganó la Champions de 2023?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Manchester City",
+        "Inter",
+        "Bayern",
+        "Real Madrid"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-7",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Fácil",
+      "prompt": "¿Qué club ganó la final de 2024?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Real Madrid",
+        "Borussia Dortmund",
+        "Bayern",
+        "Manchester City"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-8",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Fácil",
+      "prompt": "¿Qué club remontó una desventaja de tres goles en la final de 2005?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Liverpool",
+        "Chelsea",
+        "Manchester United",
+        "Arsenal"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-9",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Fácil",
+      "prompt": "¿Quién marcó de cabeza el empate del Real Madrid en el descuento de la final de 2014?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Sergio Ramos",
+        "Cristiano Ronaldo",
+        "Gareth Bale",
+        "Marcelo"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-10",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Fácil",
+      "prompt": "¿Qué club conquistó su primera Champions en 2025?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Paris Saint-Germain",
+        "Arsenal",
+        "Atlético de Madrid",
+        "Bayer Leverkusen"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-11",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Fácil",
+      "prompt": "¿Qué equipo ganó la final de 2019 frente al Tottenham?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Liverpool",
+        "Chelsea",
+        "Manchester City",
+        "Manchester United"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-12",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Media",
+      "prompt": "¿Quién dirigió al Porto campeón de 2004?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "José Mourinho",
+        "Rafael Benítez",
+        "Pep Guardiola",
+        "Carlo Ancelotti"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-13",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Media",
+      "prompt": "¿Qué equipo derrotó al Bayern en la final de 2012?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Chelsea",
+        "Barcelona",
+        "Inter",
+        "Real Madrid"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-14",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Media",
+      "prompt": "¿Qué club ganó la final de 1999 con dos goles en el descuento?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Manchester United",
+        "Bayern",
+        "Juventus",
+        "Real Madrid"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-15",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Media",
+      "prompt": "¿Qué club ganó la final de 2010 bajo la dirección de José Mourinho?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Inter",
+        "AC Milan",
+        "Chelsea",
+        "Porto"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-16",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Media",
+      "prompt": "¿Qué club perdió 5-0 la final de 2025?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Inter",
+        "Bayern",
+        "Juventus",
+        "Atlético de Madrid"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-17",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Media",
+      "prompt": "¿Qué club ganó la primera final bajo la denominación UEFA Champions League en 1993?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Olympique de Marsella",
+        "AC Milan",
+        "Ajax",
+        "Barcelona"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-18",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Difícil",
+      "prompt": "¿Qué club ganó la Copa de Europa de 1992 con un gol de Ronald Koeman?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Barcelona",
+        "Sampdoria",
+        "Benfica",
+        "AC Milan"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-19",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Difícil",
+      "prompt": "¿Qué jugador marcó de volea el gol decisivo en la final de 2002?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Zinedine Zidane",
+        "Raúl",
+        "Luís Figo",
+        "Fernando Morientes"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-20",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Difícil",
+      "prompt": "¿Qué club ganó la final de 1997 ante la Juventus?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Borussia Dortmund",
+        "Bayern",
+        "Ajax",
+        "AC Milan"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-21",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Difícil",
+      "prompt": "¿En qué estadio se jugó la final de 2005?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Estadio Olímpico Atatürk",
+        "Wembley",
+        "San Siro",
+        "Estadio da Luz"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-22",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Difícil",
+      "prompt": "¿Qué club derrotó al Barcelona por 4-0 en la final de 1994?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "AC Milan",
+        "Juventus",
+        "Inter",
+        "Sampdoria"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-23",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Difícil",
+      "prompt": "¿Qué entrenador ganó la Champions de 2020 con el Bayern?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Hansi Flick",
+        "Jupp Heynckes",
+        "Thomas Tuchel",
+        "Julian Nagelsmann"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-24",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Muy difícil",
+      "prompt": "¿Qué club ganó la Copa de Europa de 1986 en Sevilla?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Steaua de Bucarest",
+        "Barcelona",
+        "Benfica",
+        "Porto"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-25",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Muy difícil",
+      "prompt": "¿Qué equipo venció al Benfica en la final de 1968?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Manchester United",
+        "Celtic",
+        "Inter",
+        "Real Madrid"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-26",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Muy difícil",
+      "prompt": "¿Qué club ganó la Copa de Europa de 1991?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Estrella Roja",
+        "Olympique de Marsella",
+        "Sampdoria",
+        "Spartak de Moscú"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-27",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Muy difícil",
+      "prompt": "¿Qué club ganó la Copa de Europa de 1988 por penaltis?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "PSV Eindhoven",
+        "Ajax",
+        "Benfica",
+        "Porto"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-28",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Muy difícil",
+      "prompt": "¿Qué equipo ganó la final de 1987 con el famoso gol de tacón de Rabah Madjer?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Porto",
+        "Bayern",
+        "Benfica",
+        "Celtic"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-choice-29",
+      "category": "Champions League",
+      "mode": "choice",
+      "difficulty": "Muy difícil",
+      "prompt": "¿Qué club ganó la final de 1979 con un gol de Trevor Francis?",
+      "seconds": 25,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Nottingham Forest",
+        "Malmö",
+        "Liverpool",
+        "Hamburgo"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "ucl-number-0",
+      "category": "Champions League",
+      "mode": "number",
+      "difficulty": "Muy fácil",
+      "prompt": "¿Cuántos equipos juegan una final de Champions?",
+      "seconds": 30,
+      "illustration": "/question-art/sport.svg",
+      "correct": 2,
+      "tolerance": 0,
+      "estimateScale": 1
+    },
+    {
+      "id": "ucl-number-1",
+      "category": "Champions League",
+      "mode": "number",
+      "difficulty": "Fácil",
+      "prompt": "¿Cuántos puntos vale una victoria en la fase de liga?",
+      "seconds": 30,
+      "illustration": "/question-art/sport.svg",
+      "correct": 3,
+      "tolerance": 0,
+      "estimateScale": 1
+    },
+    {
+      "id": "ucl-number-2",
+      "category": "Champions League",
+      "mode": "number",
+      "difficulty": "Media",
+      "prompt": "¿Cuántos equipos participan en la fase de liga desde 2024/25?",
+      "seconds": 30,
+      "illustration": "/question-art/sport.svg",
+      "correct": 36,
+      "tolerance": 0,
+      "estimateScale": 5
+    },
+    {
+      "id": "ucl-number-3",
+      "category": "Champions League",
+      "mode": "number",
+      "difficulty": "Difícil",
+      "prompt": "¿En qué año se disputó la primera final de la Copa de Europa?",
+      "seconds": 30,
+      "illustration": "/question-art/sport.svg",
+      "correct": 1956,
+      "tolerance": 0,
+      "estimateScale": 5
+    },
+    {
+      "id": "ucl-number-4",
+      "category": "Champions League",
+      "mode": "number",
+      "difficulty": "Muy difícil",
+      "prompt": "¿Cuántos goles marcó Cristiano Ronaldo en la Champions 2013/14?",
+      "seconds": 30,
+      "illustration": "/question-art/sport.svg",
+      "correct": 17,
+      "tolerance": 0,
+      "estimateScale": 3
+    },
+    {
+      "id": "ucl-order-0",
+      "category": "Champions League",
+      "mode": "order",
+      "difficulty": "Muy fácil",
+      "prompt": "Ordena estas finales de Champions de más antigua a reciente.",
+      "seconds": 30,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Liverpool-Milan (la remontada de Estambul)",
+        "Inter-Bayern (el triplete de Mourinho)",
+        "Chelsea-Bayern (penaltis en Múnich)",
+        "Real Madrid-Atlético (la Décima)"
+      ],
+      "correct": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "ucl-order-1",
+      "category": "Champions League",
+      "mode": "order",
+      "difficulty": "Fácil",
+      "prompt": "Ordena las fases desde la primera hasta la última del formato actual.",
+      "seconds": 30,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Fase de liga",
+        "Octavos",
+        "Cuartos",
+        "Final"
+      ],
+      "correct": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "ucl-order-2",
+      "category": "Champions League",
+      "mode": "order",
+      "difficulty": "Media",
+      "prompt": "Ordena estos campeones de cuatro ediciones consecutivas, empezando por 1992.",
+      "seconds": 30,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Barcelona",
+        "Olympique de Marsella",
+        "AC Milan",
+        "Ajax"
+      ],
+      "correct": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "ucl-order-3",
+      "category": "Champions League",
+      "mode": "order",
+      "difficulty": "Difícil",
+      "prompt": "Ordena estas ciudades según las finales disputadas entre 2005 y 2014.",
+      "seconds": 30,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Estambul (Liverpool-Milan)",
+        "Roma (Barcelona-Manchester United)",
+        "Londres (Barcelona-Manchester United)",
+        "Lisboa (Real Madrid-Atlético)"
+      ],
+      "correct": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "ucl-order-4",
+      "category": "Champions League",
+      "mode": "order",
+      "difficulty": "Muy difícil",
+      "prompt": "Ordena estos clubes por fecha de su primera Copa de Europa.",
+      "seconds": 30,
+      "illustration": "/question-art/sport.svg",
+      "options": [
+        "Celtic",
+        "Ajax",
+        "Nottingham Forest",
+        "Porto"
+      ],
+      "correct": [
+        0,
+        1,
+        2,
+        3
+      ]
+    }
+  ]
+});
 const entries=[{id:"6d656d657332303236313131",title:"Memes e Internet",description:"Memes clásicos, cultura de Internet y tendencias de 2026.",art:"memes",questions},...themes];
 const catalog=new Map(entries.map(({questions,...meta})=>[meta.id,{meta:{...meta,visibility:"public",count:questions.length,updated:Date.UTC(2026,10,26),owned:false,builtin:true},questions}]));
 export const officialPacks=[...catalog.values()].map(x=>x.meta);
