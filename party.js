@@ -49,7 +49,7 @@ export function chooseShowEvent(r){
  const previous=r.questions.slice(0,r.index);
  const min=players.at(-1).score,max=players[0].score;
  if(q.party==='steal'&&previous.filter(x=>x.party==='steal').length===1&&min<max){
-  return {kind:'shield',ids:players.filter(p=>p.score===min).map(p=>p.userId)};
+  const ranked=players.filter(p=>p.score>0);if(!ranked.length)return null;let seed=0;for(const ch of String(r.matchId||''))seed=(Math.imul(seed,31)+ch.charCodeAt(0))>>>0;return {kind:'shield',ids:[ranked[seed%ranked.length].userId]};
  }
  if(q.party!=='warmup'||previous.filter(x=>x.party==='warmup').length!==2||q.multiplier===2||min===max)return null;
  const bottom=players.filter(p=>p.score===min);
