@@ -471,3 +471,5 @@ body.order-controller #round .question-art{height:clamp(36px,8vh,68px);height:cl
 .local-audio-dialog .secondary[aria-pressed=true]{border-color:#77e2b2;color:#bcf9dc}
 .local-audio-dialog .secondary[aria-pressed=false]{opacity:.8}
 .local-audio-dialog>.ghost{margin-top:8px}
+
+.local-volume{display:grid;gap:5px;padding:8px 2px}.local-volume input{padding:0;accent-color:#ffd55a;min-height:30px}.audio-test-status{font-size:13px;line-height:1.45;margin:8px 0;color:#ffda95}.audio-test-status[data-ok=true]{color:#a4ebc1}
