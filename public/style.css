@@ -535,10 +535,10 @@ body.tv-mode .screen .question-media-image{height:clamp(80px,24vh,250px)}
 #round[data-show-entry="intro"]::after,#round[data-show-entry="question"]::after{
  content:"";position:absolute;inset:0;pointer-events:none;z-index:5;border-radius:inherit;
  background:linear-gradient(112deg,transparent 8%,color-mix(in srgb,var(--show-accent,#8ecbff) 48%,transparent) 40%,transparent 65%);
- transform:translateX(-100%);opacity:0;animation:mq-show-stinger .65s cubic-bezier(.2,.7,.3,1) both;
+ background-size:200% 100%;background-position:100% 0;opacity:0;animation:mq-show-stinger .65s cubic-bezier(.2,.7,.3,1) both;
  clip-path:inset(0 round 14px)
 }
-@keyframes mq-show-stinger{0%{transform:translateX(-32%);opacity:0}20%{opacity:.7}100%{transform:translateX(32%);opacity:0}}
+@keyframes mq-show-stinger{0%{background-position:100% 0;opacity:0}20%{opacity:.7}100%{background-position:0% 0;opacity:0}}
 .round-intro.broadcast-intro{background:radial-gradient(ellipse at center,color-mix(in srgb,var(--intro-color,#8ecbff) 19%,transparent),transparent 70%),linear-gradient(145deg,#241639,#151026 70%);border:1px solid color-mix(in srgb,var(--intro-color,#8ecbff) 45%,#392552)}
 .round-intro .intro-show-label{font-weight:850;letter-spacing:.18em;font-size:clamp(10px,1.5vh,15px);color:var(--intro-color);margin-bottom:-.4em}
 .round-intro .intro-title{animation:mq-show-title .44s cubic-bezier(.18,.86,.34,1.18) both}
