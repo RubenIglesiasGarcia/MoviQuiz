@@ -1,9 +1,11 @@
 // Shared deterministic arcade timing. The server grades all input with its own clock.
 import {hazardPlan} from './arena-events.js';
-import {coinPlan,territoryPlan,sofaPlan,startCoins,controlCoins,finishCoins} from './coin-engine.js';
+import {coinPlan,tunaPlan,territoryPlan,sofaPlan,startCoins,controlCoins,finishCoins} from './coin-engine.js';
 export const actionKinds=['dash','dodge','hoops'];
-export const isAction=kind=>kind==='coins'||kind==='territory'||kind==='sofa'||kind==='lava'||kind==='bomb'||actionKinds.includes(kind);
+export const isAction=kind=>kind==='coins'||kind==='territory'||kind==='sofa'||kind==='lava'||kind==='bomb'||kind==='tuna'||kind==='splash'||actionKinds.includes(kind);
 export const actionMeta={
+ tuna:{title:'OPERACIÓN ATÚN',subtitle:'Recoge hasta tres latas y llévalas al comedero central. Un turbo contra otro jugador puede robarle una lata.',category:'Agilidad'},
+ splash:{title:'EMPUJÓN Y CHAPUZÓN',subtitle:'Mantente en la plataforma que se hace más pequeña. Usa turbo contra los rivales y mándalos al agua.',category:'Agilidad'},
  lava:{title:'EL SUELO ES LAVA',subtitle:'Corre a la zona segura antes de que se encienda el suelo. Sobrevive y no te achicharres los pies.',category:'Agilidad'},
  bomb:{title:'PAQUETE SOSPECHOSO',subtitle:'Si llevas el paquete, acércate a otro jugador para pasárselo. ¡No te quedes con él cuando explote!',category:'Agilidad'},
  sofa:{title:'REY DEL SOFÁ',subtitle:'¡El sofá es tuyo! Acércate al trono, mantén el puesto y usa el turbo para apartar a tus rivales. ¡Cambia de sitio cada 8 segundos!',category:'Agilidad'},
@@ -14,7 +16,7 @@ export const actionMeta={
  hoops:{title:'CANASTA ESTELAR',subtitle:'Lanza cuando el indicador atraviese la zona verde.',steps:10,interval:1900,category:'Deportes'}
 };
 export function makeActionPlan(kind,random=Math.random){
- if(kind==='lava'||kind==='bomb')return hazardPlan(kind);if(kind==='sofa')return sofaPlan(random);if(kind==='territory')return territoryPlan();if(kind==='coins')return coinPlan(random);const m=actionMeta[kind];if(!m)throw Error('Prueba desconocida.');
+ if(kind==='tuna')return tunaPlan(random);if(kind==='lava'||kind==='bomb'||kind==='splash')return hazardPlan(kind);if(kind==='sofa')return sofaPlan(random);if(kind==='territory')return territoryPlan();if(kind==='coins')return coinPlan(random);const m=actionMeta[kind];if(!m)throw Error('Prueba desconocida.');
  let prev='',repeat=0;
  const beats=Array.from({length:m.steps},(_,i)=>{
   const level=Math.min(3,Math.floor(i*4/m.steps)),duration=m.interval-level*130;

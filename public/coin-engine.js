@@ -12,6 +12,7 @@ export function coinPlan(random=Math.random){
  }
  return {kind:'coins',version:1,lead:COIN_LEAD,duration:COIN_DURATION,interval:COIN_DURATION,beats:[],coins};
 }
+export function tunaPlan(random=Math.random){const p=coinPlan(random);return {...p,variant:'tuna',duration:30000,coins:p.coins.map(c=>({...c,value:c.value===100?150:80}))};}
 export function blocked(x,z,r=.23){return COIN_BLOCKS.some(b=>Math.abs(x-b.x)<b.w/2+r&&Math.abs(z-b.z)<b.d/2+r);}
 // A shared arena variant: every contestant can repaint rivals' tiles, not just collect pickups.
 // Owner indices are round-local, never account IDs.
@@ -32,10 +33,12 @@ function shoveSofa(action,ids,time){
    if(q.until<=time||q.safeUntil>time||d<.001||d>=closest||dx*p.vx+dz*p.vz<=0)continue;target=q;closest=d;}
   if(!target)continue;
   const dx=(target.x-p.x)/closest,dz=(target.z-p.z)/closest;let moved=0;
-  for(let k=0;k<8;k++){const x=clamp(target.x+dx*.16,-5.76,5.76),z=clamp(target.z+dz*.16,-3.76,3.76);if(blocked(x,z)||Math.hypot(x-target.x,z-target.z)<.03)break;target.x=x;target.z=z;moved++;}
-  if(moved){p.bumpReady=time+500;p.bumps=(p.bumps||0)+1;target.safeUntil=time+1100;target.bumped=(target.bumped||0)+1;target.bumpedAt=time;}
+  for(let k=0;k<8;k++){const x=clamp(target.x+dx*.16,-5.76,5.76),z=clamp(target.z+dz*.16,-3.76,3.76);if((action.plan.variant!=='splash'&&blocked(x,z))||Math.hypot(x-target.x,z-target.z)<.03)break;target.x=x;target.z=z;moved++;}
+  if(moved){p.bumpReady=time+500;p.bumps=(p.bumps||0)+1;target.bumpedBy=p.colorIndex;if(action.plan.variant==='tuna'&&target.carry?.length&&(p.carry||[]).length<3){p.carry.push(target.carry.pop());}target.safeUntil=time+1100;target.bumped=(target.bumped||0)+1;target.bumpedAt=time;}
  }
 }
+export function splashRadius(elapsed){return Math.max(2.8,4.1-Math.max(0,elapsed)/30000*1.3);}
+function scoreSplash(action,ids,time,elapsed){const w=action.world,r=splashRadius(elapsed);shoveSofa(action,ids,time);for(const id of ids){const p=action.players[id];if(Math.hypot(p.x,p.z)<=r||p.fallSafe>time)continue;const by=ids.map(k=>action.players[k]).find(x=>x.colorIndex===p.bumpedBy);if(by&&by!==p&&time-(p.bumpedAt||0)<1300){by.score+=150;by.hits++;}p.score=Math.max(0,p.score-100);p.bumped++;p.bumpedAt=time;p.bumpedBy=-1;p.fallSafe=time+1100;const a=p.colorIndex*2.39996+Math.floor(elapsed/1000);p.x=Math.cos(a)*1.55;p.z=Math.sin(a)*1.55;}if(Math.floor(elapsed/1000)>w.lastAward){w.lastAward=Math.floor(elapsed/1000);for(const id of ids){const p=action.players[id];if(p.attempts&&p.until>time&&p.fallSafe<=time){p.score+=35;p.hits++;}}}}
 function scoreSofa(action,ids,time,elapsed){
  const world=action.world,spot=sofaSpot(action.plan,elapsed);shoveSofa(action,ids,time);
  let holder=null,best=SOFA_RADIUS;
@@ -66,8 +69,8 @@ function paintTerritory(action,ids,time,dt){
  }
 }
 export function startCoins(action){
- const ids=Object.keys(action.players).sort(),count=ids.length;action.world={tick:action.started+action.plan.lead,taken:{},...(action.plan.variant==='territory'?{owners:{},claimedAt:{}}:['sofa','lava','bomb'].includes(action.plan.variant)?{holder:null,lastAward:0,bombCycle:-1,passAt:0}:{})};
- ids.forEach((id,i)=>{const a=2*Math.PI*i/Math.max(1,count),p=action.players[id];Object.assign(p,{x:Math.cos(a)*5.05,z:Math.sin(a)*3.15,vx:0,vz:0,until:0,lastControl:0,boostUntil:0,boostReady:0,score:0,hits:0,attempts:0,colorIndex:i,repaints:0,bumps:0,bumped:0,safeUntil:0,bumpReady:0,bumpedAt:0});});
+ const ids=Object.keys(action.players).sort(),count=ids.length;action.world={tick:action.started+action.plan.lead,taken:{},...(action.plan.variant==='territory'?{owners:{},claimedAt:{}}:['sofa','lava','bomb','splash'].includes(action.plan.variant)?{holder:null,lastAward:0,bombCycle:-1,passAt:0}:{})};
+ ids.forEach((id,i)=>{const a=2*Math.PI*i/Math.max(1,count),p=action.players[id];Object.assign(p,{x:Math.cos(a)*(action.plan.variant==='splash'?1.65:5.05),z:Math.sin(a)*(action.plan.variant==='splash'?1.65:3.15),vx:0,vz:0,until:0,lastControl:0,boostUntil:0,boostReady:0,score:0,hits:0,attempts:0,colorIndex:i,repaints:0,bumps:0,bumped:0,safeUntil:0,bumpReady:0,bumpedAt:0,bumpedBy:-1,fallSafe:0,carry:[]});});
 }
 export function advanceCoins(action,now){
  const world=action.world;if(!world)return;
@@ -76,15 +79,17 @@ export function advanceCoins(action,now){
  while(world.tick<end){
   const dt=Math.min(50,end-world.tick),time=world.tick+dt,elapsed=time-begin;
   for(const id of ids){const p=action.players[id],moving=Math.max(0,Math.min(time,p.until)-world.tick),turbo=Math.max(0,Math.min(time,p.until,p.boostUntil)-world.tick),distance=((moving-turbo)*4.15+turbo*7.1)/1000;
-   if(moving>0){const x=clamp(p.x+p.vx*distance,-COIN_BOUNDS.x+.24,COIN_BOUNDS.x-.24),z=clamp(p.z+p.vz*distance,-COIN_BOUNDS.z+.24,COIN_BOUNDS.z-.24);if(!blocked(x,p.z))p.x=x;if(!blocked(p.x,z))p.z=z;}
+   if(moving>0){const x=clamp(p.x+p.vx*distance,-COIN_BOUNDS.x+.24,COIN_BOUNDS.x-.24),z=clamp(p.z+p.vz*distance,-COIN_BOUNDS.z+.24,COIN_BOUNDS.z-.24);if(action.plan.variant==='splash'||!blocked(x,p.z))p.x=x;if(action.plan.variant==='splash'||!blocked(p.x,z))p.z=z;}
   }
   if(action.plan.variant==='territory'){paintTerritory(action,ids,time,dt);world.tick=time;continue;}
   if(action.plan.variant==='sofa'){scoreSofa(action,ids,time,elapsed);world.tick=time;continue;}
   if(['lava','bomb'].includes(action.plan.variant)){arenaHazard(action,ids,time,elapsed);world.tick=time;continue;}
+  if(action.plan.variant==='splash'){scoreSplash(action,ids,time,elapsed);world.tick=time;continue;}
+  if(action.plan.variant==='tuna'){shoveSofa(action,ids,time);for(const id of ids){const p=action.players[id];if(p.until>time&&p.carry.length&&Math.hypot(p.x,p.z)<.85){p.score+=p.carry.reduce((a,b)=>a+b,0);p.hits+=p.carry.length;p.carry=[];}}}
   // Resolve contested pickups by nearest player; stable tie-break, no input order advantage.
   for(const c of action.plan.coins){if(c.at>elapsed||world.taken[c.id]||elapsed-c.at>=10000)continue;let winner=null,best=.48*.48;
-   for(const id of ids){const p=action.players[id],d=(p.x-c.x)**2+(p.z-c.z)**2;if(p.attempts>0&&p.until>time&&d<best){winner=p;best=d;}}
-   if(winner){world.taken[c.id]=true;winner.score+=c.value;winner.hits++;}
+   for(const id of ids){const p=action.players[id],d=(p.x-c.x)**2+(p.z-c.z)**2;if(p.attempts>0&&p.until>time&&(action.plan.variant!=='tuna'||p.carry.length<3)&&d<best){winner=p;best=d;}}
+   if(winner){world.taken[c.id]=true;if(action.plan.variant==='tuna')winner.carry.push(c.value);else{winner.score+=c.value;winner.hits++;}}
   }
   world.tick=time;
  }

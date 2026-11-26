@@ -17,6 +17,8 @@ export function arcadeAward(state){
  let pick,label,detail;
  if(variant==='sofa'){pick=unique('bumps',2);if(pick){label='SIN RESERVA';detail=pick.p.bumps+' empujones con turbo';}}
  else if(variant==='territory'){pick=unique('repaints',3);if(pick){label='PINTOR DE BROCHA GORDA';detail=pick.p.repaints+' casillas robadas';}}
+ else if(variant==='tuna'){pick=unique('hits',2);if(pick){label='PROVEEDOR OFICIAL DE ATÚN';detail=pick.p.hits+' latas entregadas';}}
+ else if(variant==='splash'){pick=unique('bumps',2);if(pick){label='SOCORRISTA NO AUTORIZADO';detail=pick.p.bumps+' empujones';}}
  else if(variant==='bomb'){pick=unique('bumps',2);if(pick){label='REPARTIDOR SOSPECHOSO';detail=pick.p.bumps+' paquetes entregados';}}
  else if(variant==='lava'){pick=unique('hits',3);if(pick){label='PIES DE AMIANTO';detail=pick.p.hits+' segundos a salvo';}}
  else if(kind!=='coins'){pick=unique('bestCombo',3);if(pick){label='EN MODO LEYENDA';detail='Combo de '+pick.p.bestCombo;}}

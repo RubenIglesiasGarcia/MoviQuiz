@@ -629,3 +629,5 @@ body.tv-mode .screen .question-media-image{height:clamp(80px,24vh,250px)}
 .arcade-coins[data-variant=lava] .coin-time-track i{background:linear-gradient(90deg,#ffc95b,#ff663e)}.arcade-coins[data-variant=bomb] .coin-time-track i{background:linear-gradient(90deg,#7cd8cc,#ffcf75)}.arcade-coins[data-variant=lava] .coin-arena{border-color:#ff925c}.arcade-coins[data-variant=bomb] .coin-arena{border-color:#80dfd6}
 
 .host-preview:has(.character3d){isolation:isolate}.host-choice:focus-visible{outline:3px solid #ffd55a;outline-offset:2px}.coin-arena .arcade-canvas{touch-action:none}.comic-award.award-current{transform:translateY(-1px)}
+
+.arcade-coins[data-variant=tuna] .coin-time-track i{background:linear-gradient(90deg,#80d6d5,#ffd55a)}.arcade-coins[data-variant=splash] .coin-time-track i{background:linear-gradient(90deg,#9de9ff,#518de5)}.arcade-coins[data-variant=tuna] .coin-arena{border-color:#ffd55a}.arcade-coins[data-variant=splash] .coin-arena{border-color:#99e3ff}
