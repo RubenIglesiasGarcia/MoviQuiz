@@ -1,4 +1,5 @@
 // Original vector art and deterministic animated clues. No third-party artwork.
+import {mysteryExpansion} from './mystery-expansion.js';
 export const mysteryQuestions=[
   {
     "id": "mystery-01",
@@ -389,5 +390,5 @@ export const mysteryQuestions=[
       "type": "animation",
       "url": "/clips/bubble"
     }
-  }
-];
+  },
+...mysteryExpansion];

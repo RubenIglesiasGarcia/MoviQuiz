@@ -1,5 +1,6 @@
 // One clock for all displays. A buzzer claim freezes the clue, not the overall round.
-export const CLIP_IDS=["basket","toast","eclipse","blocks","volley","prism","newton","queue","resonance","bubble"];
+import {EXTRA_CLIP_IDS,paintExtraClip} from './extra-clips.js';
+export const CLIP_IDS=["basket","toast","eclipse","blocks","volley","prism","newton","queue","resonance","bubble",...EXTRA_CLIP_IDS];
 export const validClip=url=>CLIP_IDS.some(id=>url==='/clips/'+id);
 export function clueElapsed(state,now){
  if(state.phase==='reveal'||state.phase==='finished')return 25000;
@@ -8,6 +9,7 @@ export function clueElapsed(state,now){
 }
 export function pixelWidth(elapsed){return [8,12,18,26,40,64,100,180,480][Math.min(8,Math.max(0,Math.floor(elapsed/2500)))];}
 export function paintClip(canvas,id,elapsed){
+ if(EXTRA_CLIP_IDS.includes(id))return paintExtraClip(canvas,id,elapsed);
  const c=canvas.getContext('2d');if(!c)return;const t=(elapsed%8000)/8000,W=480,H=270;
  c.clearRect(0,0,W,H);c.fillStyle='#25203d';c.fillRect(0,0,W,H);
  const line=(x,y,X,Y,col='#d0c2ed',w=4)=>{c.beginPath();c.strokeStyle=col;c.lineWidth=w;c.lineCap='round';c.moveTo(x,y);c.lineTo(X,Y);c.stroke();};
