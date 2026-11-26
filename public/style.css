@@ -510,3 +510,9 @@ body.tv-mode .screen .question-media-image{height:clamp(80px,24vh,250px)}
 .local-audio-dialog>.ghost{margin-top:8px}
 
 .local-volume{display:grid;gap:5px;padding:8px 2px}.local-volume input{padding:0;accent-color:#ffd55a;min-height:30px}.audio-test-status{font-size:13px;line-height:1.45;margin:8px 0;color:#ffda95}.audio-test-status[data-ok=true]{color:#a4ebc1}
+
+/* Arena championship: player identity is visible on the controller and standings. */
+.arcade-coins[data-variant=territory] .coin-stick{border-color:var(--territory-color,#a88bff);box-shadow:0 5px #130d1f,inset 0 0 20px color-mix(in srgb,var(--territory-color,#a88bff) 35%,transparent)}
+.arcade-coins[data-variant=territory] .coin-knob{background:radial-gradient(circle at 30% 20%,#fff,var(--territory-color,#a88bff) 65%,#382451);border-color:var(--territory-color,#a88bff)}
+.arcade-coins[data-variant=territory] .coin-time-track i{background:linear-gradient(90deg,#b8a1ff,#ff9db7)}
+.result-streak{font-weight:800;font-size:clamp(11px,1.7vh,19px);color:#ffdc83;text-align:center;max-width:100%;overflow-wrap:anywhere}

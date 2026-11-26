@@ -12,9 +12,33 @@ export function coinPlan(random=Math.random){
  return {kind:'coins',version:1,lead:COIN_LEAD,duration:COIN_DURATION,interval:COIN_DURATION,beats:[],coins};
 }
 export function blocked(x,z,r=.23){return COIN_BLOCKS.some(b=>Math.abs(x-b.x)<b.w/2+r&&Math.abs(z-b.z)<b.d/2+r);}
+// A shared arena variant: every contestant can repaint rivals' tiles, not just collect pickups.
+// Owner indices are round-local, never account IDs.
+export const TERRITORY_TILE_POINTS=35;
+export function territoryColor(index){return index<8?['#79c9ff','#ff9b9c','#ffd55a','#77e2b2','#dab7ff','#ffab65','#82f0f0','#ef84cd'][index]:`hsl(${Math.round(index*137.508)%360} 85% 65%)`;}
+export function territoryPlan(){
+ const tiles=[];
+ for(let ix=0;ix<12;ix++)for(let iz=0;iz<8;iz++){
+  const x=ix-5.5,z=iz-3.5;
+  if(!blocked(x,z,.32))tiles.push({id:ix*8+iz,x,z});
+ }
+ return {kind:'coins',variant:'territory',version:1,lead:COIN_LEAD,duration:35000,interval:35000,beats:[],coins:[],tiles};
+}
+function paintTerritory(action,ids,time,dt){
+ const world=action.world,tiles=action.plan.tiles;
+ for(const tile of tiles){
+  let winner=null,best=.46*.46;
+  if((world.claimedAt[tile.id]||0)+300>time)continue;
+  for(const id of ids){const p=action.players[id];if(!p.attempts||p.until<=time-dt||Math.hypot(p.vx,p.vz)<.08)continue;const d=(p.x-tile.x)**2+(p.z-tile.z)**2;if(d<best){winner=p;best=d;}}
+  if(!winner||world.owners[tile.id]===winner.colorIndex)continue;
+  const previous=world.owners[tile.id];
+  if(previous!==undefined){const loser=ids.map(id=>action.players[id]).find(p=>p.colorIndex===previous);if(loser){loser.hits=Math.max(0,loser.hits-1);loser.score=loser.hits*TERRITORY_TILE_POINTS;}winner.repaints++;}
+  world.owners[tile.id]=winner.colorIndex;world.claimedAt[tile.id]=time;winner.hits++;winner.score=winner.hits*TERRITORY_TILE_POINTS;
+ }
+}
 export function startCoins(action){
- const ids=Object.keys(action.players).sort(),count=ids.length;action.world={tick:action.started+action.plan.lead,taken:{}};
- ids.forEach((id,i)=>{const a=2*Math.PI*i/Math.max(1,count),p=action.players[id];Object.assign(p,{x:Math.cos(a)*5.05,z:Math.sin(a)*3.15,vx:0,vz:0,until:0,lastControl:0,boostUntil:0,boostReady:0,score:0,hits:0,attempts:0});});
+ const ids=Object.keys(action.players).sort(),count=ids.length;action.world={tick:action.started+action.plan.lead,taken:{},...(action.plan.variant==='territory'?{owners:{},claimedAt:{}}:{})};
+ ids.forEach((id,i)=>{const a=2*Math.PI*i/Math.max(1,count),p=action.players[id];Object.assign(p,{x:Math.cos(a)*5.05,z:Math.sin(a)*3.15,vx:0,vz:0,until:0,lastControl:0,boostUntil:0,boostReady:0,score:0,hits:0,attempts:0,colorIndex:i,repaints:0});});
 }
 export function advanceCoins(action,now){
  const world=action.world;if(!world)return;
@@ -25,6 +49,7 @@ export function advanceCoins(action,now){
   for(const id of ids){const p=action.players[id],moving=Math.max(0,Math.min(time,p.until)-world.tick),turbo=Math.max(0,Math.min(time,p.until,p.boostUntil)-world.tick),distance=((moving-turbo)*4.15+turbo*7.1)/1000;
    if(moving>0){const x=clamp(p.x+p.vx*distance,-COIN_BOUNDS.x+.24,COIN_BOUNDS.x-.24),z=clamp(p.z+p.vz*distance,-COIN_BOUNDS.z+.24,COIN_BOUNDS.z-.24);if(!blocked(x,p.z))p.x=x;if(!blocked(p.x,z))p.z=z;}
   }
+  if(action.plan.variant==='territory'){paintTerritory(action,ids,time,dt);world.tick=time;continue;}
   // Resolve contested pickups by nearest player; stable tie-break, no input order advantage.
   for(const c of action.plan.coins){if(c.at>elapsed||world.taken[c.id]||elapsed-c.at>=10000)continue;let winner=null,best=.48*.48;
    for(const id of ids){const p=action.players[id],d=(p.x-c.x)**2+(p.z-c.z)**2;if(p.attempts>0&&d<best){winner=p;best=d;}}

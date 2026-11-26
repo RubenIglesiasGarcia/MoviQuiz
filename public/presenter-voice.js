@@ -25,6 +25,9 @@ export function selectPresenterClip(s,previousLeader){
  if(next==='steal'&&q?.party!=='steal')return [19,20];
  if(next==='buzzer'&&q?.party!=='buzzer')return [21];
  if(previousLeader&&leader&&leader.id!==previousLeader)return [26];
+ if(players.some(p=>(p.previousRank??0)-(players.indexOf(p))>=2))return [9,27];
+ if(players.some(p=>(p.stolen||0)>0))return [19,20];
+ if(players.some(p=>(p.career?.streak||0)>=4))return [11,13];
  if(s.kind==='arcade')return s.index%2===0?[23,24,22]:[];
  if(players.length>1&&correct===0)return [10,12,14,17];
  if(players.length>1&&correct===players.length)return [11,13];
