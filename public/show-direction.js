@@ -1,6 +1,6 @@
 // Shared broadcast timing and editorial direction. No game-state mutations.
 const styles={
- classic:['#8ecbff','CONCURSO','Piensa rápido. Acierta.'],warmup:['#8ecbff','CALENTAMIENTO','El primer paso hacia la victoria.'],
+ tiebreak:['#ffdb78','MUERTE SÚBITA','Solo los líderes empatados pueden responder.'],classic:['#8ecbff','CONCURSO','Piensa rápido. Acierta.'],warmup:['#8ecbff','CALENTAMIENTO','El primer paso hacia la victoria.'],
  'order-round':['#c4acff','PONLO EN ORDEN','Cada posición cuenta.'],estimate:['#76e3d2','LA CIFRA JUSTA','La precisión marca la diferencia.'],
  buzzer:['#ffbf73','EL GRAN PULSADOR','Pulsa si lo tienes claro. Fallar cuesta hasta 100 puntos.'],steal:['#ff8da9','ROBAPUNTOS','El marcador puede cambiar de golpe.'],
  final:['#ffdb78','GRAN FINAL','Todo se decide ahora.'],wager:['#ffbf73','LA GRAN SUBASTA','¿Cuánto estás dispuesto a arriesgar?'],
@@ -16,7 +16,7 @@ export function showScene(state){
  const q=state?.question||{},phase=state?.phase,party=q.party||'classic',style=styles[party]||styles.classic;
  const last=state?.total>0&&state.index===state.total-1,opening=state?.index===0,finale=phase==='finished'||party==='final'||last;
  const theme=finale?'#ffdb78':style[0],kind=phase==='lobby'?'lobby':phase==='finished'?'winner':phase==='reveal'?'results':state?.partyStage==='intro'?'intro':'play';
- return {kind,theme,finale,opening,title:party==='final'?'GRAN FINAL · ×'+(q.multiplier||2):last?'ÚLTIMA RONDA · '+style[1]:style[1],tag:state?.kind==='arcade'?'MOBIQUIZ / ARCADE':'MOBIQUIZ / EL PLATÓ',subtitle:style[2]};
+ return {kind,theme,finale,opening,title:party==='tiebreak'?'MUERTE SÚBITA':party==='final'?'GRAN FINAL · ×'+(q.multiplier||2):last?'ÚLTIMA RONDA · '+style[1]:style[1],tag:state?.kind==='arcade'?'MOBIQUIZ / ARCADE':'MOBIQUIZ / EL PLATÓ',subtitle:style[2]};
 }
 export function resultTimeline(state,now){
  const start=Number(state.revealStarted)||0,end=Number(state.revealUntil)||0;const duration=start&&end>start?end-start:10000;
@@ -51,6 +51,7 @@ export function roundBeat(state){
 }
 
 const sonnyRules={
+ tiebreak:['Plot twist. Aquí nadie se va todavía.','Solo los líderes empatados responden; un acierto puede decidir el concurso.'],
  classic:['El que sabe, sabe. El que no, disimula.','Elegid una de las respuestas antes de que acabe el tiempo.'],
  warmup:['Vamos a ver si las neuronas han venido con vosotros.','Acertad y sumad puntos para arrancar.'],
  'order-round':['Hoy toca poner un poquito de orden en vuestras vidas.','Colocad los cuatro elementos en el orden correcto.'],
@@ -94,10 +95,13 @@ export function sonnyMoment(state,previousLeader=null){
  const s=state||{},q=s.question||{},p=s.players||[],i=Math.max(0,s.index||0),key=q.party||'classic',leader=p[0],normal=s.kind!=='arcade',correct=p.filter(x=>x.reaction==='correct').length;
  if(s.phase==='lobby')return {text:'Soy Sonny. Bienvenidos a MobiQuiz. Preparad los mandos y dejad las excusas fuera.',mood:'smug'};
  if(s.phase==='finished')return {text:line(sonnyJokes.finish,i),mood:'celebrate'};
+ if(s.phase==='question'&&s.partyStage==='intro'&&showEventInfo(s)){const info=showEventInfo(s);return {text:info.joke+' '+info.rule,mood:'smug',section:true};}
  if(s.phase==='question'&&s.partyStage==='intro'&&key==='warmup'&&q.multiplier===2)return {text:'¡Lluvia de puntos! Esta pregunta vale el doble. Que no se diga que no aviso.',mood:'celebrate',section:true};
  if(s.phase==='question'&&s.partyStage==='intro'&&(s.introDuration||3000)>=3000){const [a,b]=sonnyRules[key]||sonnyRules.classic;return {text:a+' '+b,mood:key==='final'?'celebrate':'smug',section:true};}
  if(s.phase!=='reveal')return null;
  let type=null,mood='smug';
+ if(p.some(x=>x.shieldBlocked))return {text:'Acceso denegado. El escudo acaba de salvar esos puntos.',mood:'smug'};
+ if(p.some(x=>x.eventBonus))return {text:'Bonus desbloqueado. El marcador acaba de recibir un parche.',mood:'celebrate'};
  if(p.some(x=>x.stolen>0))type='steal';
  else if(previousLeader&&leader?.id!==previousLeader&&leader)type='lead';
  else if(p.some((x,j)=>(x.previousRank??j)-j>=2))type='comeback';
@@ -109,4 +113,11 @@ export function sonnyMoment(state,previousLeader=null){
  else if(i%3===2)type='normal';
  if(!type)return null;
  return {text:line(sonnyJokes[type],i),mood};
+}
+
+export function showEventInfo(s){
+ const event=s?.showEvent;if(!event)return null;
+ const names=(s.players||[]).filter(p=>event.ids.includes(p.id)).map(p=>p.name).join(' · ');
+ const types={duel:{title:'DUELO DE RIVALES',icon:'⚔',joke:'Aquí hay asuntos pendientes.',rule:'Todos jugáis; el más rápido del duelo que acierte gana 150 puntos extra.'},comeback:{title:'LA REVANCHA',icon:'↗',joke:'Se abre la operación remontada.',rule:'Quienes van últimos ganan 150 puntos extra si aciertan.'},shield:{title:'EL INTOCABLE',icon:'🛡',joke:'Hoy el seguro de puntos viene incluido.',rule:'Los protegidos no pueden perder puntos por un robo en esta ronda.'}};
+ const info=types[event.kind];return info?{...info,names}:null;
 }
