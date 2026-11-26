@@ -43,7 +43,7 @@ export async function updateRecordedPresenter(s,offset,mountCharacter,enabled=tr
  if(!moment||seen.has(key))return;seen.add(key);
  const deadline=s.phase==='reveal'?s.revealUntil:s.phase==='question'?s.deadline:Date.now()+offset+7500;
  const remaining=deadline-Date.now()-offset;if(remaining<950)return;
- const target=s.phase==='reveal'?document.querySelector('.tv-results-overlay[open] .result-show-footer'):document.querySelector('#presenter-line')||document.querySelector('#app.screen');
+ const target=s.phase==='reveal'?document.querySelector('.tv-results-overlay[open] .result-show-footer')||document.querySelector('.round-results[open] .result-show-footer'):document.querySelector('#presenter-line')||document.querySelector('#app.screen');
  if(!target)return;
  const banner=node('div','voice-presenter sonny-caption'),portrait=node('div','voice-presenter-avatar'),fallback=node('span','voice-presenter-fallback','🐈‍⬛'),copy=node('div','voice-presenter-copy');
  portrait.dataset.mood=moment.mood;portrait.append(fallback);copy.append(node('strong','','SONNY · EN DIRECTO'),node('span','',moment.text));banner.append(portrait,copy);
@@ -60,7 +60,7 @@ export async function updateRecordedPresenter(s,offset,mountCharacter,enabled=tr
  const voices=speechSynthesis.getVoices().filter(v=>v.localService===true&&/^es(?:-|_)/i.test(v.lang));
  const voice=voices.find(v=>/^es[-_]ES$/i.test(v.lang))||voices[0];if(!voice)return;
  const u=new SpeechSynthesisUtterance(moment.text);u.voice=voice;u.lang=voice.lang;u.rate=1.12;u.pitch=1.03;u.volume=.88;utterance=u;
- u.onstart=()=>{if(token!==generation)return;root.dataset.mqSpeaking='1';const start=performance.now();const tick=now=>{if(token!==generation||root.dataset.mqSpeaking!=='1')return;const t=(now-start)/1000,v=.12+.72*Math.abs(Math.sin(t*13)*Math.cos(t*4.7));root.style.setProperty('--mq-mouth',String(v));portrait.dataset.mouth=String(v);frame=requestAnimationFrame(tick);};frame=requestAnimationFrame(tick);};
+ u.onstart=()=>{if(token!==generation)return;root.dataset.mqSpeaking='1';const start=performance.now();const tick=now=>{if(token!==generation||root.dataset.mqSpeaking!=='1')return;const t=(now-start)/1000,v=.12+.72*Math.abs(Math.sin(t*13)*Math.cos(t*4.7));root.style.setProperty('--mq-mouth',String(v));portrait.dataset.mouth=String(v);const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth=String(v);frame=requestAnimationFrame(tick);};frame=requestAnimationFrame(tick);};
  u.onend=endSpeech;u.onerror=endSpeech;speechSynthesis.speak(u);
  }catch{endSpeech();}
 }
