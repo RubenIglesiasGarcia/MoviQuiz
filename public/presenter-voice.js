@@ -8,10 +8,7 @@ let retryManifestAt=0;
 const node=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;};
 export const presenterEnabled=()=>localStorage.getItem('mq.voice')!=='off';
 export const presenterSpeaking=()=>!!active&&document.documentElement.dataset.mqSpeaking==='1';
-export function preloadPresenter(){
- if(!manifestPromise&&Date.now()<retryManifestAt)return Promise.resolve(null);if(!manifestPromise)manifestPromise=fetch('/presenter.json').then(async r=>{if(!r.ok)throw Error('Voice pack unavailable');const m=await r.json();if(m.version!==1||m.audio!=='/presenter.mp3'||!Array.isArray(m.clips)||m.clips.length!==30||!Number.isFinite(m.frameMs)||m.frameMs<=0||m.clips.some(c=>!Number.isFinite(c.start)||!Number.isFinite(c.end)||c.end<=c.start||typeof c.text!=='string'||!Array.isArray(c.mouth)))throw Error('Invalid voice pack');audio=new Audio(m.audio);audio.preload='auto';audio.volume=.90;audio.load();return m;}).catch(()=>{manifestPromise=null;retryManifestAt=Date.now()+60000;return null;});
- return manifestPromise;
-}
+export function preloadPresenter(){try{globalThis.speechSynthesis?.getVoices();}catch{}return Promise.resolve(null);}
 export function stopPresenter(){generation++;cancelAnimationFrame(frame);clearTimeout(stopTimer);if(utterance){try{globalThis.speechSynthesis?.cancel();}catch{}utterance=null;}if(audio)audio.pause();active?.banner?.remove();active=null;document.documentElement.style.removeProperty('--mq-mouth');document.documentElement.dataset.mqSpeaking='0';document.documentElement.dataset.mqPresenting='0';delete document.documentElement.dataset.mqSonnyMood;}
 export function setPresenterEnabled(value){localStorage.setItem('mq.voice',value?'on':'off');if(!value)stopPresenter();else preloadPresenter();}
 const choice=ids=>{const available=ids.filter(id=>id!==lastId);return (available.length?available:ids)[Math.floor(Math.random()*(available.length||ids.length))];};
