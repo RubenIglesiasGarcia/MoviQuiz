@@ -39,3 +39,13 @@ export function standingsSpotlight(players=[]){
  return {kind:'leader',title:'AL FRENTE DEL MARCADOR',detail:leader.name+(margin!==null?' · '+margin.toLocaleString('es-ES')+' pts de ventaja':''),ids:[leader.id]};
 }
 export function applyShowScene(root,state){const scene=showScene(state);if(root.dataset.showScene!==scene.kind)root.dataset.showScene=scene.kind;if(root.dataset.showFinal!==String(scene.finale))root.dataset.showFinal=String(scene.finale);if(root.style.getPropertyValue('--show-accent')!==scene.theme)root.style.setProperty('--show-accent',scene.theme);return scene;}
+
+ // A deterministic editorial cue, identical on every connected device.
+export function roundBeat(state){
+ const q=state?.question||{},index=Math.max(0,state?.index||0),total=state?.total||0,scene=showScene(state),special=['steal','final','wager','buzzer','hot','pie','bluff'].includes(q.party);
+ const quick=(state?.introDuration||3000)<2000;
+ const opening=index===0,last=total>0&&index===total-1;
+ const variants=['¡Aquí no vale mirar al de al lado!','Los puntos no se ganan solos.','¡Concentración, que esto se pone serio!','La gloria está a un botón de distancia.','¡El mando no muerde!','A ver quién sorprende al plató.','Todavía queda mucha partida.','¡Que nadie se duerma!'];
+ const title=last?'¡LA ÚLTIMA!':opening?'¡QUE EMPIECE EL SHOW!':special?scene.title:quick?['¡SIGUIENTE!','¡VAMOS ALLÁ!','¡OTRA MÁS!','¡AL LÍO!'][index%4]:scene.title;
+ return {title,quick,special,caption:last?'Un último esfuerzo.':special?scene.subtitle:variants[index%variants.length]};
+}
