@@ -9,6 +9,7 @@ jobs:
         with:
           node-version: '22'
       - run: npm install
+      - run: npm run build
       - run: npm run check
       - run: node --check public/sw.js && node --check icons.js
       - run: npm test

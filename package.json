@@ -12,7 +12,8 @@
     "db:local": "wrangler d1 migrations apply DB --local",
     "db:remote": "wrangler d1 migrations apply DB --remote",
     "build:ui": "node scripts/build-ui.mjs",
-    "postinstall": "npm run build:ui"
+    "postinstall": "npm run build:ui",
+    "build": "node scripts/build-ui.mjs"
   },
   "engines": {
     "node": ">=22"
