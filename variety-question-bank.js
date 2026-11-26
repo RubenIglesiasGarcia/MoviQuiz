@@ -1,5 +1,4 @@
-// Curated general trivia; answers use the engine's existing shuffling and illustrations.
-const levels=["Muy fácil","Fácil","Media","Difícil","Muy difícil"];
+// Curated general trivia; answers use existing shuffling and illustrations.
 export const varietyChoices=[
  {
   "id": "variety-choice-0-0",
@@ -1728,13 +1727,13 @@ export const varietyChoices=[
  },
  {
   "id": "variety-choice-3-25",
-  "category": "Cultura general",
-  "prompt": "¿Qué objeto se utiliza para mantener la ropa sujeta en un tendedero?",
+  "category": "Música",
+  "prompt": "¿Qué grupo de música electrónica publicó el álbum Moon Safari en 1998?",
   "options": [
-   "Pinza",
-   "Taza",
-   "Candado",
-   "Tenedor"
+   "Air",
+   "Daft Punk",
+   "Justice",
+   "Röyksopp"
   ],
   "correct": 0,
   "difficulty": "Difícil",
@@ -2356,12 +2355,12 @@ export const varietyOrders=[
  {
   "id": "variety-order-1-0",
   "category": "Geografía",
-  "prompt": "Ordena estos intervalos de tiempo desde el menor al mayor.",
+  "prompt": "Ordena estas capitales de la península ibérica y las islas Canarias de menor a mayor latitud.",
   "options": [
-   "15 segundos",
-   "2 minutos",
-   "3 horas",
-   "1 día"
+   "Las Palmas de Gran Canaria (capital compartida de Canarias)",
+   "Lisboa",
+   "Madrid",
+   "Oviedo"
   ],
   "correct": [
    0,
@@ -2989,10 +2988,10 @@ export const varietyEstimates=[
  {
   "id": "variety-number-4-1",
   "category": "Historia",
-  "prompt": "¿Cuántos minutos hay en nueve horas exactas?",
-  "correct": 540,
+  "prompt": "¿En qué año tuvo lugar la batalla de Austerlitz?",
+  "correct": 1805,
   "tolerance": 0,
-  "estimateScale": 50,
+  "estimateScale": 20,
   "difficulty": "Muy difícil",
   "mode": "number",
   "seconds": 30
