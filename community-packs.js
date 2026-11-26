@@ -2157,8 +2157,8 @@ const themes=[
         "category": "Voleibol",
         "mode": "order",
         "difficulty": "Media",
-        "prompt": "Ordena las sedes del debut olímpico del voleibol de pista, el debut del vóley playa y estas dos ediciones posteriores.",
-        "options": ["Tokio","Atlanta","Pekín","París"],
+        "prompt": "Ordena estas sedes olímpicas de verano entre 1964 y 2024, de más antigua a más reciente.",
+        "options": ["Ciudad de México","Seúl","Atenas","Río de Janeiro"],
         "correct": [
           0,
           1,

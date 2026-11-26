@@ -1727,7 +1727,7 @@ export const freshOrders=[
   "category": "Deportes",
   "difficulty": "Media",
   "mode": "order",
-  "prompt": "Ordena estas ciudades por los Juegos Olímpicos de verano que acogieron.",
+  "prompt": "Ordena estas sedes de los Juegos Olímpicos de verano de las cuatro ediciones entre 2008 y 2020, de más antigua a más reciente.",
   "options": [
    "Pekín",
    "Londres",

@@ -148,7 +148,7 @@ export const orderBank=[
  [
   "Muy fácil",
   "Naturaleza",
-  "Ordena estos animales por su tamaño adulto típico.",
+  "Ordena estos animales por su tamaño adulto típico, de menor a mayor.",
   "Mosca",
   "Conejo",
   "Oveja",
@@ -258,7 +258,7 @@ export const orderBank=[
   "Historia",
   "Ordena estos hechos del siglo XX cronológicamente.",
   "Inicio de la Primera Guerra Mundial",
-  "Crac de 1929",
+  "Crac de Wall Street de la Gran Depresión",
   "Fin de la Segunda Guerra Mundial",
   "Llegada del Apolo 11 a la Luna"
  ],
@@ -418,7 +418,7 @@ export const orderBank=[
  [
   "Muy fácil",
   "Ciencia",
-  "Ordena estos objetos por su tamaño habitual.",
+  "Ordena estos objetos por su tamaño habitual, de menor a mayor.",
   "Grano de arroz",
   "Pelota de tenis",
   "Bicicleta",
@@ -472,7 +472,7 @@ export const orderBank=[
  [
   "Fácil",
   "Ciencia",
-  "Ordena por temperatura típica estas situaciones.",
+  "Ordena por temperatura típica estas situaciones, de menor a mayor.",
   "Interior de un congelador",
   "Nevera",
   "Habitación templada",
@@ -652,7 +652,7 @@ export const orderBank=[
  [
   "Muy fácil",
   "Ciencia",
-  "Ordena por masa aproximada estos objetos cotidianos.",
+  "Ordena por masa aproximada estos objetos cotidianos, de menor a mayor.",
   "Clip de papel",
   "Manzana",
   "Maleta llena",
@@ -715,7 +715,7 @@ export const orderBank=[
  [
   "Fácil",
   "Gastronomía",
-  "Ordena estos recipientes por su capacidad habitual.",
+  "Ordena estos recipientes por su capacidad habitual, de menor a mayor.",
   "Cucharilla de café",
   "Taza de desayuno",
   "Botella de vino",
