@@ -10,8 +10,8 @@ const user={id:'tester',guest:true};
 const env={DB:null};
 
 test('built-in packs have distinct IDs and playable content at their supported difficulties',()=>{
- assert.equal(officialPacks.length,7);
- assert.equal(new Set(officialPacks.map(p=>p.id)).size,7);
+ assert.equal(officialPacks.length,9);
+ assert.equal(new Set(officialPacks.map(p=>p.id)).size,9);
  assert.ok(officialPacks.reduce((n,p)=>n+p.count,0)>=300);
  for(const meta of officialPacks){
   assert.match(meta.id,/^[a-f0-9]{24}$/);
