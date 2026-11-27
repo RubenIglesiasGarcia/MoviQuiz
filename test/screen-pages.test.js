@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {pageWindow} from '../public/screen-pages.js';import {castStatus} from '../public/cast.js';
+test('catalog pagination never drops the final item',()=>{assert.deepEqual(pageWindow(7,99,3),{page:2,count:3,start:6,end:7});assert.deepEqual(pageWindow(0,0,3),{page:0,count:1,start:0,end:0});});
+test('Cast discovery only advertises real known availability',()=>{assert.equal(castStatus('NOT_CONNECTED'),'available');assert.equal(castStatus('NO_DEVICES_AVAILABLE'),'none');assert.equal(castStatus('CONNECTED'),'connected');assert.equal(castStatus(undefined),'unknown');});
