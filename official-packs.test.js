@@ -9,10 +9,10 @@ const levels=['Muy fácil','Fácil','Media','Difícil','Muy difícil'];
 const user={id:'tester',guest:true};
 const env={DB:null};
 
-test('six official packs have distinct IDs and playable content at every difficulty',()=>{
- assert.equal(officialPacks.length,6);
- assert.equal(new Set(officialPacks.map(p=>p.id)).size,6);
- assert.equal(officialPacks.reduce((n,p)=>n+p.count,0),210);
+test('built-in packs have distinct IDs and playable content at their supported difficulties',()=>{
+ assert.equal(officialPacks.length,7);
+ assert.equal(new Set(officialPacks.map(p=>p.id)).size,7);
+ assert.equal(officialPacks.reduce((n,p)=>n+p.count,0),213);
  for(const meta of officialPacks){
   assert.match(meta.id,/^[a-f0-9]{24}$/);
   assert.equal(meta.builtin,true);
@@ -23,7 +23,9 @@ test('six official packs have distinct IDs and playable content at every difficu
   for(const q of pack.questions)validateQuestions([q]);
   for(const level of levels){
    const source={standard:false,categories:null,questions:pack.questions};
-   assert.ok(pack.questions.filter(q=>q.difficulty===level).length>=3);
+   const count=pack.questions.filter(q=>q.difficulty===level).length;
+   if(meta.id==='6372697374696e6132303236'&&level!=='Media'){assert.equal(count,0);assert.throws(()=>selectedContest('classic',level,source),/No hay suficientes preguntas/);continue;}
+   assert.ok(count>=3);
    for(const kind of ['classic','party']){
     const round=selectedContest(kind,level,source);
     assert.ok(round.length>=3);
@@ -37,7 +39,7 @@ test('six official packs have distinct IDs and playable content at every difficu
 
 test('official packs can be combined without D1 reads',async()=>{
  const source=await loadPackSelection(env,user,{standard:false,categories:null,packIds:officialPacks.map(p=>p.id)});
- assert.equal(source.questions.length,210);
+ assert.equal(source.questions.length,213);
  assert.equal(source.standard,false);
 });
 
