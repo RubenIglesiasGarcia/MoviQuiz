@@ -28,7 +28,7 @@ export async function uploadPackAsset(env,u,data){
 }
 export async function verifyPackAssets(db,u,pack){
  const refs=new Map();if(assetId(pack.cover))refs.set(assetId(pack.cover),'image');for(const q of pack.questions){const id=assetId(q.media?.url);if(id){if(refs.has(id)&&refs.get(id)!==q.media.type)throw Error('El tipo de archivo no coincide.');refs.set(id,q.media.type);}}
- for(const [id,kind] of refs){const row=await db.prepare('SELECT owner,kind FROM question_pack_assets WHERE id=?').bind(id).first();if(row?.owner!==u.id||row.kind!==kind)throw Error('Archivo multimedia no disponible o de otro usuario.');}
+ if(!refs.size)return;const entries=[...refs];for(let i=0;i<entries.length;i+=40){const chunk=entries.slice(i,i+40),result=await db.prepare('SELECT id,owner,kind FROM question_pack_assets WHERE id IN ('+chunk.map(()=>'?').join(',')+')').bind(...chunk.map(([id])=>id)).all();const rows=new Map(result.results.map(r=>[r.id,r]));for(const [id,kind] of chunk){const row=rows.get(id);if(row?.owner!==u.id||row.kind!==kind)throw Error('Archivo multimedia no disponible o de otro usuario.');}}
 }
 export function assetResponse(row,range){
  if(!row||!types[row.mime])return new Response(null,{status:404});
