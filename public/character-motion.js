@@ -51,3 +51,6 @@ export function podiumMotion(player,players,solo=false){
  return rank===1?'podium-win':rank===2?'podium-silver':rank===3?'podium-bronze':'podium-loss';
 }
 export function reactionClock(elapsed,first,second){const t=Math.max(0,elapsed);if(t>=3.2&&second!==first)return {kind:second,time:t-3.2};return {kind:first,time:t};}
+
+// Cross-fade between actions, treating a full body turn as the same orientation.
+export function blendMotion(from,to,progress){const u=smooth(progress);return to.map((v,i)=>{const a=from[i]||0,delta=i===2?((v-a+Math.PI)%TAU+TAU)%TAU-Math.PI:v-a;return a+delta*u;});}
