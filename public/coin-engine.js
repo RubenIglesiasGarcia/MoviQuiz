@@ -29,13 +29,13 @@ export function sofaPlan(random=Math.random){
 export function sofaSpot(plan,elapsed){return plan.spots[Math.min(plan.spots.length-1,Math.max(0,Math.floor(elapsed/SOFA_PERIOD)))];}
 function shoveSofa(action,ids,time){
  for(const id of ids){const p=action.players[id];if(p.boostUntil<=time||p.until<=time||(p.bumpReady||0)>time)continue;
-  let target=null,closest=.76;
+  const sofa=action.plan.variant==='sofa',freePush=['sofa','lava','bomb'].includes(action.plan.variant);let target=null,closest=sofa?1.12:freePush?.95:.76;
   for(const other of ids){if(other===id)continue;const q=action.players[other],dx=q.x-p.x,dz=q.z-p.z,d=Math.hypot(dx,dz);
-   if(q.until<=time||q.safeUntil>time||d<.001||d>=closest||dx*p.vx+dz*p.vz<=0)continue;target=q;closest=d;}
+   if(q.until<=time||q.safeUntil>time||d<.001||d>=closest||(!(freePush&&Math.hypot(p.vx,p.vz)<.05)&&dx*p.vx+dz*p.vz<=0))continue;target=q;closest=d;}
   if(!target)continue;
   const dx=(target.x-p.x)/closest,dz=(target.z-p.z)/closest;let moved=0;
-  for(let k=0;k<8;k++){const x=clamp(target.x+dx*.16,-5.76,5.76),z=clamp(target.z+dz*.16,-3.76,3.76);if((action.plan.variant!=='splash'&&blocked(x,z))||Math.hypot(x-target.x,z-target.z)<.03)break;target.x=x;target.z=z;moved++;}
-  if(moved){p.bumpReady=time+500;p.bumps=(p.bumps||0)+1;target.bumpedBy=p.colorIndex;if(action.plan.variant==='tuna'&&target.carry?.length&&(p.carry||[]).length<3){p.carry.push(target.carry.pop());}target.safeUntil=time+1100;target.bumped=(target.bumped||0)+1;target.bumpedAt=time;}
+  for(let k=0;k<(sofa?11:8);k++){const x=clamp(target.x+dx*.16,-5.76,5.76),z=clamp(target.z+dz*.16,-3.76,3.76);if((action.plan.variant!=='splash'&&blocked(x,z))||Math.hypot(x-target.x,z-target.z)<.03)break;target.x=x;target.z=z;moved++;}
+  if(moved){p.bumpReady=time+500;p.bumps=(p.bumps||0)+1;target.bumpedBy=p.colorIndex;if(action.plan.variant==='tuna'&&target.carry?.length&&(p.carry||[]).length<3){p.carry.push(target.carry.pop());}target.safeUntil=time+1100;if(sofa)target.stunUntil=time+350;target.bumped=(target.bumped||0)+1;target.bumpedAt=time;}
  }
 }
 export function splashRadius(elapsed){return Math.max(2.8,4.1-Math.max(0,elapsed)/30000*1.3);}
@@ -79,7 +79,7 @@ export function advanceCoins(action,now){if(['volley','meteor'].includes(action.
  const ids=Object.keys(action.players).sort();
  while(world.tick<end){
   const dt=Math.min(50,end-world.tick),time=world.tick+dt,elapsed=time-begin;
-  for(const id of ids){const p=action.players[id],moving=Math.max(0,Math.min(time,p.until)-world.tick),turbo=Math.max(0,Math.min(time,p.until,p.boostUntil)-world.tick),distance=((moving-turbo)*4.15+turbo*7.1)/1000;
+  for(const id of ids){const p=action.players[id],moving=Math.max(0,Math.min(time,p.until)-Math.max(world.tick,p.stunUntil||0)),turbo=Math.max(0,Math.min(time,p.until,p.boostUntil)-Math.max(world.tick,p.stunUntil||0)),distance=((moving-turbo)*4.15+turbo*7.1)/1000;
    if(moving>0){const x=clamp(p.x+p.vx*distance,-COIN_BOUNDS.x+.24,COIN_BOUNDS.x-.24),z=clamp(p.z+p.vz*distance,-COIN_BOUNDS.z+.24,COIN_BOUNDS.z-.24);if(action.plan.variant==='splash'||!blocked(x,p.z))p.x=x;if(action.plan.variant==='splash'||!blocked(p.x,z))p.z=z;}
   }
   if(action.plan.variant==='territory'){paintTerritory(action,ids,time,dt);world.tick=time;continue;}
@@ -100,8 +100,8 @@ export function controlCoins(action,id,input,now){if(['volley','meteor'].include
  const match=/^(-?\d{1,3}),(-?\d{1,3}),([01])$/.exec(input);if(!match)throw Error('Control inválido.');
  const x=Number(match[1]),z=Number(match[2]);if(Math.abs(x)>100||Math.abs(z)>100)throw Error('Control inválido.');
  if(p.lastControl&&now-p.lastControl<COIN_MIN_INPUT)throw Error('Control demasiado rápido.');
- advanceCoins(action,now);const norm=Math.max(100,Math.hypot(x,z));p.vx=x/norm;p.vz=z/norm;p.until=now+COIN_LEASE;p.lastControl=now;if(x||z||['lava','bomb'].includes(action.plan.variant))p.attempts++;
- if(match[3]==='1'&&(x||z)&&now>=p.boostReady){p.boostUntil=now+450;p.boostReady=now+2200;}
+ advanceCoins(action,now);const norm=Math.max(100,Math.hypot(x,z));p.vx=x/norm;p.vz=z/norm;p.until=now+COIN_LEASE;p.lastControl=now;if(x||z||['lava','bomb','sofa'].includes(action.plan.variant))p.attempts++;
+ if(match[3]==='1'&&(x||z||['sofa','lava','bomb'].includes(action.plan.variant))&&now>=p.boostReady){p.boostUntil=now+450;p.boostReady=now+2200;}
  return 0;
 }
 export function finishCoins(r){if(['volley','meteor'].includes(r.action.plan.variant))return finishSkill(r);

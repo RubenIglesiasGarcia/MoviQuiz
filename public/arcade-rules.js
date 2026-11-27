@@ -9,7 +9,7 @@ export const actionMeta={
  splash:{title:'EMPUJÓN Y CHAPUZÓN',subtitle:'Mantente en la plataforma que se hace más pequeña. Usa turbo contra los rivales y mándalos al agua.',category:'Agilidad'},
  lava:{title:'EL SUELO ES LAVA',subtitle:'Cada instante a salvo suma y cada quemadura resta. Usa turbo para empujar rivales.',category:'Agilidad'},
  bomb:{title:'PAQUETE SOSPECHOSO',subtitle:'Acércate a un rival para pasarle el paquete. Usa turbo para empujar y esquiva la explosión.',category:'Agilidad'},
- sofa:{title:'REY DEL SOFÁ',subtitle:'¡El sofá es tuyo! Acércate al trono, mantén el puesto y usa el turbo para apartar a tus rivales. ¡Cambia de sitio cada 8 segundos!',category:'Agilidad'},
+ sofa:{title:'REY DEL SOFÁ',subtitle:'Ocupa el sofá y pulsa empujar para echar a tus rivales, incluso sin moverte. El asiento cambia cada 8 segundos.',category:'Agilidad'},
  territory:{title:'GUERRA DE COLORES',subtitle:'Pinta el suelo de tu color, roba las casillas de tus rivales y usa el turbo. Gana quien controla más terreno al acabar.',category:'Agilidad'},
  coins:{title:'FIEBRE DEL ORO',subtitle:'Muévete libremente, esquiva las barreras y recoge más monedas que tus rivales.',category:'Agilidad'},
  dash:{title:'CARRERA DE VALLAS',subtitle:'Esquiva por los lados o salta la valla en el momento justo.',steps:12,interval:1750,category:'Agilidad'},
