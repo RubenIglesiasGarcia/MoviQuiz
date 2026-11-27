@@ -54,3 +54,6 @@ Gala de resultados modal sincronizada (10 s), animaciones de avatares mediante u
 
 ### Console Experience polish
 Rounds use a synchronized three-second server-controlled presentation before the answer clock. Rematches prioritize unseen questions, and longer prompts get a modest reading-time allowance. The TV stage reuses its 3D scene between question phases, uses procedural stage lighting and contact shadows, adapts render resolution to frame timing, and has a fallback on WebGL context loss. The controller confirms inputs and retries WebSocket connections with backoff. Arcade shot/jump animations track the actual server-recorded input timing. Music and crowd-like sound effects are procedural, not recordings. End-to-end browser and physical Cast hardware tests remain necessary; this update does not add new modes or AAA character assets.
+
+## Browser regression checks
+Run `npm install`, `npx playwright install chromium`, `npm run db:local`, and `npm start`. In a separate terminal run `npm run test:browser`. The browser workflow uses a local Worker and D1, two authenticated players and a browser-based TV screen. It checks the lobby QR, a known question across mobile and desktop sizes, and submission/reveal. It does not emulate a physical Chromecast or iOS Safari.

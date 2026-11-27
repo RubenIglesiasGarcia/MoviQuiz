@@ -1,0 +1,22 @@
+name: Browser regression
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - run: npm run db:local
+      - name: Test local Worker with two browsers and TV
+        run: |
+          npx wrangler dev --local --ip 127.0.0.1 --port 8787 > /tmp/mobiquiz-worker.log 2>&1 &
+          pid=$!
+          trap 'kill $pid 2>/dev/null || true; cat /tmp/mobiquiz-worker.log' EXIT
+          npm run test:browser
+        env:
+          WRANGLER_SEND_METRICS: 'false'
