@@ -11,3 +11,16 @@ test('ties, zero scores and empty rankings do not invent a winner',()=>{const p=
 test('stable scene attributes do not cause repeated style changes during a live round',()=>{let writes=0,accent='';const root={dataset:{},style:{getPropertyValue:()=>accent,setProperty:(k,v)=>{accent=v;writes++;}}};applyShowScene(root,state);applyShowScene(root,state);assert.equal(writes,1);assert.equal(root.dataset.showScene,'intro');});
 
 test('competitive drama is grounded in actual ranking and close margins',()=>{const p=[{id:'a',name:'A',score:1500,previousRank:1},{id:'b',name:'B',score:1450,previousRank:0}];assert.equal(competitiveMoment(p).kind,'change');assert.equal(competitiveMoment(p.map((x,i)=>({...x,previousRank:i}))).kind,'close');assert.equal(competitiveMoment([{...p[0],score:3000,previousRank:0},{...p[1],previousRank:1}]),null);assert.equal(competitiveMoment(p.map(x=>({...x,score:1500}))).kind,'tie');assert.equal(competitiveMoment([p[0]]),null);});
+
+import {broadcastShot} from '../public/show-direction.js';
+test('camera uses contextual shots only during safe broadcast windows',()=>{
+ const players=[{id:'a',name:'A',score:800,last:600,stolen:100},{id:'b',name:'B',score:500,last:-100,lost:100}];
+ const s={players,phase:'reveal',revealStarted:100000,revealUntil:110000};
+ assert.deepEqual(broadcastShot(s,.5).ids,['a','b']);
+ assert.equal(broadcastShot(s,3).kind,'wide');
+ assert.equal(broadcastShot(s,.5,false).kind,'wide');
+ assert.equal(broadcastShot({...s,phase:'question',partyStage:'answer'},0,true,true).kind,'wide');
+ assert.equal(broadcastShot({...s,phase:'question',partyStage:'intro',showEvent:{kind:'duel',ids:['a','b']}},1).kind,'rivals');
+ assert.equal(broadcastShot({...s,phase:'finished'},2).kind,'winner');
+ assert.equal(broadcastShot({...s,phase:'finished',players:players.map(p=>({...p,score:800}))},2).kind,'wide');
+});

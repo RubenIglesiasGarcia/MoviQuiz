@@ -41,7 +41,12 @@ export function motionPose(kind,t,personality='',seed=0,motion=true){
  // Soft breathing and follow-through fade in as the one-shot action ends.
  const idle=kind==='idle'?1:base,b=Math.sin(time*2.4+seed);
  p[0]+=.012*b*idle;p[2]+=.045*Math.sin(time*.8+seed)*idle;p[4]+=.022*Math.sin(time*.86)*idle;p[5]+=.065*Math.sin(time*.54+seed)*idle;p[6]+=.035*Math.sin(time*1.5+seed)*idle;p[7]+=.045*Math.sin(time*1.6)*idle;p[9]-=.045*Math.sin(time*1.6)*idle;
- if(personality==='sleepy')p[4]+=.10*idle;if(personality==='cool')p[6]-=.07*idle;
+ // Small individual gestures, with no extra geometry or animation mixer.
+ const cycle=((time+Math.abs(seed)%7)%9+9)%9,gesture=Math.sin(Math.PI*clamp((cycle-5.4)/1.8))*idle;
+ if(kind==='idle'){p[3]+=.032*Math.sin(time*1.1+seed);p[5]+=.14*gesture;p[6]-=.055*gesture;p[7]-=.14*gesture;}
+ if(personality==='sleepy'){p[4]+=.10*idle+.12*gesture;}if(personality==='cool'){p[6]-=.07*idle;p[9]-=.13*gesture;}
+ if(personality==='dramatic'){p[6]+=.10*gesture;p[8]-=.25*gesture;p[10]+=.25*gesture;}
+ if(personality==='champion'){p[9]-=.25*gesture;p[10]+=.35*gesture;}
  if(personality==='dancer'){p[3]+=.035*Math.sin(time*2.8)*idle;p[8]-=.08*Math.sin(time*2.8)*idle;p[10]+=.08*Math.sin(time*2.8)*idle;}
  if(final){const e=smooth((time-2.1)/1.1);if(kind==='podium-win'){p[4]-=.08*e;p[8]-=(.58+.06*b)*e;p[10]+=(.58+.06*b)*e;}else if(kind==='podium-silver'){p[10]+=.22*e;p[4]-=.045*e;}else if(kind==='podium-bronze'){p[6]+=.06*e;}else{p[1]+=.09*e;p[4]+=.15*e;}}
  return p;

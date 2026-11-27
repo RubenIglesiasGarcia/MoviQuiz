@@ -137,7 +137,7 @@ export function showEventInfo(s){
  const event=s?.showEvent;if(!event)return null;
  const names=(s.players||[]).filter(p=>event.ids.includes(p.id)).map(p=>p.name).join(' · ');
  const types={duel:{title:'DUELO DE RIVALES',icon:'⚔',joke:'Aquí hay asuntos pendientes.',rule:'Todos jugáis; el más rápido del duelo que acierte gana 150 puntos extra.'},comeback:{title:'LA REVANCHA',icon:'↗',joke:'Se abre la operación remontada.',rule:'Quienes van últimos ganan 150 puntos extra si aciertan.'},shield:{title:'EL INTOCABLE',icon:'🛡',joke:'Hoy el seguro de puntos viene incluido.',rule:'Los protegidos no pueden perder puntos por un robo en esta ronda.'}};
- const info=types[event.kind];return info?{...info,names}:null;
+ const info=types[event.kind];return info?{...info,names,rule:info.rule+(s.question?.party==='final'?' La pregunta mantiene su multiplicador ×'+(s.question.multiplier||2)+'.':'')}:null;
 }
 
  // Pure editorial scheduler. No server clock changes and no antics during active play.
@@ -158,3 +158,29 @@ export function showEventInfo(s){
   if(t<start||t>=start+duration)return idle;
   return {act:item.act,progress:(t-start)/duration,duration,sound:item.sound,key:[s.matchId,s.phase,index,slot,item.act].join(':')};
  }
+
+// Presentation-only camera scheduler. Never narrow the frame during live play or standings.
+export function broadcastShot(state,elapsed,motion=true,presenting=false){
+ const wide={kind:'wide',ids:[],zoom:1,height:1.45};
+ if(!motion||!state)return wide;
+ const t=Math.max(0,elapsed),players=state.players||[],event=state.showEvent;
+ if(state.phase==='finished'){
+  const leaders=players.filter(p=>p.score===players[0]?.score);
+  return t<5&&leaders.length===1?{kind:'winner',ids:[leaders[0].id],zoom:.85,height:1.62}:wide;
+ }
+ if(state.phase==='reveal'){
+  const timeline=resultTimeline(state,(state.revealStarted||((state.revealUntil||10000)-10000))+t*1000);
+  if(timeline.stage!=='answer')return wide;
+  const thief=players.find(p=>p.stolen>0),victim=players.find(p=>p.lost>0);
+  if(thief&&victim&&thief.id!==victim.id)return {kind:'rivals',ids:[thief.id,victim.id],zoom:.91,height:1.55};
+  const bonus=players.find(p=>p.eventBonus>0),best=resultSpotlight(players);
+  const ids=bonus?[bonus.id]:best?.kind==='round'?best.ids:[];
+  return ids.length?{kind:'reaction',ids,zoom:.83,height:1.58}:wide;
+ }
+ if(state.phase==='question'&&state.partyStage==='intro'){
+  if(event?.ids?.length===2&&t<2.8)return {kind:'rivals',ids:event.ids,zoom:.92,height:1.58};
+  if(presenting&&t<4)return {kind:'host',ids:[],zoom:.87,height:1.72};
+ }
+ if(state.phase==='lobby'&&presenting&&t<4)return {kind:'host',ids:[],zoom:.9,height:1.7};
+ return wide;
+}

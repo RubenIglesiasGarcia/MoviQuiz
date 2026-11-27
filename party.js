@@ -41,6 +41,7 @@ const isMystery=q=>q.media?.effect==='pixel'||q.media?.type==='animation'||q.med
 const normalizePrompt=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^\p{L}\p{N}]/gu,'');
 export const questionKey=q=>typeof q==='string'?normalizePrompt(q):normalizePrompt(q?.prompt)+(q?.media?.url?'|'+q.media.url:'')+(q?.mode==='order'?'|'+(q.options||[]).map(normalizePrompt).sort().join('|'):'');
 export function questionFingerprint(q){let a=2166136261,b=2246822519;for(const c of questionKey(q)){a=Math.imul(a^c.codePointAt(0),16777619);b=Math.imul(b^c.codePointAt(0),3266489917);}return 'fp:'+ (a>>>0).toString(16)+':'+(b>>>0).toString(16);}
+export function mergeRoomHistory(...lists){return [...new Set(lists.flat().filter(x=>typeof x==='string'&&x.startsWith('fp:')))].slice(0,600);}
 const recentSet=xs=>new Set(xs.map(x=>String(x).startsWith('fp:')?x:questionFingerprint(x)));
 const recentRank=xs=>new Map([...recentSet(xs)].map((key,i)=>[key,i]));
 function uniqueQuestions(items){const seen=new Set();return items.filter(q=>{const key=questionKey(q);if(seen.has(key))return false;seen.add(key);return true;});}
@@ -61,6 +62,11 @@ export function chooseShowEvent(r){
  const min=players.at(-1).score,max=players[0].score;
  if(q.party==='steal'&&previous.filter(x=>x.party==='steal').length===1&&min<max){
   const ranked=players.filter(p=>p.score>0);if(!ranked.length)return null;let seed=0;for(const ch of String(r.matchId||''))seed=(Math.imul(seed,31)+ch.charCodeAt(0))>>>0;return {kind:'shield',ids:[ranked[seed%ranked.length].userId]};
+ }
+ // Late head-to-head: close leaders compete for a small bonus; everyone still answers.
+ if(q.party==='final'&&!previous.some(x=>x.party==='final')&&max>0&&max-players[1].score<=Math.max(400,max*.12)){
+  if(players[2]&&players[1].score===players[2].score)return null;
+  return {kind:'duel',ids:players.slice(0,2).map(p=>p.userId)};
  }
  if(q.party!=='warmup'||previous.filter(x=>x.party==='warmup').length!==2||q.multiplier===2||min===max)return null;
  const bottom=players.filter(p=>p.score===min);

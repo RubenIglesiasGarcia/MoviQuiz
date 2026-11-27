@@ -13,3 +13,15 @@ test('buzzer miss costs 100 points once and waiting players keep their points',(
 test('buzzer penalties cannot make a balance negative',()=>{for(const score of [0,35,100,400]){const r=buzzerRoom();r.players.a.score=score;begin(r,1000);buzz(r,{id:'a'},1100);answer(r,{id:'a'},0,1300);assert.equal(r.answers.a.points,Math.min(100,score)?-Math.min(100,score):0);}});
 test('claiming then running out of time has the same penalty even at the overall deadline',()=>{for(const at of [1100,25500]){const r=buzzerRoom();begin(r,1000);buzz(r,{id:'a'},at);const deadline=r.deadline;assert.equal(expireBuzzer(r,deadline-1),false);assert.equal(expireBuzzer(r,deadline),true);assert.equal(r.answers.a.points,-100);assert.equal(r.answers.a.timeout,true);assert.equal(r.answers.b,undefined);assert.equal(expireBuzzer(r,deadline+1),false);assert.equal(r.buzzer,null);}});
 test('never pressing has no penalty',()=>{const r=buzzerRoom();begin(r,1000);assert.equal(expireBuzzer(r,r.deadline),false);assert.deepEqual(r.answers,{});});
+
+import {chooseShowEvent,applyShowEvent,mergeRoomHistory} from '../party.js';
+test('close leaders can duel in the first final without excluding other players',()=>{
+ const q={party:'final',multiplier:2},r={kind:'party',questions:[q],index:0,players:{a:{userId:'a',score:2000},b:{userId:'b',score:1800},c:{userId:'c',score:900}},answers:{a:{correct:true,ms:200,points:2000},b:{correct:true,ms:300,points:1900},c:{correct:true,ms:100,points:2000}}};
+ r.showEvent=chooseShowEvent(r);assert.deepEqual(r.showEvent,{kind:'duel',ids:['a','b']});
+ applyShowEvent(r,q);applyShowEvent(r,q);assert.equal(r.answers.a.points,2150);assert.equal(r.answers.c.points,2000);
+ r.players.c.score=1800;assert.equal(chooseShowEvent(r),null);
+});
+test('group history retains unique recent fingerprints and has a bounded size',()=>{
+ assert.deepEqual(mergeRoomHistory(['fp:a','fp:b'],['fp:b','fp:c','bad']),['fp:a','fp:b','fp:c']);
+ assert.equal(mergeRoomHistory(Array.from({length:800},(_,i)=>'fp:'+i)).length,600);
+});
