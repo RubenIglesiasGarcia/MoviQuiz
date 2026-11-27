@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {actionKinds,actionRound,makeActionPlan,actionBeat,beatDuration,startAction,recordAction,finishAction,actionDuration,actionPoints} from '../public/arcade-rules.js';
-for(const kind of actionKinds)test(kind+' server authoritative timing and scoring',()=>{
+for(const kind of actionKinds.filter(k=>k!=='dodge'&&k!=='volley'))test(kind+' server authoritative timing and scoring',()=>{
  const q=actionRound(kind),r={phase:'question',players:{a:{},b:{}},answers:{}};
  startAction(r,q,1000);assert.equal(r.deadline,1000+actionDuration(q.plan));
  assert.throws(()=>recordAction(r,'a',q.plan.beats[0].target,0,1100));
@@ -19,7 +19,7 @@ for(const kind of actionKinds)test(kind+' server authoritative timing and scorin
  finishAction(r);assert.ok(r.answers.a.correct);assert.ok(r.answers.a.points>=900);assert.equal(r.action.players.a.bestCombo,q.plan.beats.length);assert.equal(r.answers.b.points,0);assert.equal(r.answers.b.timeout,true);
 });
 test('challenge ramps up and only precise actions earn full points',()=>{
- for(const kind of actionKinds){const p=makeActionPlan(kind,()=>.3),first=p.beats[0],last=p.beats.at(-1);
+ for(const kind of actionKinds.filter(k=>k!=='dodge'&&k!=='volley')){const p=makeActionPlan(kind,()=>.3),first=p.beats[0],last=p.beats.at(-1);
  assert.ok(last.duration<first.duration);assert.ok(last.window<first.window);
  assert.equal(actionPoints(kind,last,last.target,last.center),150);
  assert.equal(actionPoints(kind,last,last.target,0),0);

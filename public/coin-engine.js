@@ -1,4 +1,5 @@
 // Server-authoritative continuous movement; no frame-rate or client position trust.
+import {startSkill,advanceSkill,controlSkill,finishSkill} from './skill-arena.js';
 import {arenaHazard} from './arena-events.js';
 export const COIN_DURATION=30000,COIN_LEAD=3500,COIN_LEASE=550,COIN_MIN_INPUT=160;
 export const COIN_BOUNDS={x:6,z:4};
@@ -68,11 +69,11 @@ function paintTerritory(action,ids,time,dt){
   world.owners[tile.id]=winner.colorIndex;world.claimedAt[tile.id]=time;winner.hits++;winner.score=winner.hits*TERRITORY_TILE_POINTS;
  }
 }
-export function startCoins(action){
+export function startCoins(action){if(['volley','meteor'].includes(action.plan.variant))return startSkill(action);
  const ids=Object.keys(action.players).sort(),count=ids.length;action.world={tick:action.started+action.plan.lead,taken:{},...(action.plan.variant==='territory'?{owners:{},claimedAt:{}}:['sofa','lava','bomb','splash'].includes(action.plan.variant)?{holder:null,lastAward:0,bombCycle:-1,passAt:0}:{})};
  ids.forEach((id,i)=>{const a=2*Math.PI*i/Math.max(1,count),p=action.players[id];Object.assign(p,{x:Math.cos(a)*(action.plan.variant==='splash'?1.65:5.05),z:Math.sin(a)*(action.plan.variant==='splash'?1.65:3.15),vx:0,vz:0,until:0,lastControl:0,boostUntil:0,boostReady:0,score:0,hits:0,attempts:0,colorIndex:i,repaints:0,bumps:0,bumped:0,safeUntil:0,bumpReady:0,bumpedAt:0,bumpedBy:-1,fallSafe:0,carry:[]});});
 }
-export function advanceCoins(action,now){
+export function advanceCoins(action,now){if(['volley','meteor'].includes(action.plan.variant))return advanceSkill(action,now);
  const world=action.world;if(!world)return;
  const begin=action.started+action.plan.lead,end=Math.min(now,begin+action.plan.duration);if(end<=world.tick)return;
  const ids=Object.keys(action.players).sort();
@@ -83,7 +84,7 @@ export function advanceCoins(action,now){
   }
   if(action.plan.variant==='territory'){paintTerritory(action,ids,time,dt);world.tick=time;continue;}
   if(action.plan.variant==='sofa'){scoreSofa(action,ids,time,elapsed);world.tick=time;continue;}
-  if(['lava','bomb'].includes(action.plan.variant)){arenaHazard(action,ids,time,elapsed);world.tick=time;continue;}
+  if(['lava','bomb'].includes(action.plan.variant)){shoveSofa(action,ids,time);arenaHazard(action,ids,time,elapsed);world.tick=time;continue;}
   if(action.plan.variant==='splash'){scoreSplash(action,ids,time,elapsed);world.tick=time;continue;}
   if(action.plan.variant==='tuna'){shoveSofa(action,ids,time);for(const id of ids){const p=action.players[id];if(p.until>time&&p.carry.length&&Math.hypot(p.x,p.z)<.85){p.score+=p.carry.reduce((a,b)=>a+b,0);p.hits+=p.carry.length;p.carry=[];}}}
   // Resolve contested pickups by nearest player; stable tie-break, no input order advantage.
@@ -94,16 +95,16 @@ export function advanceCoins(action,now){
   world.tick=time;
  }
 }
-export function controlCoins(action,id,input,now){
+export function controlCoins(action,id,input,now){if(['volley','meteor'].includes(action.plan.variant))return controlSkill(action,id,input,now);
  const p=action.players[id],start=action.started+action.plan.lead;if(!p||typeof input!=='string'||now<start||now>=start+action.plan.duration)throw Error('La prueba no está activa.');
  const match=/^(-?\d{1,3}),(-?\d{1,3}),([01])$/.exec(input);if(!match)throw Error('Control inválido.');
  const x=Number(match[1]),z=Number(match[2]);if(Math.abs(x)>100||Math.abs(z)>100)throw Error('Control inválido.');
  if(p.lastControl&&now-p.lastControl<COIN_MIN_INPUT)throw Error('Control demasiado rápido.');
- advanceCoins(action,now);const norm=Math.max(100,Math.hypot(x,z));p.vx=x/norm;p.vz=z/norm;p.until=now+COIN_LEASE;p.lastControl=now;if(x||z)p.attempts++;
+ advanceCoins(action,now);const norm=Math.max(100,Math.hypot(x,z));p.vx=x/norm;p.vz=z/norm;p.until=now+COIN_LEASE;p.lastControl=now;if(x||z||['lava','bomb'].includes(action.plan.variant))p.attempts++;
  if(match[3]==='1'&&(x||z)&&now>=p.boostReady){p.boostUntil=now+450;p.boostReady=now+2200;}
  return 0;
 }
-export function finishCoins(r){
+export function finishCoins(r){if(['volley','meteor'].includes(r.action.plan.variant))return finishSkill(r);
  advanceCoins(r.action,r.action.started+r.action.plan.lead+r.action.plan.duration);
  for(const [id,p] of Object.entries(r.action.players))r.answers[id]={correct:p.hits>=5,points:p.score,ms:null,timeout:p.attempts===0,arcadeHits:p.hits,arcadeAttempts:p.attempts};
 }

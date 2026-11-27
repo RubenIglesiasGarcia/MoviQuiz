@@ -1,13 +1,13 @@
 // Server-owned arena hazards. The same coordinates and clock are used by every screen.
 export const HAZARD_PERIOD=6000;
-export function hazardPlan(kind){return {kind:'coins',variant:kind,version:1,lead:3500,duration:36000,interval:36000,beats:[],coins:[]};}
+export function hazardPlan(kind){return {kind:'coins',variant:kind,version:kind==='lava'?2:1,lead:3500,duration:36000,interval:36000,beats:[],coins:[]};}
 export function lavaZone(elapsed){const cycle=Math.max(0,Math.floor(elapsed/HAZARD_PERIOD)),t=Math.max(0,elapsed)%HAZARD_PERIOD;return {axis:cycle%2?'x':'z',side:Math.floor(cycle/2)%2?-1:1,hot:t>=2200&&t<4900,warning:t<2200,cycle};}
 export function inLava(x,z,h){return (h.axis==='x'?x:z)*h.side>.65;}
 export function wanderingParcel(elapsed){const t=elapsed/1000;return {x:4.6*Math.sin(t*.85),z:2.95*Math.cos(t*1.2)};}
 export function arenaHazard(action,ids,time,elapsed){
  const w=action.world,ps=ids.map(id=>action.players[id]),cycle=Math.floor(elapsed/HAZARD_PERIOD),active=ps.filter(p=>p.attempts&&p.until>time);
  if(action.plan.variant==='lava'){
-  const zone=lavaZone(elapsed);for(const p of active){if(zone.hot&&inLava(p.x,p.z,zone)&&p.hitCycle!==cycle){p.hitCycle=cycle;p.bumpedAt=time;p.score=Math.max(0,p.score-100);p.bumped++;}}
+  const zone=lavaZone(elapsed);if(action.plan.version===2){for(const p of active){const hot=zone.hot&&inLava(p.x,p.z,zone),dt=Math.min(50,Math.max(0,time-(p.lavaTick??time-50)));p.lavaTick=time;p.safeMs=(p.safeMs||0)+(hot?0:dt);p.burnMs=(p.burnMs||0)+(hot?dt:0);p.burning=hot;p.score=Math.max(0,Math.floor(p.safeMs*.065)-Math.floor(p.burnMs*.22));p.hits=Math.floor(p.safeMs/1000);if(hot&&time-(p.burnFlashAt||0)>=500){p.burnFlashAt=time;p.bumpedAt=time;p.bumped=(p.bumped||0)+1;}}return;}for(const p of active){if(zone.hot&&inLava(p.x,p.z,zone)&&p.hitCycle!==cycle){p.hitCycle=cycle;p.bumpedAt=time;p.score=Math.max(0,p.score-100);p.bumped++;}}
   if(Math.floor(elapsed/1000)>w.lastAward){w.lastAward=Math.floor(elapsed/1000);for(const p of active)if(!zone.hot||!inLava(p.x,p.z,zone)){p.hits++;p.score+=45;}}
  }else{
   if(ps.length===1){const p=active[0],spot=wanderingParcel(elapsed);w.holder=null;if(p){const hit=Math.hypot(p.x-spot.x,p.z-spot.z)<.7;if(hit&&time-(p.bumpedAt||0)>1100){p.score=Math.max(0,p.score-100);p.bumped++;p.bumpedAt=time;}if(Math.floor(elapsed/1000)>w.lastAward){w.lastAward=Math.floor(elapsed/1000);if(!hit){p.hits++;p.score+=40;}}}return;}

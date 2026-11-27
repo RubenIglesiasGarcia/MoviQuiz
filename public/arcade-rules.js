@@ -1,4 +1,5 @@
 // Shared deterministic arcade timing. The server grades all input with its own clock.
+import {skillPlan} from './skill-arena.js';
 import {hazardPlan} from './arena-events.js';
 import {coinPlan,tunaPlan,territoryPlan,sofaPlan,startCoins,controlCoins,finishCoins} from './coin-engine.js';
 export const actionKinds=['dash','dodge','hoops','volley'];
@@ -6,18 +7,18 @@ export const isAction=kind=>kind==='coins'||kind==='territory'||kind==='sofa'||k
 export const actionMeta={
  tuna:{title:'OPERACIÓN ATÚN',subtitle:'Recoge hasta tres latas y llévalas al comedero central. Un turbo contra otro jugador puede robarle una lata.',category:'Agilidad'},
  splash:{title:'EMPUJÓN Y CHAPUZÓN',subtitle:'Mantente en la plataforma que se hace más pequeña. Usa turbo contra los rivales y mándalos al agua.',category:'Agilidad'},
- lava:{title:'EL SUELO ES LAVA',subtitle:'Corre a la zona segura antes de que se encienda el suelo. Sobrevive y no te achicharres los pies.',category:'Agilidad'},
- bomb:{title:'PAQUETE SOSPECHOSO',subtitle:'Si llevas el paquete, acércate a otro jugador para pasárselo. ¡No te quedes con él cuando explote!',category:'Agilidad'},
+ lava:{title:'EL SUELO ES LAVA',subtitle:'Cada instante a salvo suma y cada quemadura resta. Usa turbo para empujar rivales.',category:'Agilidad'},
+ bomb:{title:'PAQUETE SOSPECHOSO',subtitle:'Acércate a un rival para pasarle el paquete. Usa turbo para empujar y esquiva la explosión.',category:'Agilidad'},
  sofa:{title:'REY DEL SOFÁ',subtitle:'¡El sofá es tuyo! Acércate al trono, mantén el puesto y usa el turbo para apartar a tus rivales. ¡Cambia de sitio cada 8 segundos!',category:'Agilidad'},
  territory:{title:'GUERRA DE COLORES',subtitle:'Pinta el suelo de tu color, roba las casillas de tus rivales y usa el turbo. Gana quien controla más terreno al acabar.',category:'Agilidad'},
  coins:{title:'FIEBRE DEL ORO',subtitle:'Muévete libremente, esquiva las barreras y recoge más monedas que tus rivales.',category:'Agilidad'},
  dash:{title:'CARRERA DE VALLAS',subtitle:'Esquiva por los lados o salta la valla en el momento justo.',steps:12,interval:1750,category:'Agilidad'},
- dodge:{title:'LLUVIA DE METEORITOS',subtitle:'Observa los meteoritos y salta al carril que quede libre.',steps:12,interval:1700,category:'Reflejos'},
- volley:{title:'VOLEY · PUNTO DE ORO',subtitle:'Lee la jugada: recibe el saque, coloca, remata o bloquea. Pulsa el gesto correcto cuando el balón llegue a la zona verde.',steps:12,interval:2200,category:'Deportes'},
- hoops:{title:'CANASTA ESTELAR',subtitle:'Lanza cuando el indicador atraviese la zona verde.',steps:10,interval:1900,category:'Deportes'}
+ dodge:{title:'LLUVIA DE METEORITOS',subtitle:'Elige un carril antes del impacto. Si ya estás a salvo, no hace falta moverte.',steps:12,interval:1700,category:'Reflejos'},
+ volley:{title:'VOLEY · QUE NO CAIGA',subtitle:'Muévete a izquierda y derecha, llega debajo del balón y mantén la mayor racha de toques. Cada toque acelera el juego.',steps:12,interval:2200,category:'Deportes'},
+ hoops:{title:'CANASTA ESTELAR',subtitle:'Afina el lanzamiento: la ventana cambia y se estrecha. El centro dorado vale más.',steps:12,interval:1750,category:'Deportes'}
 };
 export function makeActionPlan(kind,random=Math.random){
- if(kind==='tuna')return tunaPlan(random);if(kind==='lava'||kind==='bomb'||kind==='splash')return hazardPlan(kind);if(kind==='sofa')return sofaPlan(random);if(kind==='territory')return territoryPlan();if(kind==='coins')return coinPlan(random);const m=actionMeta[kind];if(!m)throw Error('Prueba desconocida.');
+ if(kind==='volley'||kind==='dodge')return skillPlan(kind,random);if(kind==='tuna')return tunaPlan(random);if(kind==='lava'||kind==='bomb'||kind==='splash')return hazardPlan(kind);if(kind==='sofa')return sofaPlan(random);if(kind==='territory')return territoryPlan();if(kind==='coins')return coinPlan(random);const m=actionMeta[kind];if(!m)throw Error('Prueba desconocida.');
  let prev='',repeat=0;
  const beats=Array.from({length:m.steps},(_,i)=>{
   const level=Math.min(3,Math.floor(i*4/m.steps)),duration=m.interval-level*130;
@@ -25,8 +26,8 @@ export function makeActionPlan(kind,random=Math.random){
   let target=kind==='volley'?(i%3===0?(random()<.5?'receive':'block'):i%3===1?'set':'spike'):kind==='hoops'?'shoot':choices[Math.min(2,Math.floor(random()*3))];
   if(kind!=='hoops'&&kind!=='volley'&&target===prev&&repeat>=1)target=choices[(choices.indexOf(target)+1+Math.floor(random()*2))%3];
   repeat=target===prev?repeat+1:0;prev=target;
-  const center=kind==='volley'?Math.round(duration*(.56+random()*.16)):kind==='hoops'?Math.round(duration*(.43+random()*.20)):Math.round(duration*.70);
-  const window=kind==='volley'?[460,390,325,275][level]:kind==='hoops'?[300,250,205,175][level]:kind==='dash'?[430,375,310,260][level]:[530,450,380,320][level];
+  const center=kind==='volley'?Math.round(duration*(.56+random()*.16)):kind==='hoops'?Math.round(duration*(.32+random()*.40)):Math.round(duration*.70);
+  const window=kind==='volley'?[460,390,325,275][level]:kind==='hoops'?[205,165,125,95][level]:kind==='dash'?[430,375,310,260][level]:[530,450,380,320][level];
   return {target,center,window,duration,level};
  });
  return {version:2,kind,lead:3500,interval:m.interval,beats};
@@ -45,7 +46,7 @@ export function actionPoints(kind,beat,input,elapsed){
  const error=Math.abs(elapsed-beat.center);
  if(error<=beat.window*.42)return 150;
  if(error<=beat.window)return 100;
- if((kind==='hoops'||kind==='volley')&&error<=beat.window*1.65)return 45;
+ if(kind==='volley'&&error<=beat.window*1.65)return 45;if(kind==='hoops'&&error<=beat.window*1.18)return 35;
  return 0;
 }
 export function actionRound(kind){const m=actionMeta[kind],plan=makeActionPlan(kind);return {party:kind,mode:'fast',category:m.category,difficulty:'Difícil',prompt:m.subtitle,seconds:Math.ceil(actionDuration(plan)/1000),plan,correct:null,options:[]};}
