@@ -3430,8 +3430,64 @@ themes.push({
     }
   ]
 });
-const entries=[{id:"6d656d657332303236313131",title:"Memes e Internet",description:"Memes clásicos, cultura de Internet y tendencias de 2026.",art:"memes",questions},...themes];
-const catalog=new Map(entries.map(({questions,...meta})=>[meta.id,{meta:{...meta,visibility:"public",count:questions.length,updated:Date.UTC(2026,10,26),owned:false,builtin:true},questions}]));
+// Community pack curated for Chubi; stable ID for future additions.
+const cristinaPack={
+  "id": "6372697374696e6132303236",
+  "title": "Cumple de Cristina",
+  "description": "¿Cuánto sabes realmente de Cristina? Demuestra que la conoces mejor que el resto.",
+  "author": "Chubi",
+  "art": "general",
+  "questions": [
+    {
+      "id": "cumple-cristina-1",
+      "category": "Cumple de Cristina",
+      "mode": "choice",
+      "difficulty": "Media",
+      "prompt": "¿Qué alimento detecta Cristina en cantidades diminutas al segundo, del asco que le da?",
+      "options": [
+        "Canela",
+        "Anchoas",
+        "Fuet",
+        "Cilantro"
+      ],
+      "correct": 0,
+      "seconds": 25
+    },
+    {
+      "id": "cumple-cristina-2",
+      "category": "Cumple de Cristina",
+      "mode": "choice",
+      "difficulty": "Media",
+      "prompt": "¿De quién se disfrazó Cristina en un carnaval en Denia?",
+      "options": [
+        "Pétalo",
+        "Burbuja",
+        "Cactus",
+        "El Profesor"
+      ],
+      "correct": 3,
+      "seconds": 25
+    },
+    {
+      "id": "cumple-cristina-3",
+      "category": "Cumple de Cristina",
+      "mode": "choice",
+      "difficulty": "Media",
+      "prompt": "¿En qué equipo juega Cristina actualmente al voleibol?",
+      "options": [
+        "Fuenlabrada",
+        "Cubas",
+        "Valdemoro",
+        "Carpe Diem"
+      ],
+      "correct": 1,
+      "seconds": 25
+    }
+  ],
+  "updated": 1795737600000
+};
+const entries=[{id:"6d656d657332303236313131",title:"Memes e Internet",description:"Memes clásicos, cultura de Internet y tendencias de 2026.",art:"memes",questions},...themes,cristinaPack];
+const catalog=new Map(entries.map(({questions,...meta})=>[meta.id,{meta:{...meta,visibility:"public",count:questions.length,updated:meta.updated??Date.UTC(2026,10,26),owned:false,builtin:true},questions}]));
 export const officialPacks=[...catalog.values()].map(x=>x.meta);
 export const memePack=officialPacks[0];
 export const builtinPack=id=>{const entry=catalog.get(id);return entry?{...entry.meta,questions:entry.questions}:null;};
