@@ -1,0 +1,2 @@
+export const questionReportReasons={'incorrect':'La respuesta correcta parece errónea','ambiguous':'Hay varias respuestas posibles','wording':'El enunciado es confuso','media':'La imagen, vídeo o audio no funciona','duplicate':'Pregunta repetida'};
+export function canReportQuestion(room,u,data){return !!u?.id&&!!room.players[u.id]&&room.phase==='reveal'&&room.matchId===data.matchId&&room.questions[room.index]?.id===data.questionId&&!['custom','draw','bluff'].includes(room.questions[room.index]?.party)&&Object.hasOwn(questionReportReasons,data.reason);}

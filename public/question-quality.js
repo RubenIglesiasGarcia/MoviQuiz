@@ -1,0 +1,4 @@
+const normalize=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().match(/[\p{L}\p{N}]+/gu)||[];
+const filler=new Set(['el','la','los','las','un','una','unos','unas','de','del','en','por','al','a','que','cual','quien','se','es','son','fue']);
+export function semanticQuestionKey(q){if(!q||typeof q!=='object'||q.media||q.mode!=='choice'||!Array.isArray(q.options))return null;const words=normalize(q.prompt).filter(w=>!filler.has(w));if(words.length<3)return null;const answer=normalize(q.options[q.correct]).join(' ');if(!answer)return null;return [...words].sort().join(' ')+'|'+answer;}
+export function deduplicatePrompts(items,key){const exact=new Set(),semantic=new Set();return items.filter(q=>{const a=key(q),b=semanticQuestionKey(q);if(exact.has(a)||(b&&semantic.has(b)))return false;exact.add(a);if(b)semantic.add(b);return true;});}

@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS question_reports (reporter TEXT NOT NULL, fingerprint TEXT NOT NULL, reason TEXT NOT NULL, prompt TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY(reporter,fingerprint));
