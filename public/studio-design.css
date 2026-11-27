@@ -312,3 +312,28 @@ body.mq-studio #app:is(.setup,.profile,.wardrobe,.join,.login){padding-top:8px;p
 @media(max-width:800px){body.mq-studio:has(#app:is(.setup,.profile,.wardrobe,.join,.login))>footer{display:none}.mq-studio #app.profile .screen-tabs{gap:4px}.mq-studio #app.profile .screen-tabs>button{font-size:11px;min-height:32px;padding:5px 7px}.mq-studio #app.profile .profile-page>.panel{padding:9px}.mq-studio #app.profile .bar-row{padding:5px 0}.mq-studio #app.profile .profile-stat-rows{gap:3px}body.paged-lobby #app .lobby-page>.tag,body.paged-lobby #app .lobby-page>p:not(.sub){font-size:12px;margin:0}body.paged-lobby #app .lobby-page .room-code{font-size:34px}body.paged-lobby #app .lobby-page .round-journey{margin:2px 0}body.paged-lobby #header{padding:6px 10px}body.paged-lobby>footer{display:none}body.paged-lobby #app{padding:7px 10px;margin:0 auto}}
 
 .category-selection-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.category-selection-actions button{min-height:40px}.mq-studio .pack-category-chip{justify-content:space-between;min-height:42px}.mq-studio .pack-category-chip .category-emblem{flex:1;justify-content:flex-start}.startup-card{max-width:440px;margin:8vh auto;padding:20px;text-align:center}.startup-card button{margin-top:12px;min-height:44px}
+
+/* Outside the live round, allow normal document scrolling and spacious editing. */
+body.mq-studio:has(#app:is(.setup,.profile,.wardrobe)):not(.quiz-controller):not(.order-controller):not(.arcade-viewport){overflow-y:auto;height:auto;position:static}
+.mq-studio #app.setup .mode-setup{padding:clamp(16px,3vw,26px)}.mq-studio #app.setup .mode-setup>.stack{gap:16px}.mq-studio #app.setup .setup-page{gap:12px}.mq-studio #app.setup .setup-bottom{position:sticky;bottom:0;padding:10px 0;background:#142239;z-index:4}.mq-studio #app.setup .mode-setup>.tag,.mq-studio #app.setup .mode-setup>p.sub{display:block}
+.mq-studio #app.wardrobe .wardrobe-showroom{height:clamp(220px,38dvh,360px);min-height:220px}.mq-studio #app.wardrobe .wardrobe-choice{padding:9px}.mq-studio #app.wardrobe .wardrobe-choice .wardrobe-sample{max-height:none}.mq-studio #app.wardrobe .wardrobe-header p{display:block}
+.mq-studio #app.profile .profile-identity{margin:16px 0}.mq-studio #app.profile .stat-grid,.mq-studio #app.profile .stats-grid{gap:12px}
+@media(max-width:800px){.mq-studio #app.setup .mode-setup .host-preview{height:150px}.mq-studio #app.setup .mode-setup .mode-ticket{min-height:88px}.mq-studio #app.profile .stats-grid{grid-template-columns:1fr}}
+/* Live-round sizing keeps the outer viewport fixed, shrinking content only when necessary. */
+body.quiz-controller #round>.quiz-prompt,body.quiz-controller #round>#answers{overflow:hidden;min-height:0;scrollbar-width:none}
+body.quiz-controller .quiz-prompt>*{zoom:var(--quiz-density,1)}
+body.quiz-controller #answers>*{zoom:var(--quiz-density,1)}
+body.quiz-controller #answers select{width:100%;min-height:44px;font-size:16px}
+body.quiz-controller #round .draw-board{min-height:0;display:grid;gap:5px;justify-items:center;width:100%}
+body.quiz-controller #round .draw-board canvas{display:block;max-width:100%;width:auto;height:clamp(80px,25dvh,240px);object-fit:contain;touch-action:none}
+body.quiz-controller #round .draw-tools{display:flex;flex-wrap:wrap;justify-content:center;gap:4px}
+body.quiz-controller #round .draw-tools button{min-height:32px;min-width:32px}
+body.quiz-controller #app>.host-controls{flex:none;margin:0;position:static}
+body.order-controller #round h2,body.order-controller #round .media,body.order-controller #round .sort-wrap{overflow:hidden;overscroll-behavior:none}
+body.order-controller #round .sort-wrap{touch-action:none}
+body.order-controller #round .sortable-list .sort-tile{height:var(--order-tile-height,44px);min-height:0;box-sizing:border-box;gap:4px}
+body.order-controller #round .sort-tile :is(.sort-grip,.sort-up,.sort-down){min-height:0;height:100%;padding:2px}
+body.order-controller #round .sort-label{font-size:clamp(12px,3.3vw,15px);line-height:1.12;overflow-wrap:anywhere}
+body.order-controller #round .sort-wrap .sortable-list{gap:4px}
+@media(min-width:801px){body.order-controller #round .sort-label{font-size:clamp(14px,1.8vw,20px)}}
+@media(max-height:500px){body.order-controller #round .sort-label{font-size:12px}body.quiz-controller #round .draw-board canvas{height:clamp(70px,23dvh,150px)}}
