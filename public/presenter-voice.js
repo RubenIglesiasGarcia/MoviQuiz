@@ -42,14 +42,14 @@ export async function updateRecordedPresenter(s,offset,mountCharacter,enabled=tr
  const match=[s.code,s.matchId].join(':');if(match!==matchKey){stopPresenter();matchKey=match;lastLeader=null;seen.clear();eventKey='';}
  const slot=s.phase==='finished'?Math.max(0,Math.floor((Date.now()+offset-(s.finishedAt||Date.now()))/8500)):0;const key=[match,s.phase,s.index,s.partyStage==='intro'?'intro':'',slot].join(':');
  clearTimeout(pendingTimer);if(key===eventKey)return;
- const moment=presenterMoment(s,lastLeader,slot);
+ const moment=presenterMoment(s,lastLeader,slot),intro=s.phase==='question'&&s.partyStage==='intro',quiet=intro?(s.introPause||0):0;
  // Never interrupt an already-started sentence merely because the game moved on.
  // If another announcement is due, retry only while this same phase is still current.
- if(utterance&&active&&presenterEnabled()&&enabled){clearTimeout(pendingTimer);pendingTimer=setTimeout(()=>{if(eventKey===key)return;updateRecordedPresenter(s,offset,mountCharacter,enabled);},150);return;}
+ if(utterance&&active&&presenterEnabled()&&enabled&&!intro&&s.phase!=='question'){clearTimeout(pendingTimer);pendingTimer=setTimeout(()=>{if(eventKey===key)return;updateRecordedPresenter(s,offset,mountCharacter,enabled);},150);return;}
  eventKey=key;stopPresenter();if(s.phase==='reveal'&&s.players?.[0])lastLeader=s.players[0].id;
  if(!moment||seen.has(key))return;seen.add(key);
  const deadline=s.phase==='reveal'?s.revealUntil:s.phase==='question'?s.deadline:s.phase==='finished'&&s.finishedAt?s.finishedAt+(slot+1)*8500:Date.now()+offset+7500;
- const remaining=deadline-Date.now()-offset;if(remaining<950)return;
+ const remaining=deadline-Date.now()-offset,speakingTime=Math.max(0,remaining-quiet);if(speakingTime<950)return;
  const target=s.phase==='reveal'?document.querySelector('.tv-results-overlay[open] .result-show-footer')||document.querySelector('.round-results[open] .result-show-footer'):document.querySelector('#presenter-line')||document.querySelector('#app.screen');
  if(!target)return;
  const banner=node('div','voice-presenter sonny-caption'),portrait=node('div','voice-presenter-avatar'),fallback=node('span','voice-presenter-fallback',s.presenter==='dogs'?'🐕 🐕':'🐈‍⬛'),copy=node('div','voice-presenter-copy');
@@ -58,13 +58,13 @@ export async function updateRecordedPresenter(s,offset,mountCharacter,enabled=tr
  active={banner,moment};const root=document.documentElement;root.dataset.mqPresenting='1';root.dataset.mqSonnyMood=moment.mood;
  // The actual presenter already lives in the studio. Only use a separate portrait during results.
  if(s.phase==='reveal')try{mountCharacter(portrait,{presenter:true,hostType:s.presenter},'idle');}catch{}
- const token=generation,plan=sonnyVoicePlan(moment.text,remaining),duration=Math.max(850,remaining-120);
+ const token=generation,plan=sonnyVoicePlan(moment.text,speakingTime),duration=Math.max(850,remaining-120);
  const endSpeech=()=>{if(token!==generation)return;utterance=null;cancelAnimationFrame(frame);root.dataset.mqSpeaking='0';root.dataset.mqVoicePending='0';root.style.removeProperty('--mq-mouth');portrait.dataset.mouth='0';const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth='0';};
  // Captions have a normal expiry. Active speech is cleaned up by its own end event.
  const clearCaption=()=>{if(token!==generation)return;if(utterance){stopTimer=setTimeout(clearCaption,250);return;}dogPlayback?.stop();dogPlayback=null;cancelAnimationFrame(frame);root.dataset.mqSpeaking='0';root.style.removeProperty('--mq-mouth');active?.banner?.remove();active=null;root.dataset.mqPresenting='0';delete root.dataset.mqSonnyMood;};
  stopTimer=setTimeout(clearCaption,duration);
  if(s.presenter==='dogs'){
- const lines=[moment,...(moment.reply?[moment.reply]:[])],budget=Math.max(0,Math.min(remaining-180,lines.length===2?7200:5900)),weights=lines.map(l=>Math.max(24,l.text.length)),total=weights.reduce((a,b)=>a+b,0),pause=lines.length>1?160:0;
+ const lines=[moment,...(moment.reply?[moment.reply]:[])],budget=Math.max(0,Math.min(speakingTime-180,lines.length===2?7200:5900)),weights=lines.map(l=>Math.max(24,l.text.length)),total=weights.reduce((a,b)=>a+b,0),pause=lines.length>1?160:0;
  const canSpeak=enabled&&presenterEnabled();let index=0,segmentStart=0,phrase=null,pauseUntil=0,finished=false;
  const mouth=amount=>{root.style.setProperty('--mq-mouth',String(amount));portrait.dataset.mouth=String(amount);const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth=String(amount);};
  const showLine=()=>{const l=lines[index];root.dataset.mqDogSpeaker=l.speaker;copy.firstChild.textContent=l.speaker.toUpperCase()+' · EN DIRECTO';copy.lastChild.textContent=l.text;phrase=dogSpeechPlan(l.text,l.speaker,(budget-pause)*weights[index]/total,l.mood||'idle');dogPlayback?.stop();dogPlayback=canSpeak&&presenterEnabled()?playDogSpeech(phrase):null;segmentStart=performance.now();root.dataset.mqSpeaking=dogPlayback?'1':'0';};
@@ -87,6 +87,6 @@ export async function updateRecordedPresenter(s,offset,mountCharacter,enabled=tr
  u.onend=endSpeech;u.onerror=endSpeech;speechSynthesis.speak(u);
  // Some installed voices never fire onend (blocked autoplay or an engine failure). Only
  // recover after a generous watchdog interval, never at the ordinary visual deadline.
- clearTimeout(stopTimer);stopTimer=setTimeout(()=>{if(token!==generation)return;if(utterance){try{speechSynthesis.cancel();}catch{}endSpeech();}clearCaption();},Math.max(duration,plan.estimatedMs+5500));
+ clearTimeout(stopTimer);stopTimer=setTimeout(()=>{if(token!==generation)return;if(utterance){try{speechSynthesis.cancel();}catch{}endSpeech();}clearCaption();},quiet?Math.max(0,speakingTime):Math.max(duration,plan.estimatedMs+5500));
  }catch{endSpeech();}
 }

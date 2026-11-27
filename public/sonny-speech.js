@@ -21,3 +21,9 @@ export function sonnyIntroWindow(text,baseMs){
  if(!text||baseMs<2000)return baseMs;
  return Math.max(baseMs,Math.ceil((speechEstimate(text)+1100)/500)*500);
 }
+
+export const POST_SPEECH_PAUSE=1100;
+// Keep ordinary transitions short, reserving a quiet beat independently of response time.
+export function pacedIntro(text,baseMs){if(!text)return {duration:Math.max(1600,Math.min(baseMs,2200)),pause:POST_SPEECH_PAUSE};const budget=Math.max(2000,speechEstimate(text));return {duration:Math.ceil((budget+POST_SPEECH_PAUSE+350)/250)*250,pause:POST_SPEECH_PAUSE};}
+export function speechBudget(remaining,pause=0){return Math.max(0,remaining-Math.max(0,pause));}
+export function previewDuringIntro(q){return !!q&&['choice','boolean','text','number','order'].includes(q.mode)&&['classic','warmup','order-round','estimate','steal','final','solo-bonus','custom'].includes(q.party||'classic')&&!q.media;}
