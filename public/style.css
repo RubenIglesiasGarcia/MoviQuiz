@@ -817,3 +817,7 @@ body.tv-mode .tv-scoreboard[data-dense=true] .tv-score-avatar .full-character{wi
 @keyframes social-splat{0%,58%{opacity:0;transform:scale(.3)}67%{opacity:1;transform:scale(1.2)}90%{opacity:1}100%{opacity:0}}
 @media(prefers-reduced-motion:no-preference){.social-mini .full-character[data-emote=throw] .full-arm.right{animation:full-throw 2s var(--social-delay,0s) both}.social-mini .full-character[data-emote=hit]{animation:full-hit 2.7s var(--social-delay,0s) both}.social-flying-tomato{animation:social-flight 2.2s var(--social-delay,0s) both}.social-splat{animation:social-splat 3s var(--social-delay,0s) both}.social-mini .full-character[data-emote=celebrate],.social-mini .full-character[data-emote=dance]{animation:full-cheer .7s 2}}
 @media(prefers-reduced-motion:reduce){.social-flying-tomato{left:65%}.social-splat{opacity:1}}
+
+.tv-scoreboard[data-count="1"] .tv-score-row{min-height:32vh;grid-template-columns:3ch minmax(14vh,24vh) minmax(0,1fr) minmax(6ch,auto) minmax(7ch,auto)}.tv-scoreboard[data-count="1"] .tv-score-avatar{height:25vh}.tv-scoreboard[data-count="1"] .tv-score-avatar .full-character{width:17.5vh;height:25vh}.tv-scoreboard[data-count="2"] .tv-score-row{min-height:24vh}.tv-scoreboard[data-count="2"] .tv-score-avatar{height:20vh}.tv-scoreboard[data-count="2"] .tv-score-avatar .full-character{width:14vh;height:20vh}
+@media(prefers-reduced-motion:no-preference){.tv-scoreboard[data-step=points] .full-character[data-emote=hit]{animation:full-hit .9s 1}}
+.stage-social-bubble[hidden]{display:none!important}
