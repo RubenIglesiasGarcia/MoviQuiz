@@ -3,7 +3,7 @@
 export function arcadeViewport(state,playing,action){
  if(!playing||state?.phase!=='question'||state.partyStage==='intro')return '';
  if(action&&state.arcade)return 'action';
- if(state.kind==='arcade'&&['reflex','odd','number-hunt','memory','count'].includes(state.question?.party))return 'quick';
+ if(state.kind==='arcade'&&(['reflex','odd','number-hunt'].includes(state.question?.party)||state.partyStage==='memory-show'&&['memory','count'].includes(state.question?.party)))return 'quick';
  return '';
 }
 export function blockArcadePan(event,root){
