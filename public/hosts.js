@@ -25,21 +25,21 @@ const wild=['¡Estoy super loca!','¡Quiero comer brilli brilli!','¿Me das un p
 // the results (never while explaining the rules). Stable across devices/reconnects.
 function hostSeed(s){let n=0;for(const c of String(s.matchId||s.code||''))n=(Math.imul(n,31)+c.charCodeAt(0))>>>0;return n;}
 const introductions={
- parker:['Vamos con la siguiente prueba.','Atención a las reglas.','Preparad los mandos.','Escuchad bien, que cambia la mecánica.','Tenemos una nueva oportunidad de sumar puntos.'],
- mei:['¡Vamos allá!','¡Esta ronda promete!','¡A por todas!','¡Venga, que se note esa energía!','¡Arrancamos una nueva prueba!']
+ parker:['Vamos con la siguiente prueba.','Atención a las reglas.','Preparad los mandos.','Escuchad bien, que cambia la mecánica.','Tenemos una nueva oportunidad de sumar puntos.','Olfato preparado, que empieza la prueba.','Atentos, que la pelota está en vuestro tejado.','Una vuelta más al parque del conocimiento.','Preparad las patas y los mandos.','Vamos a seguir el rastro de esos puntos.','Que nadie se distraiga con el cartero.','En fila, como en un paseo de domingo.','A ver quién encuentra el premio.'],
+ mei:['¡Vamos allá!','¡Esta ronda promete!','¡A por todas!','¡Venga, que se note esa energía!','¡Arrancamos una nueva prueba!','¡Guau, a por el premio!','¡Tengo la cola a mil por hora!','¡A correr detrás de los puntos!','¡Esta pregunta tiene pinta de galletita!','¡Parker, suelta la pelota, que empezamos!','¡Vamos, manada!','¡Olfato a tope!']
 };
 function reaction(s,previousLeader,speaker){
  const p=s.players||[],leader=p[0],i=Math.max(0,s.index||0),pick=rows=>rows[(i+hostSeed(s))%rows.length];
  if(p.some(x=>x.shieldBlocked))return 'El escudo ha protegido esos puntos. ¡Atentos al marcador!';
  if(p.some(x=>x.eventBonus))return '¡Puntos extra! Ese bonus puede cambiar la clasificación.';
- if(p.some(x=>x.stolen>0))return '¡Acaba de haber un robo de puntos! Revisad la clasificación.';
+ if(p.some(x=>x.stolen>0))return pick(['¡Acaba de haber un robo de puntos! Revisad la clasificación.','¡Un mordisco al marcador!','¡Alguien ha birlado el premio de otro!','¡Eso ha sido quitarle la pelota al rival!']);
  if(previousLeader&&leader&&leader.id!==previousLeader)return '¡Cambio de líder! '+leader.name+' toma la delantera.';
  if(s.kind==='arcade')return pick(['¡Se acabó el tiempo! Veamos quién ha conseguido la mejor marca.','¡Prueba terminada! Menudo ritmo.','Los puntos ya están en el marcador. Todavía queda mucha partida.','¡Eso ha estado muy disputado!']);
  const correct=p.filter(x=>x.reaction==='correct').length;
- if(p.length&&correct===p.length)return pick(['¡Pleno de aciertos! Así da gusto.','¡Todos habéis acertado! Gran ronda.','¡Qué nivel! Vamos a tener que subir el listón.']);
- if(p.length&&correct===0)return pick(['Esta se os ha escapado. La siguiente es otra oportunidad.','Nadie se lleva el acierto. ¡Todavía queda concurso!','Cuatro opciones y ninguna ha encontrado dueño. Bueno, seguimos.']);
- if(p.some(x=>x.fast&&x.reaction==='correct'))return pick(['¡Vaya reflejos! Hemos tenido un acierto rapidísimo.','¡Qué velocidad! El marcador vuelve a moverse.']);
- return speaker==='parker'?pick(['Vamos a comprobar cómo queda la clasificación.','Todavía queda mucho por decidir.','Cada punto cuenta, no os relajéis.']):pick(['¡Bien jugado! La cosa está interesante.','¡Esto se anima! A ver qué pasa en la próxima.','¡Menuda ronda! El podio sigue abierto.']);
+ if(p.length&&correct===p.length)return pick(['¡Pleno de aciertos! Así da gusto.','¡Todos habéis acertado! Gran ronda.','¡Qué nivel! Vamos a tener que subir el listón.','¡Premio para toda la manada!','¡Todos han seguido el rastro correcto!','¡Menudo festival de colas moviéndose!','¡Habéis traído la pelota todos a la primera!','¡Guau, ni en una exhibición de agility!']);
+ if(p.length&&correct===0)return pick(['Esta se os ha escapado. La siguiente es otra oportunidad.','Nadie se lleva el acierto. ¡Todavía queda concurso!','Cuatro opciones y ninguna ha encontrado dueño. Bueno, seguimos.','El olfato se ha quedado en casa.','Se nos ha escapado la pelota.','Habéis cavado en el jardín equivocado.','El premio se ha ido de paseo.','Vamos a olfatear mejor la siguiente.']);
+ if(p.some(x=>x.fast&&x.reaction==='correct'))return pick(['¡Vaya reflejos! Hemos tenido un acierto rapidísimo.','¡Qué velocidad! El marcador vuelve a moverse.','¡Como un galgo detrás de la pelota!','¡Ni el cartero corre tanto!','¡Ha olido el acierto desde la otra punta!','¡Eso merece una galletita!']);
+ return speaker==='parker'?pick(['Vamos a comprobar cómo queda la clasificación.','Todavía queda mucho por decidir.','Cada punto cuenta, no os relajéis.','Seguid el rastro, queda mucho paseo.','No perdáis de vista el premio.','A ver qué olfatea Mei en la siguiente.','El marcador va con la correa suelta.','Yo guardaría alguna galletita para la final.']):pick(['¡Bien jugado! La cosa está interesante.','¡Esto se anima! A ver qué pasa en la próxima.','¡Menuda ronda! El podio sigue abierto.','¡Guau, esto se pone interesante!','¡Tengo ganas de otra vuelta al parque!','¡Que nadie suelte la pelota!','¡A mover esas colas, que queda concurso!','¡El premio todavía no tiene dueño!']);
 }
 export function presenterMoment(s,previousLeader,awardIndex=0){
  if(normalizePresenter(s.presenter)==='sonny'){
@@ -55,7 +55,7 @@ export function presenterMoment(s,previousLeader,awardIndex=0){
  if(s.phase==='lobby')return {speaker:'parker',mood:'idle',text:'¡Bienvenidos a MobiQuiz! Soy Parker. Preparad vuestros mandos, estamos a punto de empezar.',reply:{speaker:'mei',text:'¡Y yo soy Mei! Hoy tenemos un montón de pruebas. ¡Mucha suerte a todos!'}};
  if(s.phase==='question'&&s.partyStage==='intro'){
   if(!sonnyMoment(s,previousLeader))return null;
-  const speaker=i%2?'mei':'parker',prefix=introductions[speaker][(i+seed)%5];
+  const speaker=i%2?'mei':'parker',prefix=introductions[speaker][(Math.floor(i/2)+seed)%introductions[speaker].length];
   return {speaker,mood:'idle',text:prefix+' '+presenterRule(s),section:true};
  }
  if(s.phase!=='reveal')return null;
