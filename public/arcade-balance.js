@@ -1,0 +1,4 @@
+export const ARCADE_BUDGET=2000;
+export function arcadeBenchmark(plan){if(plan.kind!=='coins')return Math.max(1,plan.beats.length*180);switch(plan.variant){case 'volley':return 2400;case 'meteor':return Math.max(1,plan.waves.length*180);case 'lava':return plan.duration*.065;case 'bomb':return plan.duration/1000*40;case 'sofa':return plan.duration/1000*35;case 'territory':return (plan.tiles?.length||1)*35;case 'splash':return 1800;case 'tuna':return 2300;default:return 2200;}}
+export function arcadeAward(plan,score){const raw=Math.max(0,Number(score)||0);return plan?.balanced===true?Math.min(ARCADE_BUDGET,Math.round(raw/arcadeBenchmark(plan)*ARCADE_BUDGET)):raw;}
+export function arcadeRecord(plan,p,correct){return {correct,points:arcadeAward(plan,p.score),rawPoints:p.score,ms:null,timeout:p.attempts===0,arcadeHits:p.hits,arcadeAttempts:plan.variant==='volley'||plan.variant==='meteor'?(p.hits||0)+(p.misses||0):p.attempts,arcadeBestCombo:p.bestCombo||0};}

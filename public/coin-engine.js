@@ -1,3 +1,4 @@
+import {arcadeRecord} from './arcade-balance.js';
 // Server-authoritative continuous movement; no frame-rate or client position trust.
 import {startSkill,advanceSkill,controlSkill,finishSkill} from './skill-arena.js';
 import {arenaHazard} from './arena-events.js';
@@ -106,5 +107,5 @@ export function controlCoins(action,id,input,now){if(['volley','meteor'].include
 }
 export function finishCoins(r){if(['volley','meteor'].includes(r.action.plan.variant))return finishSkill(r);
  advanceCoins(r.action,r.action.started+r.action.plan.lead+r.action.plan.duration);
- for(const [id,p] of Object.entries(r.action.players))r.answers[id]={correct:p.hits>=5,points:p.score,ms:null,timeout:p.attempts===0,arcadeHits:p.hits,arcadeAttempts:p.attempts};
+ for(const [id,p] of Object.entries(r.action.players))r.answers[id]=arcadeRecord(r.action.plan,p,p.hits>=5);
 }
