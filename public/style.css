@@ -730,3 +730,7 @@ body.arcade-viewport[data-arcade-viewport=quick] #round[data-rule=odd] .odd-tile
 #app[data-display-mode=tv] .local-sonny,#app[data-display-mode=tv] .round-results .voice-presenter{display:none}
 .arcade-mode-toggle[hidden]{display:none!important}
 body.arcade-viewport .arcade-pad-tools:has(button:only-child[hidden]){display:none}
+
+/* Do not keep an empty toolbar row when there is no external screen. */
+body.arcade-viewport .arcade-pad-tools:has(button[hidden]):not(:has(button:not([hidden]))){display:none}
+#app[data-display-mode=tv] .shared-clue-note{background:#3a2a5b;border:1px solid #8e75c8;border-radius:9px;padding:7px 10px;font-weight:750}
