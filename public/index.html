@@ -2,24 +2,24 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#27194c"><title>MobiQuiz — El concurso está en tus manos</title>
-<link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icons/v2-180.png"><link rel="icon" href="/icons/mobiquiz-v2.webp"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="stylesheet" href="/generated/ui.css"><link rel="stylesheet" href="/style.css"><script type="module" src="/generated/ui.js"></script>
+<meta name="theme-color" content="#111b30"><title>MobiQuiz — El concurso está en tus manos</title>
+<link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icons/v2-180.png"><link rel="icon" href="/icons/mobiquiz-v2.webp"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="stylesheet" href="/generated/ui.css"><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/studio-design.css"><script type="module" src="/generated/ui.js"></script>
 <script src="https://accounts.google.com/gsi/client" async></script><script type="module" src="/app.js"></script>
 </head>
-<body><header id="header"><button class="brand" id="home" aria-label="Inicio"><img class="logo" src="/icons/mobiquiz-v2.webp" alt=""><span>Mobi<span class="accent">Quiz</span></span></button><span class="live"><i></i> ¡EN EL AIRE!</span><nav id="nav"></nav></header>
+<body class="mq-studio"><header id="header"><button class="brand" id="home" aria-label="Inicio"><img class="logo" src="/icons/mobiquiz-v2.webp" alt=""><span>Mobi<span class="accent">Quiz</span></span></button><span class="live"><i></i> ¡EN EL AIRE!</span><nav id="nav"></nav></header>
 <main id="app" aria-live="polite"></main><div id="toast" role="status"></div>
 <template id="home-template">
 <section class="show-poster" aria-label="MobiQuiz, el concurso de tu salón">
  <div class="poster-marquee" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
  <div class="poster-kicker"><span>EL SHOW</span><span>DE TU SALÓN</span></div>
- <div class="poster-art" aria-hidden="true"><img src="/show-poster.svg" alt=""><img class="poster-logo" src="/icons/mobiquiz-v2.webp" alt=""></div>
+ <div class="poster-art" aria-hidden="true"><img src="/show-poster.svg" alt=""></div>
  <h1><span>¡QUE</span><span>EMPIECE</span><span>EL SHOW!</span></h1>
- <div class="poster-sticker">TU MÓVIL<br>ES EL MANDO</div>
+ <div class="poster-sticker">TV + MÓVIL</div>
  <p>Preguntas, reflejos y piques entre amigos.</p>
  <div class="poster-marquee bottom" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 </section>
 <section class="show-menu" aria-label="Elige cómo jugar">
- <div class="menu-caption"><span>01 / ENTRADA AL PLATÓ</span><i></i></div>
+ <div class="menu-caption"><span>ELIGE TU PARTIDA</span><i></i></div>
  <h2>¿JUGAMOS?</h2>
  <button class="show-ticket ticket-create" id="create"><span class="ticket-icon" aria-hidden="true">✦</span><span class="ticket-copy"><strong>Crear partida</strong><small>Reúne a tu gente y monta el show.</small></span><span class="ticket-arrow" aria-hidden="true">↗</span></button>
  <button class="show-ticket ticket-join" id="join"><span class="ticket-icon" aria-hidden="true">➜</span><span class="ticket-copy"><strong>Entrar a sala</strong><small>Ya tengo un código de concurso.</small></span><span class="ticket-arrow" aria-hidden="true">↗</span></button>

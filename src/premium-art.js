@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 // Original, procedural art direction for MobiQuiz. All geometry is generated locally.
 const clamp=THREE.MathUtils.clamp;
+export const studioPalette={neon:{sky:0x13243b,floor:0x334d67,accent:0x73dccb,metal:0x253b53,panel:0x14263e},space:{sky:0x10182e,floor:0x26395d,accent:0x9bb5ff,metal:0x273552,panel:0x14213b},tropical:{sky:0x183c40,floor:0x477e77,accent:0xa9e2a8,metal:0x234b4d,panel:0x163c3e},retro:{sky:0x2d263d,floor:0x644b68,accent:0xffa58b,metal:0x41344b,panel:0x2b2339}};
+export function studioColors(theme){return studioPalette[theme]||studioPalette.neon;}
+export function renderBudget({high=false,cast=false,count=1}={}){const crowded=count>8,constrained=cast||crowded;return {high:high&&!constrained,cast,maxPixelRatio:crowded?1:cast?1.1:high?1.65:1.25,frameMs:high&&!constrained?16:33,shadows:high&&!constrained&&count<=4};}
 const standard=(color,roughness=.65,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
 const glow=(color,intensity=1)=>new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:intensity,roughness:.45});
 const add=(p,g,m,x=0,y=0,z=0)=>{const o=new THREE.Mesh(g,m);o.position.set(x,y,z);p.add(o);return o;};
@@ -37,7 +40,7 @@ export function enrichAvatar({root,torso,head,arms,legs,skin,dark,white,hair,shi
  }else{
   // Player seams and hems are integrated into the sculpted body.
  }
- const iris=standard(host?0x694538:0x655f86,.37),nose=sphere(head,skin,0,-.05,.475,.093,.105,.09);
+ const iris=standard(host?0x694538:0x59495d,.55),nose=sphere(head,skin,0,-.05,.475,.093,.105,.09);
  facialFeatures.push(nose);
  for(const s of [-1,1]){const i=sphere(head,iris,s*.2,.08,.483,.079,.091,.026);facialFeatures.push(i);eyes.push([i,.091]);}
  // Lip and interior remain independent, so the avatar can articulate vowels and closed consonants.
@@ -61,16 +64,16 @@ export function qualityProfile(tv=false,count=1){
  const weak=(navigator.hardwareConcurrency||4)<=4||((navigator.deviceMemory||8)<=4);
  let preset='auto';try{preset=localStorage.getItem('mq.graphics')||'auto';}catch{}
  const high=preset==='high'||(preset==='auto'&&tv&&!cast&&!weak&&count<=4);
- return {high,cast,maxPixelRatio:high?1.75:cast?1.15:1.35,frameMs:high?16:33,shadows:high&&count<=4};
+ return renderBudget({high,cast,count});
 }
 export function configureRenderer(renderer,quality){
  renderer.outputColorSpace=THREE.SRGBColorSpace;
- renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.16;
+ renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.06;
  renderer.setPixelRatio(Math.min(devicePixelRatio||1,quality.maxPixelRatio));
  renderer.shadowMap.enabled=quality.shadows;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 }
 export function studioLight(scene,key,quality){
- const rim=new THREE.DirectionalLight(0xc3a7ff,1.8);rim.position.set(2,5,-6);scene.add(rim);
+ const rim=new THREE.DirectionalLight(0x9cc8e8,1.35);rim.position.set(2,5,-6);scene.add(rim);
  if(quality.shadows){key.castShadow=true;key.shadow.mapSize.set(1024,1024);Object.assign(key.shadow.camera,{left:-8,right:8,top:8,bottom:-8,near:.5,far:30});key.shadow.bias=-.0005;key.shadow.normalBias=.025;key.shadow.camera.updateProjectionMatrix();}
  return rim;
 }
@@ -79,23 +82,26 @@ function instanced(parent,geometry,material,entries){
  const m=new THREE.InstancedMesh(geometry,material,entries.length),dummy=new THREE.Object3D();
  entries.forEach((v,i)=>{dummy.position.set(...v.slice(0,3));dummy.scale.set(v[3]??1,v[4]??1,v[5]??1);dummy.rotation.set(0,0,v[6]??0);dummy.updateMatrix();m.setMatrixAt(i,dummy.matrix);});m.instanceMatrix.needsUpdate=true;parent.add(m);return m;
 }
-export function premiumStudio(scene,theme){
- const metal=standard(0x302641,.38,.55),velvet=standard(0x211632,.87),warm=glow(0xffc76a,1.4),cool=glow(theme==='tropical'?0x55eed1:0x8f8bff,1.1);
- const deck=add(scene,new THREE.CylinderGeometry(7.1,7.3,.28,64),metal,0,-.45,0);
- for(const [r,y,m] of [[6.87,-.25,warm],[6.98,-.38,cool],[4.85,-.005,cool]]){const t=ring(scene,m,0,y,0,r,.025);t.rotation.x=Math.PI/2;}
- box(scene,metal,0,2.1,-7.1,13,4.3,.45);
- box(scene,velvet,0,2.5,-6.83,10,3.1,.15);
- const panels=[];for(let i=0;i<18;i++)panels.push([-4.6+i*.54,2.35,-6.68,.018,1.1,.025]);
- instanced(scene,new THREE.BoxGeometry(1,1,1),cool,panels);
- const rail=ring(scene,warm,0,4.7,-.6,5.9,.045);rail.rotation.x=Math.PI/2;
- const audience=[];for(let r=0;r<3;r++)for(let i=0;i<22;i++){const theta=(i-10.5)*.109;audience.push([Math.sin(theta)*(6.8+r*.3),.48+r*.48,-Math.cos(theta)*5.7-r*.25,.15,.22,.15]);}
- const crowd=instanced(scene,new THREE.SphereGeometry(1,8,6),standard(0x5e427e,.85),audience),crowdDummy=new THREE.Object3D();let lastCrowd=-1;for(let i=0;i<audience.length;i++)crowd.setColorAt(i,new THREE.Color([0xa28bc9,0x735d9b,0x595c90,0xb888ad][i%4]));crowd.instanceColor.needsUpdate=true;
- const lights=[];for(let i=0;i<9;i++){const x=(i-4)*1.4;box(scene,metal,x,4.65,-4.9,.55,.28,.38);lights.push([x,4.62,-4.68,.18,.12,.04]);}
- instanced(scene,new THREE.SphereGeometry(1,12,8),warm,lights);
- // Low-cost translucent light shafts: additive, no volumetric ray marching.
- const beamMat=new THREE.MeshBasicMaterial({color:0xb9a0ff,transparent:true,opacity:.045,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending});
- const beams=[];for(const x of [-4.2,-2.8,2.8,4.2]){const b=add(scene,new THREE.ConeGeometry(1.35,5.5,16,1,true),beamMat,x,2.0,-3.6);b.rotation.z=x*.04;beams.push(b);}
- const target=new THREE.Color();return {animate(t,celebrate,accent='#b9a0ff'){if(Math.floor(t*12)!==lastCrowd){lastCrowd=Math.floor(t*12);audience.forEach((v,i)=>{crowdDummy.position.set(v[0],v[1]+(celebrate?.16:.027)*Math.abs(Math.sin(t*(celebrate?8:2)+i*.71)),v[2]);crowdDummy.scale.set(v[3],v[4],v[5]);crowdDummy.rotation.set(0,0,Math.sin(t*3+i)*.08);crowdDummy.updateMatrix();crowd.setMatrixAt(i,crowdDummy.matrix);});crowd.instanceMatrix.needsUpdate=true;}beams.forEach((b,i)=>{b.rotation.z=(i-1.5)*.11+Math.sin(t*.5+i)*.12;});beamMat.opacity=celebrate?.085:.042;target.set(accent);beamMat.color.lerp(target,.045);cool.emissive.lerp(target,.035);}};
+export function premiumStudio(scene,theme,quality={high:false}){
+ const p=studioColors(theme),metal=standard(p.metal,.48,.20),panel=standard(p.panel,.88),warm=glow(0xffcd83,.85),cool=glow(p.accent,.8);
+ // The set is constructed from a handful of shared material batches instead of dozens of props.
+ add(scene,new THREE.CylinderGeometry(7.05,7.2,.25,48),metal,0,-.45,0);
+ for(const [r,y,m] of [[6.82,-.29,warm],[6.98,-.38,cool],[4.85,.006,cool]]){const t=ring(scene,m,0,y,0,r,.022);t.rotation.x=Math.PI/2;}
+ box(scene,panel,0,2.3,-7.1,14,4.8,.30);
+ const frame=[],inlays=[],lamps=[],seatRows=[];
+ for(let i=0;i<11;i++){const x=(i-5)*1.21;frame.push([x,2.27,-6.86,1.13,3.95,.15]);inlays.push([x-.50,2.27,-6.75,.035,3.82,.035]);}
+ for(const x of [-5.95,5.95]){frame.push([x,2.45,-6.3,.35,4.9,.65]);inlays.push([x,2.45,-5.94,.09,4.6,.04]);}
+ frame.push([0,4.7,-6.6,12.2,.20,.5]);inlays.push([0,4.48,-6.28,11.9,.06,.035],[0,.65,-6.72,11.9,.04,.035]);
+ instanced(scene,new THREE.BoxGeometry(1,1,1),metal,frame);instanced(scene,new THREE.BoxGeometry(1,1,1),cool,inlays);
+ for(let i=0;i<7;i++)lamps.push([(i-3)*1.75,4.62,-6.26,.29,.10,.04]);
+ instanced(scene,new THREE.BoxGeometry(1,1,1),warm,lamps);
+ // Tiered stylized audience silhouettes, static on low-power receivers.
+ const audience=[],rows=quality.high?3:2,columns=quality.high?20:16;
+ for(let r=0;r<rows;r++)for(let i=0;i<columns;i++){const theta=(i-(columns-1)/2)*.105;const x=Math.sin(theta)*(7.3+r*.32),z=-Math.cos(theta)*5.35-r*.25,y=.42+r*.43;audience.push([x,y,z,.15,.20,.14]);seatRows.push([x,y-.17,z,.24,.22,.23]);}
+ const seats=instanced(scene,new THREE.BoxGeometry(1,1,1),panel,seatRows);
+ const crowd=instanced(scene,new THREE.SphereGeometry(1,8,6),standard(0xffffff,.9),audience),dummy=new THREE.Object3D(),c=new THREE.Color();
+ for(let i=0;i<audience.length;i++)crowd.setColorAt(i,c.setHex([0x657f9c,0x8ca4b6,0x4e657e,0xc1a78b][i%4]));crowd.instanceColor.needsUpdate=true;
+ let last=-1;const accentTarget=new THREE.Color();return {animate(t,celebrate,accent='#73dccb'){const frame=Math.floor(t*(quality.high?12:5));if(frame===last)return;last=frame;accentTarget.set(accent);cool.emissive.lerp(accentTarget,.17);if(quality.high&&celebrate){for(let i=0;i<audience.length;i++){const v=audience[i];dummy.position.set(v[0],v[1]+.10*Math.abs(Math.sin(t*6+i*.71)),v[2]);dummy.scale.set(v[3],v[4],v[5]);dummy.rotation.set(0,0,0);dummy.updateMatrix();crowd.setMatrixAt(i,dummy.matrix);}crowd.instanceMatrix.needsUpdate=true;}}};
 }
 export function premiumArcade(scene,kind,width){
  const metal=standard(0x22223d,.44,.4),edge=glow(kind==='dash'?0x7bd5ff:kind==='dodge'?0x9f8dff:0xffb866,1.1),gold=glow(0xffdf80,1);

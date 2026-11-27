@@ -9,7 +9,7 @@ function oval(parent,mat,x,y,z,sx,sy,sz){const m=mesh(parent,new THREE.SphereGeo
 function rounded(parent,mat,x,y,z,w,h,d,r=.06){return mesh(parent,new RoundedBoxGeometry(w,h,d,2,r),mat,x,y,z);}
 function profile(parent,mat,points,x,y,z,depth=1,segments=24){
  const ordered=points[0][1]>points[points.length-1][1]?[...points].reverse():points;const c=new THREE.CatmullRomCurve3(ordered.map(([r,h])=>new THREE.Vector3(r,h,0)),false,'centripetal');
- const p=c.getPoints(28).map(v=>new THREE.Vector2(Math.max(0,v.x),v.y));const m=mesh(parent,new THREE.LatheGeometry(p,segments),mat,x,y,z);m.scale.z=depth;return m;
+ const p=c.getPoints(20).map(v=>new THREE.Vector2(Math.max(0,v.x),v.y));const m=mesh(parent,new THREE.LatheGeometry(p,segments),mat,x,y,z);m.scale.z=depth;return m;
 }
 function stitch(parent,mat,points,r=.012){const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));return mesh(parent,new THREE.TubeGeometry(curve,12,r,6,false),mat);}
 export function buildContestantBody({root,torso,skin,dark,white,shirt,gold,arms,legs},a){
@@ -48,7 +48,7 @@ export function buildContestantBody({root,torso,skin,dark,white,shirt,gold,arms,
 function batchStaticParts(parent){const groups=new Map();for(const o of parent.children){if(!o.isMesh||Array.isArray(o.material)||o.material.transparent||!o.geometry.attributes.position||!o.geometry.attributes.normal||!o.geometry.attributes.uv)continue;const list=groups.get(o.material)||[];list.push(o);groups.set(o.material,list);}for(const [mat,parts] of groups){if(parts.length<2)continue;const copies=parts.map(o=>{o.updateMatrix();const g=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();g.applyMatrix4(o.matrix);return g;});let combined;try{combined=mergeGeometries(copies,false);}catch{combined=null;}finally{copies.forEach(g=>g.dispose());}if(!combined)continue;for(const o of parts){parent.remove(o);o.geometry.dispose();}mesh(parent,combined,mat);}}
 export function optimizeContestantBody(torso,arms,legs){for(const joint of [torso,...arms,...legs])batchStaticParts(joint);}
 export function maskGeometry(rx=.405,ry=.455,depth=.085,front=.52){
- const n=48,rings=10,positions=[0,-.012,front],uv=[.5,.5],indices=[];
+ const n=40,rings=8,positions=[0,-.012,front],uv=[.5,.5],indices=[];
  for(let i=1;i<=rings;i++){const r=i/rings;for(let j=0;j<=n;j++){const a=j*2*Math.PI/n,x=r*Math.cos(a),y=r*Math.sin(a);positions.push(x*rx,y*ry-.012,front-depth*r*r);uv.push(.5+x*.5,.5+y*.5);}}
  for(let j=0;j<n;j++)indices.push(0,1+j,2+j);
  for(let i=1;i<rings;i++){const a=1+(i-1)*(n+1),b=a+n+1;for(let j=0;j<n;j++)indices.push(a+j,b+j,b+j+1,a+j,b+j+1,a+j+1);}
@@ -62,10 +62,10 @@ export function buildPhotoMask(head,a,facialFeatures){
  // An actual three-dimensional bezel hides the hard edge of the original
  // crop. The photo pixels are untouched; only UV mapping and framing change.
  const tint=({cat:0x8b71bc,fox:0xb97241,dragon:0x4b9777,space:0xb5c8df,wizard:0x69539e,party:0xbc587c,scout:0x58714c,crown:0xac8042,star:0xac8042})[a.hat]||0x493044;
- const rimMat=material(tint,.77),edge=material(0x211a30,.84);
+ const rimMat=material(tint,.88),edge=material(0x28384c,.90);
  const ring=(rx,ry,z,r,mat)=>{const points=[];for(let i=0;i<48;i++){const t=i*Math.PI/24;points.push(new THREE.Vector3(rx*Math.cos(t),ry*Math.sin(t)-.012,z));}return mesh(group,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points,true,'centripetal'),48,r,8,true),mat);};
- ring(rx+.014,ry+.012,front-depth-.008,.039,rimMat);
- ring(rx-.004,ry-.004,front-depth+.008,.012,edge);
+ ring(rx+.014,ry+.012,front-depth-.008,.026,rimMat);
+ ring(rx-.004,ry-.004,front-depth+.008,.008,edge);
  new THREE.TextureLoader().load(a.photo,t=>{if(head.userData.disposed){t.dispose();return;}t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;faceMat.map=t;faceMat.needsUpdate=true;facialFeatures.forEach(o=>o.visible=false);group.visible=true;},undefined,()=>{});
  return group;
 }

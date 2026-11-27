@@ -3,9 +3,9 @@ import * as THREE from 'three';
 export function createSonny(){
  const root=new THREE.Group(),torso=new THREE.Group(),head=new THREE.Group(),arms=[],legs=[],eyes=[],ears=[];
  const mat=(color,roughness=.68,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
- const fur=mat(0x151421,.73),soft=mat(0x252433,.8),ear=mat(0x69404a),jacket=mat(0x552b82,.76),lapel=mat(0x21172d),gold=mat(0xf3bd45,.34,.38),cream=mat(0xffead3),iris=mat(0xd0d34b,.34),pupil=mat(0x080b14,.3),shine=mat(0xffffff,.24),mouthMat=mat(0x080810),tongueMat=mat(0xc67183);
+ const fur=mat(0x242b39,.78),soft=mat(0x394052,.86),ear=mat(0x69404a),jacket=mat(0x514778,.81),lapel=mat(0x262c40),gold=mat(0xf5c978,.45,.20),cream=mat(0xffead3),iris=mat(0xd0d34b,.34),pupil=mat(0x080b14,.3),shine=mat(0xffffff,.24),mouthMat=mat(0x080810),tongueMat=mat(0xc67183);
  const add=(p,g,m,x=0,y=0,z=0)=>{const o=new THREE.Mesh(g,m);o.position.set(x,y,z);p.add(o);return o;};
- const sphere=(p,m,x,y,z,sx,sy,sz)=>{const o=add(p,new THREE.SphereGeometry(1,24,16),m,x,y,z);o.scale.set(sx,sy,sz);return o;};
+ const sphere=(p,m,x,y,z,sx,sy,sz)=>{const o=add(p,new THREE.SphereGeometry(1,20,14),m,x,y,z);o.scale.set(sx,sy,sz);return o;};
  const plate=(p,m,pts,z)=>{const shape=new THREE.Shape();pts.forEach(([x,y],i)=>i?shape.lineTo(x,y):shape.moveTo(x,y));shape.closePath();return add(p,new THREE.ShapeGeometry(shape),m,0,0,z);};
  const tube=(p,m,points,r=.025)=>add(p,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points.map(v=>new THREE.Vector3(...v))),16,r,8,false),m);
  root.add(torso,head);head.position.y=2.05;

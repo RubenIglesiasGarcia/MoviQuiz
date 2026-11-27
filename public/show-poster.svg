@@ -1,1 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 520"><defs><pattern id="dots" width="13" height="13" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.7" fill="#f7e9c5" opacity=".2"/></pattern><linearGradient id="r" x2=".7" y2="1"><stop stop-color="#ff9474"/><stop offset="1" stop-color="#ee3d70"/></linearGradient><linearGradient id="b" x2=".7" y2="1"><stop stop-color="#8fe0f9"/><stop offset="1" stop-color="#4b9be4"/></linearGradient></defs><path d="M340 260 5 7 0 167ZM340 260 202 0 90 0ZM340 260 459 0 566 0ZM340 260 680 56 680 192ZM340 260 680 420 680 510ZM340 260 105 520 0 520Z" fill="#fae8c0" opacity=".13"/><rect width="680" height="520" fill="url(#dots)"/><g stroke="#221745" stroke-width="7" stroke-linejoin="round"><path d="m41 195 102-64-17 60 70 12-81 48 6-44Z" fill="#ffd55a"/><path d="m551 83 12 37 39 9-35 22-2 40-27-30-39 11 20-35-22-33 40 5Z" fill="#78e7aa"/><path d="m576 340 79-22-29 43 32 29-66-1-30 46-10-51Z" fill="#70c8f3"/><path d="m93 337 18 31 36 2-23 26 9 35-33-14-29 20 4-36-28-22 36-6Z" fill="#ff807a"/></g><g transform="translate(160 235) rotate(-16)"><ellipse cx="0" cy="12" rx="92" ry="59" fill="#201641"/><ellipse cx="0" cy="0" rx="92" ry="56" fill="#812c53" stroke="#211642" stroke-width="6"/><ellipse cx="0" cy="-14" rx="79" ry="49" fill="url(#r)" stroke="#211642" stroke-width="6"/><path d="M-52-26q50-35 96-7" stroke="#ffe6cf" stroke-width="8" fill="none" stroke-linecap="round" opacity=".65"/></g><g transform="translate(530 257) rotate(16)"><ellipse cx="0" cy="12" rx="85" ry="52" fill="#201641"/><ellipse cx="0" cy="0" rx="85" ry="50" fill="#2c5ca9" stroke="#211642" stroke-width="6"/><ellipse cx="0" cy="-14" rx="73" ry="43" fill="url(#b)" stroke="#211642" stroke-width="6"/><path d="M-47-26q47-28 90-6" stroke="#e0fbff" stroke-width="8" fill="none" stroke-linecap="round" opacity=".65"/></g><circle cx="340" cy="234" r="143" fill="#f8dc8c" stroke="#211642" stroke-width="9"/><circle cx="340" cy="234" r="130" fill="#35235c" stroke="#f7edc9" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round"/><path d="M40 60h56M68 32v56M606 456h36M624 438v36" stroke="#f8e8bf" stroke-width="5" stroke-linecap="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520">
+<defs>
+ <linearGradient id="bg" x2="0" y2="1"><stop stop-color="#1d3454"/><stop offset="1" stop-color="#10182c"/></linearGradient>
+ <linearGradient id="fur" x2=".8" y2="1"><stop stop-color="#49536a"/><stop offset="1" stop-color="#202636"/></linearGradient>
+ <linearGradient id="dog" x2=".6" y2="1"><stop stop-color="#d0a379"/><stop offset="1" stop-color="#805540"/></linearGradient>
+ <linearGradient id="coat" x2=".6" y2="1"><stop stop-color="#7566a7"/><stop offset="1" stop-color="#3d3867"/></linearGradient>
+ <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M36 0H0V36" stroke="#9bd9ed" stroke-opacity=".09" fill="none"/></pattern>
+</defs>
+<rect width="720" height="520" fill="url(#bg)"/><rect width="720" height="520" fill="url(#grid)"/>
+<path d="M60 363V146Q60 35 178 35H542Q660 35 660 146V363" fill="none" stroke="#536a85" stroke-width="23"/>
+<path d="M60 363V146Q60 35 178 35H542Q660 35 660 146V363" fill="none" stroke="#7ee4d5" stroke-width="4"/>
+<path d="M104 328V154Q104 79 186 79H534Q616 79 616 154V328" fill="#14243a" stroke="#334a64" stroke-width="2"/>
+<path d="M146 115L67 380H245L201 115Z" fill="#fff0ba" opacity=".09"/><path d="M519 115L465 380H653L575 115Z" fill="#73daca" opacity=".10"/>
+<ellipse cx="360" cy="391" rx="305" ry="65" fill="#0d1425"/><ellipse cx="360" cy="378" rx="280" ry="52" fill="#2e4660" stroke="#62859d" stroke-width="3"/><ellipse cx="360" cy="378" rx="247" ry="38" fill="none" stroke="#f5c978" stroke-width="3"/>
+<!-- Parker, the lankier brown galgo -->
+<g transform="translate(122 155)" stroke="#202636" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+ <path d="M31 161Q-1 136 10 92Q17 77 43 95" fill="none" stroke="#93674d" stroke-width="13"/>
+ <path d="M57 128Q22 167 47 208L53 251H69L82 189 105 183 117 251H134L134 169Q158 151 131 115Z" fill="url(#dog)"/>
+ <path d="M71 142L75 93 100 57 133 76 126 143Q100 168 71 142Z" fill="#a47957"/>
+ <path d="M77 82Q44 32 61 12Q87 15 97 45M130 74Q160 36 148 17Q126 21 116 49" fill="#735345"/>
+ <path d="M78 62Q95 33 128 50Q149 63 141 96L160 117Q163 136 136 141Q104 141 93 113Z" fill="url(#dog)"/>
+ <path d="M111 100Q125 96 153 113L158 122 133 130Q110 126 111 100Z" fill="#dfb792"/>
+ <ellipse cx="155" cy="116" rx="13" ry="9" fill="#272b38"/><ellipse cx="113" cy="78" rx="8" ry="10" fill="#251f29"/><circle cx="115" cy="75" r="2.6" fill="#fff" stroke="none"/>
+ <path d="M76 137Q101 150 128 132" fill="none" stroke="#63d5ca" stroke-width="12"/><circle cx="105" cy="146" r="10" fill="#f7cc7c"/>
+</g>
+<!-- Sonny in tuxedo, silhouette and face drawn as an original vector mascot -->
+<g transform="translate(360 226)" stroke="#171d2c" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+ <path d="M53 107Q125 133 125 80Q126 57 111 52" fill="none" stroke="#30394b" stroke-width="17"/>
+ <path d="M-52 92L-46 158H-10L-7 112H7L10 158H46L52 92Z" fill="#2b3346"/>
+ <path d="M-55 18Q-90 35-90 97L-66 102-40 48M55 18Q90 35 90 97L66 102 40 48" fill="url(#coat)"/>
+ <path d="M-59 23Q0-2 59 23L52 117H-52Z" fill="url(#coat)"/>
+ <path d="M-27 13L0 89 27 13" fill="#f8f0dd"/><path d="M-44 22L-12 54-23 70 0 104-56 52ZM44 22L12 54 23 70 0 104 56 52Z" fill="#30334c"/>
+ <path d="M-25 23L0 32 25 23 25 45 0 38-25 45Z" fill="#f5c978"/><circle cy="90" r="4" fill="#f5c978" stroke="none"/>
+ <path d="M-67-28L-70-113Q-44-124-21-77Q0-89 21-77Q44-124 70-113L67-28Q82 24 40 45Q0 65-40 45Q-82 24-67-28Z" fill="url(#fur)"/>
+ <path d="M-56-96L-52-54-29-76ZM56-96L52-54 29-76Z" fill="#ad7584" stroke="none"/>
+ <path d="M-48-22Q-32-44-10-23Q-24 1-48-22M10-23Q32-44 48-22Q24 1 10-23" fill="#cddd79" stroke-width="3"/>
+ <path d="M-28-36L-26-12M28-36L26-12" stroke="#17212a" stroke-width="7"/>
+ <circle cx="-35" cy="-30" r="3" fill="#fff" stroke="none"/><circle cx="21" cy="-30" r="3" fill="#fff" stroke="none"/>
+ <path d="M-9 3Q0-4 9 3L0 12Z" fill="#d18a94" stroke-width="2"/><path d="M0 12Q-8 25-19 16M0 12Q9 25 20 16" fill="none" stroke="#b7bcc3" stroke-width="2.5"/>
+ <path d="M-22 9L-76-1M-22 17L-79 21M22 9L76-1M22 17L79 21" stroke="#b3b9c5" stroke-width="2"/>
+ <path d="M69-12Q94 2 62 25L39 27" stroke="#f5c978" stroke-width="6" fill="none"/><circle cx="39" cy="27" r="5" fill="#252838"/>
+</g>
+<!-- Mei, smaller brindle galgo -->
+<g transform="translate(497 178) scale(.87)" stroke="#242c3a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M125 167Q160 158 155 108" fill="none" stroke="#9a765f" stroke-width="12"/>
+ <path d="M40 132Q10 151 30 191L39 244H55L70 189 90 180 108 244H124L123 157Q139 138 115 115Z" fill="#c49b77"/>
+ <path d="M44 142L44 83 77 56 109 80 99 140Q69 158 44 142Z" fill="#ad8567"/>
+ <path d="M48 75Q6 27 30 17Q52 20 71 49M108 75Q149 28 129 20Q105 28 93 53" fill="#92705a"/>
+ <path d="M44 56Q75 27 107 52Q125 71 103 100L80 138Q61 148 46 128L29 110Q19 90 44 56Z" fill="url(#dog)"/>
+ <path d="M44 94Q65 84 80 104L60 133Q35 128 29 111Z" fill="#e6c8a1"/>
+ <ellipse cx="34" cy="108" rx="12" ry="9" fill="#292a33"/><ellipse cx="67" cy="77" rx="8" ry="10" fill="#292a33"/><circle cx="66" cy="74" r="3" fill="#fff" stroke="none"/>
+ <path d="M53 46L44 60M88 49L103 65M94 126L112 137M63 153L54 177M90 157L99 171" stroke="#84624e" stroke-width="9"/>
+ <path d="M46 140Q72 158 100 137" fill="none" stroke="#ff8a80" stroke-width="12"/><circle cx="71" cy="148" r="10" fill="#f7cc7c"/>
+</g>
+<g fill="#f5c978"><path d="M96 106h5v27h-5zM85 117h27v5H85zM620 93h4v24h-4zM610 103h24v4h-24z"/><circle cx="147" cy="58" r="4"/><circle cx="573" cy="58" r="4"/></g>
+<path d="M0 415Q360 440 720 415V520H0Z" fill="#111b30"/>
+</svg>

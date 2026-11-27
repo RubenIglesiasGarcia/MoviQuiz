@@ -11,7 +11,7 @@ export function scoreboardFrame(state,now,reduced=false){
 }
 function cells(row,p,avatarNode){
  const rank=el('b','tv-score-rank',String(p.rank)),portrait=el('div','tv-score-avatar'),name=el('div','tv-score-name'),delta=el('strong','tv-score-delta',signed(p.delta)),score=el('strong','tv-score-total',fmt(p.total)),shift=el('small','tv-score-move',p.move>0?'▲ Sube '+p.move:p.move<0?'▼ Baja '+Math.abs(p.move):'— Mantiene posición');
- shift.dataset.direction=p.move>0?'up':p.move<0?'down':'same';delta.dataset.negative=String(p.delta<0);row.dataset.reaction=p.reaction;row.classList.toggle('is-me',p.mine);
+ shift.dataset.direction=p.move>0?'up':p.move<0?'down':'same';delta.dataset.negative=String(p.delta<0);row.dataset.reaction=p.reaction;row.dataset.emote=p.emote;row.classList.toggle('is-me',p.mine);
  try{portrait.append(avatarNode(p.avatar,p.name,p.emote));}catch{portrait.textContent='★';}
  name.append(el('b','',p.name+(p.mine?' (tú)':'')),shift);row.append(rank,portrait,name,delta,score);return {rank,score,delta,shift};
 }
