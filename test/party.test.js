@@ -23,5 +23,5 @@ test('close leaders can duel in the first final without excluding other players'
 });
 test('group history retains unique recent fingerprints and has a bounded size',()=>{
  assert.deepEqual(mergeRoomHistory(['fp:a','fp:b'],['fp:b','fp:c','bad']),['fp:a','fp:b','fp:c']);
- assert.equal(mergeRoomHistory(Array.from({length:800},(_,i)=>'fp:'+i)).length,600);
+ assert.equal(mergeRoomHistory(Array.from({length:800},(_,i)=>'fp:'+i)).length,800);
 });

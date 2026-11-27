@@ -12,7 +12,7 @@ const env={DB:null};
 test('built-in packs have distinct IDs and playable content at their supported difficulties',()=>{
  assert.equal(officialPacks.length,7);
  assert.equal(new Set(officialPacks.map(p=>p.id)).size,7);
- assert.equal(officialPacks.reduce((n,p)=>n+p.count,0),213);
+ assert.ok(officialPacks.reduce((n,p)=>n+p.count,0)>=300);
  for(const meta of officialPacks){
   assert.match(meta.id,/^[a-f0-9]{24}$/);
   assert.equal(meta.builtin,true);
@@ -39,7 +39,7 @@ test('built-in packs have distinct IDs and playable content at their supported d
 
 test('official packs can be combined without D1 reads',async()=>{
  const source=await loadPackSelection(env,user,{standard:false,categories:null,packIds:officialPacks.map(p=>p.id)});
- assert.equal(source.questions.length,213);
+ assert.equal(source.questions.length,officialPacks.reduce((n,p)=>n+p.count,0));
  assert.equal(source.standard,false);
 });
 

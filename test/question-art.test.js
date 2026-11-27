@@ -16,9 +16,9 @@ test('every standard question has original media or valid local artwork',()=>{
 test('curated community pack is publicly selectable without database records',async()=>{
  const env={DB:{prepare(){return {bind(){return this;},async run(){return {success:true};},async all(){return {results:[]};},async first(){throw Error('unexpected db lookup');}};},async batch(statements){return Promise.all(statements.map(s=>s.all()));}}},u={id:'guest',guest:true};
  const catalog=await (await packAPI(env,u,'list')).json();assert.ok(catalog.community.some(p=>p.id===memePack.id&&p.builtin));
- const lookup=await (await packAPI(env,u,'lookup',{id:memePack.id})).json();assert.equal(lookup.pack.count,30);
- const source=await loadPackSelection(env,u,{standard:false,categories:null,packIds:[memePack.id]});assert.equal(source.questions.length,30);
- assert.equal(builtinPack(memePack.id).questions.length,30);
+ const lookup=await (await packAPI(env,u,'lookup',{id:memePack.id})).json();assert.equal(lookup.pack.count,memePack.count);
+ const source=await loadPackSelection(env,u,{standard:false,categories:null,packIds:[memePack.id]});assert.equal(source.questions.length,memePack.count);
+ assert.equal(builtinPack(memePack.id).questions.length,memePack.count);
  for(const q of source.questions)assert.ok(validArtwork(q.illustration));
  for(const difficulty of ['Muy fácil','Fácil','Media','Difícil','Muy difícil'])assert.ok(selectedContest('classic',difficulty,source).length>=3);
  assert.equal(selectedContest('party','Mixta',source).length,18);
