@@ -143,3 +143,74 @@ body.mq-studio.tv-mode>header{background:transparent;border-bottom:1px solid #33
 .personality-choice small{color:#c3d1dd;font-size:12px;line-height:1.3}
 .personality-choice[aria-pressed=true]{background:#2c4854;border-color:#73dccb;box-shadow:inset 3px 0 #73dccb}
 .personality-choice[aria-pressed=true] strong:after{content:' ✓';color:#73dccb}
+
+/* Active quiz controller: the page never needs scrolling to reach the answers.
+   Only unusually long clues or option lists can scroll independently. */
+.quiz-prompt{display:contents}
+.quiz-more{display:none}
+#app[data-display-mode=tv][data-round-phase=question] .quiz-prompt>.media{display:none}
+@media (max-width:800px), (max-height:520px) and (pointer:coarse){
+ html:has(body.quiz-controller){overflow:hidden;overscroll-behavior:none}
+ body.mq-studio.quiz-controller{position:fixed;inset:0;width:100%;height:100vh;height:100dvh;height:var(--quiz-height,100dvh);min-height:0;overflow:hidden;overscroll-behavior:none}
+ body.quiz-controller>#header,body.quiz-controller>footer,body.quiz-controller #app>.board>.side,body.quiz-controller #app>.host-controls:empty{display:none!important}
+ body.quiz-controller #app{display:flex;flex-direction:column;gap:6px;box-sizing:border-box;width:100%;height:100%;max-width:none;margin:0;padding:max(5px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));overflow:hidden;min-height:0}
+ body.mq-studio.quiz-controller #app>.room-head{position:static;flex:0 0 auto;display:flex;flex-wrap:nowrap;gap:5px;min-height:0;padding:4px 6px;margin:0;background:#17283e;border:1px solid #425d78;border-radius:9px}
+ body.quiz-controller #app>.room-head>div:first-child{min-width:0;margin-right:auto}
+ body.quiz-controller #app>.room-head .tag{display:none}
+ body.quiz-controller #app>.room-head .room-code,body.quiz-controller #app>.room-head .solo-round-label{font-size:14px;letter-spacing:.06em;white-space:nowrap;line-height:1.1}
+ body.quiz-controller #app>.room-head .custom-match-label{display:none}
+ body.quiz-controller #app>.room-head>.tv-launch,body.quiz-controller #app>.room-head>.ghost{display:none}
+ body.quiz-controller #app>.room-head .quick-ranking-button,body.quiz-controller #app>.room-head .quiz-more,body.quiz-controller #app>.room-head .social-trigger{display:inline-flex;align-items:center;justify-content:center;flex:none;min-height:44px;min-width:44px;padding:4px 8px;margin:0;border-radius:8px;background:#2b415d;color:#f8f3e8;border:1px solid #54708a;box-shadow:none}
+ body.quiz-controller #app>.room-head .quick-ranking-button span:last-child{display:none}
+ body.quiz-controller #app>.room-head .quiz-more{font-size:25px}
+ body.quiz-controller #app>.room-head .social-trigger{font-size:0}
+ body.quiz-controller #app>.room-head .social-trigger:before{content:'😊';font-size:20px}
+ body.quiz-controller #app>.board{display:flex;flex-direction:column;flex:1 1 0;min-height:0;min-width:0;gap:0;margin:0;overflow:hidden}
+ body.quiz-controller #app #round{position:relative;display:flex;flex-direction:column;justify-content:flex-start;flex:1 1 0;height:100%;min-height:0;min-width:0;gap:6px;padding:9px;overflow:hidden;box-shadow:none}
+ body.quiz-controller #round>.timer,body.quiz-controller #round>#timebar{flex:none;margin:0}
+ body.quiz-controller #round>.timer .tag{font-size:11px;letter-spacing:.06em}
+ body.quiz-controller #round>.timer b{font-size:23px;line-height:1}
+ body.quiz-controller .quiz-prompt{display:flex;flex-direction:column;justify-content:flex-start;flex:1 1 0;min-height:0;min-width:0;gap:7px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:1px 2px 4px}
+ body.quiz-controller .quiz-prompt>*{flex:0 0 auto;min-width:0}
+ body.quiz-controller .quiz-prompt h2{font-size:clamp(18px,5.2vw,28px);line-height:1.15;margin:0;letter-spacing:-.025em;overflow-wrap:anywhere}
+ body.quiz-controller .quiz-prompt .question-identity{gap:4px;margin:0}
+ body.quiz-controller .quiz-prompt .category-emblem,body.quiz-controller .quiz-prompt .difficulty-emblem{font-size:11px;padding:3px 6px;gap:4px;min-height:0}
+ body.quiz-controller .quiz-prompt .category-emblem svg{width:17px;height:17px}
+ body.quiz-controller .quiz-prompt .difficulty-bars{height:13px;gap:2px}
+ body.quiz-controller .quiz-prompt .difficulty-bars i{width:4px;max-height:100%}
+ body.quiz-controller .quiz-prompt .question-format,body.quiz-controller .quiz-prompt .round-rule,body.quiz-controller .quiz-prompt .question-art-frame{display:none}
+ body.quiz-controller .quiz-prompt .question-prompt-art{display:block}
+ body.quiz-controller .quiz-prompt .party-banner{font-size:11px;padding:4px 6px;margin:0;line-height:1.1}
+ body.quiz-controller .quiz-prompt .party-banner:empty{display:none}
+ body.quiz-controller .quiz-prompt .show-event-card{font-size:12px;gap:3px;padding:5px;margin:0}
+ body.quiz-controller .quiz-prompt .shared-clue-note{font-size:12px;padding:4px;margin:0}
+ body.quiz-controller .quiz-prompt .media{margin:0;min-height:0}
+ body.quiz-controller .quiz-prompt .media img,body.quiz-controller .quiz-prompt .media video{max-height:25dvh;max-width:100%;object-fit:contain}
+ body.quiz-controller #round>#answers{flex:0 1 auto;max-height:65%;min-height:0;min-width:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:2px 2px 7px;display:grid;gap:6px}
+ body.quiz-controller #answers .options,body.quiz-controller #answers .game-pads{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px!important;margin:0}
+ body.quiz-controller #answers .option,body.quiz-controller #answers .game-pads .option{min-height:clamp(60px,12dvh,98px);padding:8px 7px;gap:6px;line-height:1.12;white-space:normal;font-size:clamp(14px,4vw,20px);overflow-wrap:anywhere}
+ body.quiz-controller #answers .option .answertext{min-width:0;font-size:clamp(14px,4vw,20px);line-height:1.15;overflow-wrap:anywhere}
+ body.quiz-controller #answers .game-pads .option .letter{flex:0 0 25px;width:25px;height:25px;font-size:13px;padding:0}
+ body.quiz-controller #answers .option:after{display:none}
+ body.quiz-controller #answers .stack{margin:0;gap:7px}
+ body.quiz-controller #answers :is(input:not([type=range]),textarea){font-size:16px;padding:10px;min-height:44px}
+ body.quiz-controller #answers button.primary{min-height:46px;padding:8px 12px;justify-content:center}
+ body.quiz-controller #answers .answer-receipt{min-height:90px;padding:8px;gap:4px}
+ body.quiz-controller #answers .receipt-tick{width:38px;height:38px;font-size:24px}
+ body.quiz-controller #answers .answer-receipt strong{font-size:20px}
+ body.quiz-controller #answers .feedback{padding:9px;font-size:14px}
+ body.quiz-controller #round>#answerstatus{flex:none;margin:0;font-size:11px;line-height:1.2;min-height:0}
+ body.quiz-controller #round .voice-presenter{display:none}
+ body.quiz-controller .quiz-menu{width:min(94vw,420px);max-height:85dvh;overflow:auto;border:1px solid #54708a;border-radius:12px;background:#1c2c44;color:#f8f3e8;padding:14px}
+ body.quiz-controller .quiz-menu[open]{display:grid;gap:8px}
+ body.quiz-controller .quiz-menu::backdrop{background:#10182dbb}
+ body.quiz-controller .connection-indicator.connection-compact{top:max(2px,env(safe-area-inset-top));bottom:auto;pointer-events:none}
+}
+@media(max-height:520px) and (orientation:landscape) and (pointer:coarse){
+ body.quiz-controller #app #round{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);grid-template-rows:auto auto minmax(0,1fr) auto;gap:4px 10px}
+ body.quiz-controller #round>.timer,body.quiz-controller #round>#timebar,body.quiz-controller #round>#answerstatus{grid-column:1/-1}
+ body.quiz-controller #round>.quiz-prompt{grid-column:1;grid-row:3}
+ body.quiz-controller #round>#answers{grid-column:2;grid-row:3;max-height:none;align-content:center}
+ body.quiz-controller #answers .option,body.quiz-controller #answers .game-pads .option{min-height:52px}
+ body.quiz-controller .quiz-prompt h2{font-size:clamp(16px,4vh,23px)}
+}

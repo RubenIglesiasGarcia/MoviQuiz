@@ -6,3 +6,6 @@ export function sharedDisplayFor(state,role){return !!state?.sharedDisplay&&!sta
 export function useTvPad(state,playing,preference=null){return !!playing&&sharedDisplayFor(state,'player')&&preference!==false;}
 export function localPresenter(state,role){return role==='screen'||(!sharedDisplayFor(state,role)&&['host','player'].includes(role));}
 export function screenPresenceMessage(role,visible){return role==='screen'?{type:'screen-presence',visible:!!visible}:null;}
+
+// Keep specialized drawing, ordering and full action game controllers unchanged.
+export function compactQuiz(state,playing,action=false){return !!playing&&state?.phase==='question'&&state.partyStage!=='intro'&&!!state.question&&!action&&state.question.party!=='draw'&&state.question.mode!=='order';}
