@@ -1,7 +1,9 @@
 // Sonny's live captions and optional device-local speech. No voice cloning or remote speech API.
 import {presenterMoment,hostName,finaleLines} from './hosts.js';
-import {playSound} from './effects.js';
+import {playDogSpeech} from './effects.js';
+import {dogSpeechPlan,dogMouth} from './dog-voice.js';
 import {sonnyVoicePlan} from './sonny-speech.js';
+let dogPlayback=null;
 let manifestPromise=null,audio=null,active=null,frame=0,eventKey='',lastLeader=null,lastId=0,matchKey='',generation=0,stopTimer=0,utterance=null,pendingTimer=0;
 const seen=new Set();
 // Text-only fallback until the original recordings are deployed; never substitutes synthetic speech.
@@ -11,7 +13,7 @@ const node=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.classNa
 export const presenterEnabled=()=>localStorage.getItem('mq.voice')!=='off';
 export const presenterSpeaking=()=>!!active&&document.documentElement.dataset.mqSpeaking==='1';
 export function preloadPresenter(){try{globalThis.speechSynthesis?.getVoices();}catch{}return Promise.resolve(null);}
-export function stopPresenter(){generation++;cancelAnimationFrame(frame);clearTimeout(stopTimer);clearTimeout(pendingTimer);if(utterance){try{globalThis.speechSynthesis?.cancel();}catch{}utterance=null;}if(audio)audio.pause();active?.banner?.remove();active=null;document.documentElement.style.removeProperty('--mq-mouth');document.documentElement.dataset.mqSpeaking='0';document.documentElement.dataset.mqVoicePending='0';document.documentElement.dataset.mqPresenting='0';delete document.documentElement.dataset.mqSonnyMood;delete document.documentElement.dataset.mqDogSpeaker;const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth='0';}
+export function stopPresenter(){dogPlayback?.stop();dogPlayback=null;generation++;cancelAnimationFrame(frame);clearTimeout(stopTimer);clearTimeout(pendingTimer);if(utterance){try{globalThis.speechSynthesis?.cancel();}catch{}utterance=null;}if(audio)audio.pause();active?.banner?.remove();active=null;document.documentElement.style.removeProperty('--mq-mouth');document.documentElement.dataset.mqSpeaking='0';document.documentElement.dataset.mqVoicePending='0';document.documentElement.dataset.mqPresenting='0';delete document.documentElement.dataset.mqSonnyMood;delete document.documentElement.dataset.mqDogSpeaker;const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth='0';}
 export function setPresenterEnabled(value){localStorage.setItem('mq.voice',value?'on':'off');if(!value)stopPresenter();else preloadPresenter();}
 const choice=ids=>{const available=ids.filter(id=>id!==lastId);return (available.length?available:ids)[Math.floor(Math.random()*(available.length||ids.length))];};
 export function selectPresenterClip(s,previousLeader){
@@ -59,14 +61,19 @@ export async function updateRecordedPresenter(s,offset,mountCharacter,enabled=tr
  const token=generation,plan=sonnyVoicePlan(moment.text,remaining),duration=Math.max(850,remaining-120);
  const endSpeech=()=>{if(token!==generation)return;utterance=null;cancelAnimationFrame(frame);root.dataset.mqSpeaking='0';root.dataset.mqVoicePending='0';root.style.removeProperty('--mq-mouth');portrait.dataset.mouth='0';const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth='0';};
  // Captions have a normal expiry. Active speech is cleaned up by its own end event.
- const clearCaption=()=>{if(token!==generation)return;if(utterance){stopTimer=setTimeout(clearCaption,250);return;}active?.banner?.remove();active=null;root.dataset.mqPresenting='0';delete root.dataset.mqSonnyMood;};
+ const clearCaption=()=>{if(token!==generation)return;if(utterance){stopTimer=setTimeout(clearCaption,250);return;}dogPlayback?.stop();dogPlayback=null;cancelAnimationFrame(frame);root.dataset.mqSpeaking='0';root.style.removeProperty('--mq-mouth');active?.banner?.remove();active=null;root.dataset.mqPresenting='0';delete root.dataset.mqSonnyMood;};
  stopTimer=setTimeout(clearCaption,duration);
  if(s.presenter==='dogs'){
- const lines=[moment,...(moment.reply?[moment.reply]:[])],budget=Math.min(remaining-120,lines.length===2?6800:4500),weights=lines.map(l=>Math.max(25,l.text.length)),total=weights.reduce((a,b)=>a+b,0);let index=0,nextBark=0,segmentStart=performance.now();
- const canSpeak=enabled&&presenterEnabled(),durationFor=i=>lines.length===1?budget:Math.max(1200,budget*weights[i]/total);
- const showLine=()=>{const l=lines[index];root.dataset.mqDogSpeaker=l.speaker;copy.firstChild.textContent=l.speaker.toUpperCase()+' · EN DIRECTO';copy.lastChild.textContent=l.text;};
- showLine();if(canSpeak)root.dataset.mqSpeaking='1';
- const barkTick=now=>{if(token!==generation)return;let elapsed=now-segmentStart;if(elapsed>=durationFor(index)){if(index+1>=lines.length){endSpeech();return;}index++;segmentStart=now;nextBark=0;showLine();elapsed=0;}const l=lines[index],amount=canSpeak?.15+.7*Math.abs(Math.sin(elapsed/72)):0;root.style.setProperty('--mq-mouth',String(amount));portrait.dataset.mouth=String(amount);const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth=String(amount);if(elapsed>=nextBark){nextBark=elapsed+(l.speaker==='mei'?510:700);if(canSpeak&&presenterEnabled())playSound(l.speaker==='mei'?'mei-bark':elapsed>1400&&Math.floor(elapsed/700)%3===2?'parker-growl':'parker-bark');}frame=requestAnimationFrame(barkTick);};
+ const lines=[moment,...(moment.reply?[moment.reply]:[])],budget=Math.max(0,Math.min(remaining-180,lines.length===2?7200:5900)),weights=lines.map(l=>Math.max(24,l.text.length)),total=weights.reduce((a,b)=>a+b,0),pause=lines.length>1?160:0;
+ const canSpeak=enabled&&presenterEnabled();let index=0,segmentStart=0,phrase=null,pauseUntil=0,finished=false;
+ const mouth=amount=>{root.style.setProperty('--mq-mouth',String(amount));portrait.dataset.mouth=String(amount);const local=document.querySelector('.local-sonny-portrait');if(local)local.dataset.mouth=String(amount);};
+ const showLine=()=>{const l=lines[index];root.dataset.mqDogSpeaker=l.speaker;copy.firstChild.textContent=l.speaker.toUpperCase()+' · EN DIRECTO';copy.lastChild.textContent=l.text;phrase=dogSpeechPlan(l.text,l.speaker,(budget-pause)*weights[index]/total,l.mood||'idle');dogPlayback?.stop();dogPlayback=canSpeak&&presenterEnabled()?playDogSpeech(phrase):null;segmentStart=performance.now();root.dataset.mqSpeaking=dogPlayback?'1':'0';};
+ const finish=()=>{if(finished)return;finished=true;dogPlayback?.stop();dogPlayback=null;endSpeech();};
+ showLine();
+ const barkTick=now=>{if(token!==generation)return;if(pauseUntil){if(now<pauseUntil){frame=requestAnimationFrame(barkTick);return;}pauseUntil=0;index++;showLine();}
+ const elapsed=dogPlayback?dogPlayback.elapsed():now-segmentStart;
+ if(elapsed>=phrase.duration||now-segmentStart>phrase.duration+450){dogPlayback?.stop();dogPlayback=null;mouth(0);root.dataset.mqSpeaking='0';if(index+1>=lines.length){finish();return;}pauseUntil=now+pause;frame=requestAnimationFrame(barkTick);return;}
+ mouth(dogPlayback?dogMouth(phrase,elapsed):0);frame=requestAnimationFrame(barkTick);};
  frame=requestAnimationFrame(barkTick);return;
  }
 
