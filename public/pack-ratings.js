@@ -18,3 +18,7 @@ export function filterPacks(packs,query='',sort='rating',favorites=new Set()){
  }};
  return packs.filter(p=>{const hay=normalize([p.title,p.description,p.author,p.id].join(' '));return terms.every(term=>hay.includes(term));}).sort((a,b)=>compare(a,b)||(b.updated||0)-(a.updated||0)||String(a.id).localeCompare(String(b.id)));
 }
+
+// All origins share one catalog. Own records override any stale metadata for the same ID.
+export function catalogPacks(mine=[],community=[],extra=new Map(),scope='all',favorites=new Set()){const all=[...new Map([...extra.values(),...community,...mine.map(p=>({...p,owned:true}))].map(p=>[p.id,p])).values()];return all.filter(p=>scope==='all'||(scope==='mine'&&p.owned)||(scope==='official'&&p.builtin&&!p.author)||(scope==='community'&&!p.owned&&p.visibility==='public'&&(!p.builtin||!!p.author))||(scope==='favorites'&&favorites.has(p.id)));}
+export function catalogWindow(packs,limit=12){const shown=Math.min(packs.length,Math.max(1,Math.floor(Number(limit)||12)));return {items:packs.slice(0,shown),shown,more:shown<packs.length};}

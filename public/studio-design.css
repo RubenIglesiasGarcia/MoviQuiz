@@ -402,3 +402,35 @@ body.open-lobby #app .lobby-qr{margin:0;gap:4px;max-width:180px}.lobby-invite-ca
 @media(max-width:800px){body.open-lobby #app>.board{grid-template-columns:1fr;gap:10px}body.open-lobby #app #round{padding:12px}body.open-lobby #app .lobby-invite-card{padding:10px;gap:8px}body.open-lobby #app .lobby-invite-details>p{font-size:12px}.lobby-settings-title{font-size:15px}body.open-lobby #app .lobby-qr canvas{width:clamp(94px,27vw,135px)!important}body.open-lobby #app .lobby-question-settings{gap:5px}body.open-lobby #app>.host-controls{position:sticky;bottom:0;z-index:5;background:#142239;padding:8px 0}}
 
 .question-source-guide{display:grid;gap:5px;padding:12px;background:#20364b;border:1px solid #49647c;border-radius:10px}.question-source-guide p{margin:0;font-size:13px;line-height:1.4}.question-source-tabs{margin:0}.pack-question-settings{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}.pack-question-extras{display:grid;gap:6px;margin-top:6px}.pack-optional{border:1px solid #455b75;border-radius:8px;background:#192b40;padding:0;min-width:0}.pack-optional summary{display:flex;align-items:center;gap:8px;cursor:pointer;padding:10px 12px;font-size:14px;font-weight:650;list-style:none}.pack-optional summary::-webkit-details-marker{display:none}.pack-optional summary .ui-icon{color:#73dccb}.pack-optional[open] summary .ui-icon{transform:rotate(45deg)}.pack-optional[open] summary{border-bottom:1px solid #455b75}.pack-optional> :not(summary){margin:10px 12px;width:auto}.pack-optional .pack-media-editor{padding:0;border:0;background:transparent}.pack-option-fields>.pack-edit-head{display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px}.pack-option-fields>.pack-edit-head:has(>.pack-answer-select)[data-correct=true] input{border-color:#73dccb;background:#203c3b}.pack-answer-select{height:44px;width:44px;border-radius:8px;border:1px solid #54708a;background:#263a55;color:#f8f3e8;font-weight:800}.pack-answer-select[aria-pressed=true]{background:#73dccb;color:#142239;border-color:#73dccb}.pack-option-fields>.pack-edit-head:not(:has(>.pack-answer-select)){grid-template-columns:22px 36px minmax(0,1fr)}.pack-edit-question .pack-field textarea{min-height:80px}.pack-question-settings .pack-field{min-width:0}.pack-question-settings select{width:100%}.pack-edit-question .pack-status:empty{display:none}.pack-active-list{align-items:center}.pack-active-list>.sub{padding:4px 0}@media(max-width:480px){.pack-question-settings{gap:6px}.pack-question-settings select{font-size:13px}.pack-option-fields>.pack-edit-head{grid-template-columns:38px minmax(0,1fr)}.pack-answer-select{width:38px}.pack-optional summary{font-size:13px}}
+
+/* Browse packs continuously; compact tiles make room for many results. */
+.mq-studio .pack-dialog:has(.catalog-grid){width:min(1120px,96vw)}
+.mq-studio .catalog-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:12px;align-items:stretch}
+.mq-studio .catalog-grid .pack-card{display:flex;flex-direction:column;gap:9px;background:#1c3046;border:1px solid #486078;border-radius:10px;padding:10px;box-shadow:none}
+.mq-studio .catalog-grid .pack-card[data-selected=true]{border-color:#73dccb;box-shadow:inset 0 0 0 1px #73dccb;background:#203c40}
+.mq-studio .catalog-grid .pack-cover{height:auto;aspect-ratio:3/1;flex:none}
+.pack-card-details{display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}
+.mq-studio .catalog-grid .pack-card h3{font-size:17px;line-height:1.2;margin:0}
+.mq-studio .catalog-grid .pack-card p{color:#c4d3df;font-size:12px;line-height:1.35;margin:0}
+.mq-studio .catalog-grid .pack-card .pack-visibility{font-size:11px;color:#9bb9cc}
+.mq-studio .catalog-grid .pack-card .pack-count{font-size:12px;color:#9fe5ca}
+.mq-studio .catalog-grid .pack-card-actions{margin-top:auto;padding-top:5px;gap:5px}
+.mq-studio .catalog-grid .pack-card-actions button.primary,.mq-studio .catalog-grid .pack-card-actions button[aria-pressed]{width:100%;min-height:38px;justify-content:center}
+.mq-studio .catalog-filters{display:flex;flex-wrap:wrap;gap:5px}
+.mq-studio .catalog-filters button{flex:1 1 auto;min-height:36px;white-space:nowrap;font-size:13px}
+.mq-studio .catalog-filters button[aria-pressed=true]{background:#f5c978;color:#142239;border-color:#f5c978}
+.catalog-tools{justify-content:flex-end}.catalog-tools button{min-height:40px}
+.catalog-empty{grid-column:1/-1;text-align:center;padding:20px;display:grid;gap:8px}
+.pack-page-nav:empty{display:none}.pack-page-nav button{max-width:360px;margin:auto;justify-content:center}
+.mq-studio .pack-picker{padding:15px;gap:12px;border:1px solid #a78b58;background:#203247;box-shadow:inset 3px 0 #f5c978}
+.mq-studio .pack-picker .pack-picker-head{display:grid;gap:5px}
+.mq-studio .pack-picker-title{font-size:clamp(18px,3vw,23px);font-weight:800;letter-spacing:-.015em}
+.mq-studio .pack-picker-head p{font-size:13px;margin:0;line-height:1.35}
+.mq-studio .pack-picker .pack-summary{display:flex;flex-wrap:wrap;gap:6px}
+.pack-picker-state{padding:5px 8px;border-radius:6px;border:1px solid #54708a;background:#152238;font-size:12px;color:#e4ebf1}
+.pack-picker-state.selected{border-color:#73dccb;background:#24443f;color:#bdf0e3}
+.pack-picker-state.neutral{color:#bac9d8;border-color:#41566c}
+.mq-studio .pack-picker .pack-customize,.mq-studio .pack-picker[data-custom=true] .pack-customize{width:100%;min-height:50px;font-size:16px;padding:10px 14px;background:#f5c978;color:#142239;border:1px solid #f5c978;border-radius:8px;gap:9px;font-weight:800;white-space:normal;box-shadow:none}
+.mq-studio .pack-picker .pack-customize svg{width:21px;height:21px}
+.mq-studio .pack-picker .pack-customize:hover{background:#ffdb94;color:#142239;border-color:#ffdb94}
+@media(max-width:700px){.mq-studio .catalog-grid{grid-template-columns:1fr;gap:8px}.mq-studio .catalog-grid .pack-card{display:grid;grid-template-columns:84px minmax(0,1fr);align-items:start;padding:9px;gap:10px}.mq-studio .catalog-grid .pack-card .pack-cover{aspect-ratio:1/1;width:100%;height:auto}.mq-studio .catalog-grid .pack-card .pack-favorite{width:30px;height:30px;min-height:30px;padding:3px;top:3px;right:3px}.mq-studio .catalog-grid .pack-card h3{font-size:16px}.mq-studio .catalog-grid .pack-card .pack-card-actions button{min-height:34px}.mq-studio .catalog-grid .pack-card .pack-card-actions button.primary,.mq-studio .catalog-grid .pack-card .pack-card-actions button[aria-pressed]{width:auto;flex:1}.mq-studio .catalog-filters button{font-size:12px;min-height:36px;padding:6px 8px}.mq-studio .pack-picker{padding:12px}.mq-studio .pack-picker .pack-customize{min-height:48px;font-size:15px}}
