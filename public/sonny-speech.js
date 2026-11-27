@@ -1,6 +1,8 @@
 // Estimate natural Spanish speech duration, including short pauses for punctuation.
 // Device voices vary; these estimates reserve time, rather than imposing a speech cutoff.
-export const SONNY_PITCH=1.78;
+// Requested character pitch; native speech synthesis supports only 0–2.
+export const SONNY_TARGET_PITCH=2.35;
+export const SONNY_PITCH=Math.min(2,SONNY_TARGET_PITCH);
 export const SONNY_BASE_RATE=1.42;
 export const SONNY_MAX_RATE=1.85;
 export function speechEstimate(text,rate=SONNY_BASE_RATE){
