@@ -32,6 +32,7 @@
     "wrangler": "^4.0.0",
     "esbuild": "^0.25.0",
     "sharp": "^0.34.0",
-    "daisyui": "^5.0.0"
+    "daisyui": "^5.0.0",
+    "lucide-static": "^0.468.0"
   }
 }
