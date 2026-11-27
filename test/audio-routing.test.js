@@ -5,8 +5,8 @@ const base={hasState:true,visible:true};
 test('host and players hear the shared show on their own devices without a TV',()=>{
  for(const role of ['host','player','screen'])assert.equal(shouldPlayShowAudio({...base,role,view:role}),true);
 });
-test('casting pauses only the sender shared audio, not the TV; optional local playback works',()=>{
- assert.equal(shouldPlayShowAudio({...base,role:'host',view:'host',casting:true}),false);
+test('a shared screen pauses all controller show audio, not the TV; optional local playback works',()=>{
+ assert.equal(shouldPlayShowAudio({...base,role:'host',view:'host',casting:true}),false);assert.equal(shouldPlayShowAudio({...base,role:'player',view:'player',casting:true}),false);
  assert.equal(shouldPlayShowAudio({...base,role:'host',view:'host',casting:true,alsoLocal:true}),true);
  assert.equal(shouldPlayShowAudio({...base,role:'screen',view:'screen',casting:true}),true);
 });

@@ -1,3 +1,4 @@
+import {useTvPad} from '/display-mode.js';
 import {readPadPreference,writePadPreference} from '/arcade-viewport.js';
 import {actionBeat,actionMeta,beatDuration} from '/arcade-rules.js';
 import {syncArcadeStage} from '/generated/character3d.js';
@@ -23,8 +24,8 @@ export function mountArcadeGame(parent,{state,playerId,play,send,offset,reveal,r
  const full=btn('ghost arcade-fullscreen','⛶ Pantalla completa',async()=>{try{if(!document.fullscreenElement&&document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();await screen.orientation?.lock?.('landscape');}catch{}applyMode();});
  tools.append(switchMode,full);
  function refreshScene(){if(arena.hidden)return;try{syncArcadeStage(arena,current,clock,play?playerId:null);}catch{arena.classList.add('arcade-fallback');}}
- function applyMode(){if(!wrap.isConnected)return;pad=play&&(preference??(!current.solo&&coarse.matches&&landscape.matches));wrap.classList.toggle('tv-gamepad',pad);document.body.classList.toggle('arcade-pad-mode',pad);arena.hidden=pad;meter.hidden=pad;live.hidden=play;rotate.hidden=!play||!coarse.matches||landscape.matches||current.solo;switchMode.textContent=pad?'Ver juego en móvil':'Mando TV';full.hidden=!coarse.matches;refreshScene();}
- wrap.updateArcade=(s,o)=>{current=s;clock=o;refreshScene();};
+ function applyMode(){if(!wrap.isConnected)return;pad=useTvPad(current,play,preference);wrap.classList.toggle('tv-gamepad',pad);document.body.classList.toggle('arcade-pad-mode',pad);arena.hidden=pad;meter.hidden=pad;live.hidden=play;rotate.hidden=true;switchMode.hidden=!play||!current.sharedDisplay||current.solo;switchMode.textContent=pad?'Ver juego en móvil':'Mando TV';full.hidden=!coarse.matches;refreshScene();}
+ wrap.updateArcade=(s,o)=>{const changed=!!s.sharedDisplay!==!!current.sharedDisplay;current=s;clock=o;if(changed)applyMode();else refreshScene();};
  function keyHandler(e){if(!wrap.isConnected||e.repeat||!play)return;const map=kind==='dash'?{ArrowLeft:'left',ArrowRight:'right',' ':'jump',ArrowUp:'jump'}:kind==='dodge'?{ArrowLeft:'0',ArrowUp:'1',ArrowRight:'2'}:{' ':'shoot',Enter:'shoot'};if(map[e.key]&&e.target.tagName!=='BUTTON'){e.preventDefault();input(map[e.key]);}}
  const onRotate=()=>applyMode();landscape.addEventListener?.('change',onRotate);if(play)document.addEventListener('keydown',keyHandler);
  function dispose(){if(disposed)return;disposed=true;cancelAnimationFrame(frame);landscape.removeEventListener?.('change',onRotate);document.removeEventListener('keydown',keyHandler);if(!document.querySelector('.arcade-game.tv-gamepad'))document.body.classList.remove('arcade-pad-mode');}

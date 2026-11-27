@@ -721,3 +721,12 @@ body.arcade-viewport[data-arcade-viewport=quick] #round[data-rule=odd] .odd-tile
  body.arcade-viewport[data-arcade-viewport=quick] #round[data-rule=number-hunt] .odd-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
  body.arcade-viewport[data-arcade-viewport=action] .arcade-game:not(.tv-gamepad){grid-template-rows:auto minmax(0,1fr) auto auto auto}
 }
+
+/* Shared TV: the phone stays a responsive controller. Without a TV the entire
+   show remains visible, regardless of phone orientation. */
+.shared-clue-note{display:none}
+#app[data-display-mode=tv][data-round-phase=question] #round>.media{display:none}
+#app[data-display-mode=tv][data-round-phase=question] .shared-clue-note{display:block;font-size:12px;text-align:center;color:#d9c6ff;margin:3px 0}
+#app[data-display-mode=tv] .local-sonny,#app[data-display-mode=tv] .round-results .voice-presenter{display:none}
+.arcade-mode-toggle[hidden]{display:none!important}
+body.arcade-viewport .arcade-pad-tools:has(button:only-child[hidden]){display:none}
