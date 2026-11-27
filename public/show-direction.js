@@ -1,6 +1,6 @@
 // Shared broadcast timing and editorial direction. No game-state mutations.
 const styles={
- tiebreak:['#ffdb78','MUERTE SÚBITA','Solo los líderes empatados pueden responder.'],classic:['#8ecbff','CONCURSO','Piensa rápido. Acierta.'],warmup:['#8ecbff','CALENTAMIENTO','El primer paso hacia la victoria.'],
+ tiebreak:['#ffdb78','MUERTE SÚBITA','Solo los líderes empatados pueden responder.'],classic:['#8ecbff','CONCURSO','Piensa rápido. Acierta.'],warmup:['#8ecbff','PREGUNTAS CLÁSICAS','El primer paso hacia la victoria.'],
  'order-round':['#c4acff','PONLO EN ORDEN','Cada posición cuenta.'],estimate:['#76e3d2','LA CIFRA JUSTA','La precisión marca la diferencia.'],
  buzzer:['#ffbf73','EL GRAN PULSADOR','Pulsa si lo tienes claro. Fallar cuesta hasta 100 puntos.'],steal:['#ff8da9','ROBAPUNTOS','El marcador puede cambiar de golpe.'],
  final:['#ffdb78','GRAN FINAL','Todo se decide ahora.'],wager:['#ffbf73','LA GRAN SUBASTA','¿Cuánto estás dispuesto a arriesgar?'],
