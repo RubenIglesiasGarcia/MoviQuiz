@@ -104,7 +104,7 @@ body.tv-mode .screen .presenter-name{font-size:clamp(9px,1.2vh,15px);line-height
 body.tv-mode .screen #ranks{min-height:0;flex:0 1 auto;max-height:33vh;overflow:hidden;display:grid;gap:.4vh}
 body.tv-mode .screen .rank-row{display:grid;grid-template-columns:2ch 3.1vh minmax(0,1fr) 1ch auto;align-items:center;gap:.4vw;padding:.5vh .5vw;margin:0;min-height:0;font-size:clamp(12px,1.9vh,24px)}
 body.tv-mode .screen .rank-row .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}body.tv-mode .screen .rank-row .pos,body.tv-mode .screen .rank-row strong{font-size:clamp(12px,2.1vh,27px)}
-body.tv-mode .screen .rank-row .mq-character{width:3.1vh;height:3.5vh}body.tv-mode .screen .rank-row:nth-child(n+6){display:none}
+body.tv-mode .screen .rank-row .mq-character{width:3.1vh;height:3.5vh}body.tv-mode .screen .rank-row[hidden]{display:none!important}
 body.tv-mode .screen[data-phase=lobby]>.board{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}body.tv-mode .screen[data-phase=lobby] .tv-stage{max-height:none}
 body.tv-mode .screen .lobby{padding:1vh 0;margin:0}body.tv-mode .screen .lobby-qr{margin:1vh auto}body.tv-mode .screen .lobby-qr canvas{width:clamp(100px,25vh,280px)!important}body.tv-mode .screen .lobby .room-code{font-size:clamp(32px,7vh,90px)}
 body.tv-mode .screen[data-arcade=true]>.board{grid-template-columns:minmax(0,3.1fr) minmax(0,1fr)}
@@ -759,3 +759,14 @@ body:not(.arcade-viewport):not(.order-controller) #app[data-display-mode=tv]:not
 #app[data-display-mode=tv][data-round-phase=reveal]:not(.screen)>.board{margin-bottom:0}
 .tv-score-fallback{padding:2vh 2vw;gap:1vh!important;overflow:auto!important}.tv-fallback-row{display:grid;grid-template-columns:3ch minmax(0,1fr) auto auto;gap:1vw;align-items:center;padding:1vh;background:#382854;border-radius:8px;font-size:clamp(16px,3vh,36px)}
 @media(prefers-reduced-motion:no-preference){.tv-scoreboard[data-step=points] .tv-score-row[data-reaction=correct] .mq-character{animation:mq-hop .5s 2 ease-out}.tv-scoreboard[data-step=points] .tv-score-row[data-reaction=wrong] .mq-character{animation:mq-shake .4s ease-out}}
+
+/* Large-room broadcast: keep the side panel legible, and fit more rows in full-screen results. */
+body.tv-mode .screen .side #ranks{flex:0 0 auto;max-height:34vh;overflow:hidden}
+body.tv-mode .screen .side #ranks .rank-row[hidden]{display:none!important}
+body.tv-mode .screen .side h3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.tv-mode .screen .tv-stage[data-grouped=true]:after{content:attr(data-roster);inset:auto 0 0;box-shadow:none;background:#15182edc;color:#fff;font-size:clamp(11px,1.6vh,20px);padding:.35vh .6vw;text-align:center}
+body.tv-mode .tv-scoreboard[data-dense=true] .tv-score-row{min-height:5.9vh;padding:.25vh .55vw;font-size:clamp(13px,2.2vh,28px)}
+body.tv-mode .tv-scoreboard[data-dense=true] .tv-score-avatar{height:5vh}
+body.tv-mode .tv-scoreboard[data-dense=true] .tv-score-avatar .mq-character{width:4.2vh;height:5vh}
+body.tv-mode .tv-scoreboard[data-dense=true] .tv-score-list{gap:.3vh;padding:.35vh 1.5vw}
+body.tv-mode .tv-scoreboard[data-dense=true] .tv-score-move{font-size:.58em}

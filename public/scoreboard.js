@@ -18,7 +18,7 @@ function cells(row,p,avatarNode){
 // A complete static board exists before any animation begins.
 export function mountTvScoreboard(host,state,offset,answer,avatarNode){
  const box=el('section','tv-scoreboard'),head=el('header','tv-score-head'),title=el('h2','','Resultados de la ronda'),kicker=el('div','result-kicker','RONDA '+(state.index+1)+' / '+state.total),solution=el('p','tv-score-solution',answer||'¡Prueba terminada!'),status=el('p','tv-score-status','Puntos de la ronda y clasificación'),columns=el('div','tv-score-columns'),list=el('div','tv-score-list'),footer=el('div','result-show-footer'),clock=el('span','result-countdown','Esperando al presentador…');
- box.setAttribute('aria-label','Clasificación de la ronda');box.setAttribute('role','region');box.setAttribute('open','');box.classList.add('tv-results-overlay');head.append(kicker,title,solution,status);columns.append(el('span','','POS.'),el('span','',''),el('span','','CONCURSANTE'),el('span','','RONDA'),el('span','','TOTAL'));footer.append(clock);box.append(head,columns,list,footer);
+ box.setAttribute('aria-label','Clasificación de la ronda');box.setAttribute('role','region');box.setAttribute('open','');box.classList.add('tv-results-overlay');box.dataset.count=String(state.players.length);box.dataset.dense=String(state.players.length>8);head.append(kicker,title,solution,status);columns.append(el('span','','POS.'),el('span','',''),el('span','','CONCURSANTE'),el('span','','RONDA'),el('span','','TOTAL'));footer.append(clock);box.append(head,columns,list,footer);
  const rows=new Map(),players=scoreRows(state.players);for(const p of players){const row=el('article','tv-score-row'),parts=cells(row,p,avatarNode);rows.set(p.id,{row,...parts});list.append(row);}if(!players.length)list.append(el('p','','Esperando jugadores…'));host.append(box);
  const reduced=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches||false;
  let stage='',lastOrder='',scrollStart=0;
@@ -37,4 +37,24 @@ export function mountTvScoreboard(host,state,offset,answer,avatarNode){
 }
 export function paintRankingDialog(dialog,state,playerId,avatarNode){
  const list=dialog.querySelector('.quick-ranking-list');if(!list)return;const players=scoreRows(state.players,playerId),signature=JSON.stringify(players.map(p=>[p.id,p.rank,p.total,p.delta,p.name,p.avatar]));if(list.dataset.signature===signature)return;list.dataset.signature=signature;list.replaceChildren();for(const p of players){const row=el('div','quick-ranking-row');cells(row,p,avatarNode);list.append(row);}
+}
+
+// Keep five readable rows in the narrow side panel; every participant gets a page.
+export function rankingPage(count,now,size=5,period=4000){
+ const pages=Math.max(1,Math.ceil(count/size)),index=((Math.floor(now/period)%pages)+pages)%pages;
+ return {index,pages,start:index*size,end:Math.min(count,(index+1)*size)};
+}
+// A two-row stage is readable up to twelve. Larger rooms rotate groups by round.
+export function stagePlayers(players,index=0,finished=false){
+ const ordered=[...players].sort((a,b)=>a.id.localeCompare(b.id));
+ if(ordered.length<=12)return ordered;
+ if(finished)return [...players].slice(0,12).sort((a,b)=>a.id.localeCompare(b.id));
+ const pages=Math.ceil(ordered.length/12),page=Math.max(0,index)%pages;
+ return ordered.slice(page*12,page*12+12);
+}
+export function stageSlot(i,n){
+ const twoRows=n>8,cols=twoRows?Math.ceil(n/2):n,back=twoRows&&i>=cols,row=back?i-cols:i,count=back?n-cols:cols;
+ const spacing=n<=2?2.25:twoRows?1.60:1.48;
+ const x=(row-(count-1)/2)*spacing+(n<=2?1.25:.8)+(back?.35:0);
+ return {x,y:back?.66:0,z:back?-2.65:-.25-Math.abs(row-(count-1)/2)*.13,rot:-x*.035};
 }
