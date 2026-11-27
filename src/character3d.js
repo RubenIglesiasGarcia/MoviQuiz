@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {decorateArena,impactParticles} from './arena-art.js';
+import {decorateArena as decorateFreeArena,impactParticles} from './arena-art.js';
 import {arenaTheme,arenaImpact,arenaCameraScale} from '../public/arena-direction.js';
 import {createGalgos,animateGalgos} from './galgos.js';
 import {createSonny,animateSonny} from './sonny.js';
@@ -125,7 +125,7 @@ export function syncCoinStage(host,state,clockOffset,focusId){
  for(const z of [-4.13,4.13])mesh(scene,new THREE.BoxGeometry(12.3,.22,.09),edge,0,.1,z);
  const grid=new THREE.GridHelper(12,12,0x7560a3,0x584679);grid.scale.z=2/3;grid.position.y=.005;if(!splash)scene.add(grid);
  if(!splash)for(const b of COIN_BLOCKS){mesh(scene,new THREE.BoxGeometry(b.w,.62,b.d),dark,b.x,.31,b.z);mesh(scene,new THREE.BoxGeometry(b.w+.02,.12,b.d+.02),edge,b.x,.66,b.z);}
- const scenery=decorateArena(scene,variant,profile),impacts=impactParticles(scene,profile);
+ const scenery=decorateFreeArena(scene,variant,profile),impacts=impactParticles(scene,profile);
  const splashDeck=splash?new THREE.Group():null;if(splashDeck){scene.add(splashDeck);mesh(splashDeck,new THREE.CylinderGeometry(1,1,.25,64),mat(0xafe3f2,.37),0,.1,0);const rim=mesh(splashDeck,new THREE.TorusGeometry(1,.018,8,64),new THREE.MeshBasicMaterial({color:0xf2fbff}),0,.24,0);rim.rotation.x=Math.PI/2;}const feeder=tuna?new THREE.Group():null;if(feeder){scene.add(feeder);mesh(feeder,new THREE.CylinderGeometry(.85,.75,.16,48),mat(0xf3b95c,.4),0,.08,0);const rim=mesh(feeder,new THREE.TorusGeometry(.76,.045,12,48),rare,0,.18,0);rim.rotation.x=Math.PI/2;for(let i=0;i<3;i++){const fish=mesh(feeder,new THREE.CapsuleGeometry(.07,.22,5,12),mat(0x71bdde),Math.cos(i*2.1)*.28,.21,Math.sin(i*2.1)*.28);fish.rotation.z=Math.PI/2;}}
  const seenCoins=new Set(Object.keys(state.arcade.world.taken)),sparkCount=96,sparkPos=new Float32Array(sparkCount*3),sparkGeometry=new THREE.BufferGeometry();sparkGeometry.setAttribute('position',new THREE.BufferAttribute(sparkPos,3));sparkPos.fill(-100);const sparkMaterial=new THREE.PointsMaterial({color:0xffdd78,size:.14,transparent:true,opacity:.95,depthWrite:false,blending:THREE.AdditiveBlending});const sparks=new THREE.Points(sparkGeometry,sparkMaterial);sparks.frustumCulled=false;scene.add(sparks);const bursts=[];
  const sofa=state.arcade.plan.variant==='sofa'?new THREE.Group():null;let sofaRing=null;if(sofa){scene.add(sofa);const upholstery=mat(0xd260b0,.7),cushion=mat(0xe98bcc,.8);mesh(sofa,new THREE.BoxGeometry(1.12,.25,.56),upholstery,0,.30,0);mesh(sofa,new THREE.BoxGeometry(1.12,.55,.18),upholstery,0,.58,-.26);mesh(sofa,new THREE.BoxGeometry(.16,.42,.7),cushion,-.63,.42,0);mesh(sofa,new THREE.BoxGeometry(.16,.42,.7),cushion,.63,.42,0);mesh(sofa,new THREE.BoxGeometry(.92,.10,.50),cushion,0,.46,.03);sofaRing=mesh(sofa,new THREE.RingGeometry(SOFA_RADIUS-.07,SOFA_RADIUS,48),new THREE.MeshBasicMaterial({color:0xffd55a,side:THREE.DoubleSide}),0,.045,0);sofaRing.rotation.x=-Math.PI/2;}
