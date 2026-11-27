@@ -752,3 +752,10 @@ body.tv-mode #app.screen>.tv-scoreboard{position:relative;inset:auto;display:fle
 .controller-round-result{display:grid;gap:12px;text-align:center;padding:10px 0;min-width:0}.controller-round-result h2{margin:0;font-size:clamp(20px,5vw,30px)}.controller-result-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.controller-result-values>div{display:grid;gap:4px;background:#30244b;border:1px solid #765fa0;border-radius:10px;padding:12px}.controller-result-values strong{font-size:24px;color:#ffd55a}.controller-result-values small{font-size:12px;color:#d7c7e9}#app[data-display-mode=tv][data-round-phase=reveal]:not(.screen) #round{min-height:0;height:auto}#app[data-display-mode=tv][data-round-phase=reveal]:not(.screen) .host-controls{position:sticky;bottom:0;z-index:5;background:#211831;padding:8px 0 max(8px,env(safe-area-inset-bottom));margin-top:8px}
 .results-modal .round-result-list{align-content:start;grid-auto-rows:min-content}
 @media(prefers-reduced-motion:reduce){.tv-scoreboard .tv-score-delta{animation:none!important}}
+
+/* Never let the optional classification access obscure a live Arcade controller. */
+body:not(.arcade-viewport):not(.order-controller) #app[data-display-mode=tv]:not(.screen)>.room-head{position:sticky;top:0;z-index:12;background:#20162f;padding:6px 8px;border-radius:9px}
+#app[data-display-mode=tv][data-round-phase=reveal]:not(.screen) .room-head .tv-launch,#app[data-display-mode=tv][data-round-phase=reveal]:not(.screen) .room-head>.ghost{display:none}
+#app[data-display-mode=tv][data-round-phase=reveal]:not(.screen)>.board{margin-bottom:0}
+.tv-score-fallback{padding:2vh 2vw;gap:1vh!important;overflow:auto!important}.tv-fallback-row{display:grid;grid-template-columns:3ch minmax(0,1fr) auto auto;gap:1vw;align-items:center;padding:1vh;background:#382854;border-radius:8px;font-size:clamp(16px,3vh,36px)}
+@media(prefers-reduced-motion:no-preference){.tv-scoreboard[data-step=points] .tv-score-row[data-reaction=correct] .mq-character{animation:mq-hop .5s 2 ease-out}.tv-scoreboard[data-step=points] .tv-score-row[data-reaction=wrong] .mq-character{animation:mq-shake .4s ease-out}}

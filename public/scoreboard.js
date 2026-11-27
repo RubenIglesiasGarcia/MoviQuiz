@@ -6,7 +6,7 @@ export const signed=n=>(n>0?'+':'')+fmt(n);
 export function scoreRows(players=[],playerId=null){return players.map((p,i)=>({id:p.id,name:p.name,avatar:p.avatar,rank:i+1,total:Number(p.score)||0,delta:Number(p.last)||0,move:movement(players,p),mine:p.id===playerId,reaction:p.reaction||'idle'}));}
 export function scoreboardFrame(state,now,reduced=false){
  const t=resultTimeline(state,now),stage=reduced?'rank':t.stage,progress=stage==='answer'?0:stage==='rank'?1:Math.max(0,Math.min(1,(t.elapsed-t.pointStart)/t.pointDuration)),ordered=stage==='rank'?state.players:rankBefore(state.players);
- return {stage,progress,rows:ordered.map(p=>({id:p.id,score:Math.round((Number(p.score)||0)-(Number(p.last)||0)*(1-(1-(1-progress)**3))),delta:Number(p.last)||0}))};
+ const eased=1-(1-progress)**3;return {stage,progress,rows:ordered.map(p=>({id:p.id,score:Math.round((Number(p.score)||0)-(Number(p.last)||0)+(Number(p.last)||0)*eased),delta:Number(p.last)||0}))};
 }
 function cells(row,p,avatarNode){
  const rank=el('b','tv-score-rank',String(p.rank)),portrait=el('div','tv-score-avatar'),name=el('div','tv-score-name'),delta=el('strong','tv-score-delta',signed(p.delta)),score=el('strong','tv-score-total',fmt(p.total)),shift=el('small','tv-score-move',p.move>0?'▲ Sube '+p.move:p.move<0?'▼ Baja '+Math.abs(p.move):'— Mantiene posición');
