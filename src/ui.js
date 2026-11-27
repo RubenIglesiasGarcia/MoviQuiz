@@ -1,3 +1,8 @@
+// Only the component CSS we use, bundled locally: no runtime Tailwind or external CDN.
+import '../node_modules/daisyui/base/properties.css';
+import '../node_modules/daisyui/components/button.css';
+import '../node_modules/daisyui/components/input.css';
+import '../node_modules/daisyui/components/select.css';
 import '@fontsource/bungee/latin-400.css';
 import '@fontsource/bricolage-grotesque/latin-500.css';
 import '@fontsource/bricolage-grotesque/latin-700.css';

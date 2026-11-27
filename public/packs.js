@@ -3,10 +3,10 @@ import {levels} from '/difficulty.js';
 import {packSortOptions,filterPacks,packRating} from '/pack-ratings.js';
 import {categoryArt,categoryBadge} from '/category-art.js';
 const h=(tag,cls='',text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
-const b=(label,cls,fn)=>{const n=h('button',cls,label);n.type='button';n.onclick=fn;return n;};
+const b=(label,cls,fn)=>{const n=h('button',cls,label);n.type='button';n.onclick=fn;if(String(cls).split(/\s+/).some(t=>['primary','secondary','ghost'].includes(t))){n.classList.add('btn','mq-ui-btn');if(cls.includes('primary'))n.classList.add('btn-primary');else if(cls.includes('ghost'))n.classList.add('btn-ghost');}return n;};
 const field=(label,input)=>{const l=h('label','pack-field');l.append(h('span','',label),input);return l;};
-const input=(value='',placeholder='',max=300)=>{const n=h('input');n.value=value;n.placeholder=placeholder;n.maxLength=max;return n;};
-const select=(options,value)=>{const n=h('select');for(const [id,label] of options){const o=h('option','',label);o.value=id;n.append(o);}n.value=value;return n;};
+const input=(value='',placeholder='',max=300)=>{const n=h('input','input mq-ui-field');n.value=value;n.placeholder=placeholder;n.maxLength=max;return n;};
+const select=(options,value)=>{const n=h('select','select mq-ui-field');for(const [id,label] of options){const o=h('option','',label);o.value=id;n.append(o);}n.value=value;return n;};
 function modal(title){const d=h('dialog','pack-dialog'),head=h('header','pack-dialog-head'),body=h('div','pack-dialog-body'),close=b('✕','ghost',()=>d.close());close.setAttribute('aria-label','Cerrar');head.append(h('h2','',title),close);d.append(head,body);document.body.append(d);d.addEventListener('close',()=>d.remove(),{once:true});d.showModal();return {d,body};}
 const vis={private:'🔒 Privado',link:'🔗 Por código',public:'🌍 Comunidad'};
 const blank=()=>({mode:'choice',category:'Cultura general',difficulty:'Media',prompt:'',options:['','','',''],correct:null,explanation:''});
