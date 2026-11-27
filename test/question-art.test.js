@@ -14,7 +14,7 @@ test('every standard question has original media or valid local artwork',()=>{
  assert.equal(validateQuestions([{mode:'boolean',prompt:'A question',correct:true,illustration:'https://bad.example/x'}])[0].illustration,undefined);
 });
 test('curated community pack is publicly selectable without database records',async()=>{
- const env={DB:{prepare(){return {bind(){return this;},async all(){return {results:[]};},async first(){throw Error('unexpected db lookup');}};}}},u={id:'guest',guest:true};
+ const env={DB:{prepare(){return {bind(){return this;},async run(){return {success:true};},async all(){return {results:[]};},async first(){throw Error('unexpected db lookup');}};},async batch(statements){return Promise.all(statements.map(s=>s.all()));}}},u={id:'guest',guest:true};
  const catalog=await (await packAPI(env,u,'list')).json();assert.ok(catalog.community.some(p=>p.id===memePack.id&&p.builtin));
  const lookup=await (await packAPI(env,u,'lookup',{id:memePack.id})).json();assert.equal(lookup.pack.count,30);
  const source=await loadPackSelection(env,u,{standard:false,categories:null,packIds:[memePack.id]});assert.equal(source.questions.length,30);
