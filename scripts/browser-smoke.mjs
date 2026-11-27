@@ -13,7 +13,7 @@ try{
  const question={mode:'choice',prompt:'¿Qué número resulta de sumar dos más dos?',category:'Ciencia',difficulty:'Media',options:['Cuatro','Cinco','Tres','Dos'],correct:0,seconds:120};
  const created=await request('/api/rooms',a.token,{kind:'classic',hostPlays:true,autoAdvance:false,questions:[question]});const code=created.state.code;
  await host.goto(base+'/?host='+code);await host.locator('.lobby-qr canvas').waitFor({state:'visible',timeout:20000});
- await player.goto(base+'/?join='+code);await player.locator('.code-input').waitFor();await player.getByRole('button',{name:'Entrar en la sala',exact:true}).click();await player.locator('.lobby-qr canvas').waitFor({state:'visible'});
+ await player.goto(base+'/?join='+code);await player.locator('.code-input').waitFor();await player.getByRole('button',{name:'Entrar en la sala',exact:true}).click();await player.locator('.lobby-qr canvas').waitFor({state:'visible'});for(const width of [320,360,390]){await player.setViewportSize({width,height:720});await player.waitForTimeout(150);const size=await player.evaluate(()=>({width:innerWidth,doc:document.documentElement.scrollWidth,qr:document.querySelector('.lobby-qr canvas').getBoundingClientRect().right}));assert.ok(size.doc<=width+3&&size.qr<=width+3,JSON.stringify(size));}await player.setViewportSize({width:390,height:844});
  await tv.goto(base+'/?screen='+code);await tv.locator('.lobby-qr canvas').waitFor({state:'visible'});
  await host.getByText('Browser Player',{exact:false}).first().waitFor({state:'visible',timeout:15000});
  await host.getByRole('button',{name:'Empezar concurso',exact:true}).click();
