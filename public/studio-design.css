@@ -239,3 +239,5 @@ body.mq-studio.tv-mode>header{background:transparent;border-bottom:1px solid #33
  body.quiz-controller #app:not([data-display-mode=tv]) .quiz-prompt>.question-media-image img{max-height:100%;height:100%}
  body.quiz-controller #app:not([data-display-mode=tv]) .quiz-prompt:has(>.question-media-image) .question-identity{display:none}
 }
+
+.lobby-question-settings{display:grid;gap:7px;padding:12px;border:1px solid #4b6681;border-radius:10px;background:#192d43;text-align:left;margin:8px 0}.lobby-question-settings>.sub{font-size:13px;line-height:1.3}.lobby-question-settings .secondary{justify-content:center;min-height:44px}.pack-apply-footer{position:sticky;bottom:0;z-index:3;display:flex;gap:8px;background:#142239;padding:10px 0 max(8px,env(safe-area-inset-bottom));border-top:1px solid #526981}.pack-apply-footer .primary{flex:1;justify-content:center}.pack-active-list{display:flex;flex-wrap:wrap;gap:6px}.pack-active-list .ghost{font-size:12px;padding:6px 9px}body.tv-mode .lobby-question-settings{font-size:clamp(12px,1.8vh,22px);padding:.7vh 1vw;margin:.5vh 0}

@@ -54,3 +54,10 @@ export async function loadPackSelection(env,u,selection){
  if(!selection.standard&&!ids.length)throw Error('Activa al menos un pack o las preguntas estándar.');
  return {standard:selection.standard,categories,questions};
 }
+
+// Only the host can access pack IDs; public snapshots carry aggregate counts only.
+export function lobbyQuestionSelection(room){if(room.questionSelection)return room.questionSelection;if(room.packSource?.questions?.length)throw Error('Esta sala es anterior al editor de categorías. Crea otra sala para cambiar los packs sin perder la selección original.');return {standard:room.packSource?.standard??true,categories:room.packSource?.categories??null,packIds:[]};}
+export function canEditLobbyQuestions(room,userId){return !!userId&&room.host===userId&&room.phase==='lobby'&&room.kind!=='arcade'&&!room.customQuestions;}
+export function canonicalQuestionSelection(selection,source){return {standard:source.standard,categories:source.categories,packIds:[...new Set(selection.packIds)]};}
+export function defaultQuestionSelection(s){return s.standard&&s.categories===null&&!s.packIds.length;}
+export function lobbyQuestionSummary(room){const s=room.questionSelection;return {standard:s?.standard??room.packSource?.standard??true,categories:s?s.categories:room.packSource?.categories??null,packCount:s?.packIds.length??null};}
