@@ -1,0 +1,13 @@
+import * as THREE from 'three';
+import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
+import {normalizeLook} from '../public/contestant-looks.js';
+const mat=c=>new THREE.MeshStandardMaterial({color:c,roughness:.78});
+function mesh(p,g,m,x=0,y=0,z=0){const o=new THREE.Mesh(g,m);o.position.set(x,y,z);p.add(o);return o;}
+function box(p,m,x,y,z,w,h,d,r=.06){return mesh(p,new RoundedBoxGeometry(w,h,d,2,r),m,x,y,z);}
+function oval(p,m,x,y,z,sx,sy,sz){const o=mesh(p,new THREE.SphereGeometry(1,16,10),m,x,y,z);o.scale.set(sx,sy,sz);return o;}
+export function studioHead(head,skin){return box(head,skin,0,0,0,1.02,.97,.87,.17);}
+export function speciesHead(head,look,dark,white){look=normalizeLook(look);const fur=mat(({cat:0xe1ad64,dog:0xc29873,crow:0x3a485d,robot:0x89abb6})[look]||0xe1ad64),cream=mat(0xffe5c0),gold=mat(0xf6c66a),eyes=[],facialFeatures=[];let mouth;
+ if(look==='robot'){box(head,fur,0,0,0,1.06,.89,.82,.10);box(head,dark,0,.07,.425,.89,.40,.12,.09);const light=mat(0x72e6d7);for(const s of [-1,1]){const e=box(head,light,s*.23,.08,.50,.13,.15,.045,.03);eyes.push([e,1]);}mouth=oval(head,dark,0,-.25,.45,.14,.035,.025);box(head,gold,0,.55,0,.12,.23,.12,.025);oval(head,light,0,.69,0,.09,.09,.09);}
+ else if(look==='crow'){box(head,fur,0,0,0,.90,.91,.83,.20);const beak=mesh(head,new THREE.ConeGeometry(.24,.64,4),gold,0,-.12,.61);beak.rotation.x=Math.PI/2;beak.scale.set(1,.95,.65);mouth=oval(head,dark,0,-.22,.66,.10,.02,.18);for(const s of [-1,1]){const e=oval(head,white,s*.22,.14,.39,.115,.14,.08);const pupil=oval(head,dark,s*.22,.14,.46,.064,.08,.035);eyes.push([e,.14],[pupil,.08]);}for(let i=0;i<3;i++){const feather=box(head,fur,-.16+i*.15,.47,-.15,.14,.31,.22,.06);feather.rotation.z=-.25;}}
+ else{const dog=look==='dog';box(head,fur,0,0,0,dog?.92:1.04,.90,.83,.20);for(const s of [-1,1]){if(dog){const ear=oval(head,mat(0x8d624c),s*.47,.02,-.06,.16,.39,.13);ear.rotation.z=-s*.25;}else{const ear=mesh(head,new THREE.ConeGeometry(.25,.51,4),fur,s*.36,.48,-.04);ear.rotation.z=-s*.21;const inner=mesh(head,new THREE.ConeGeometry(.14,.31,3),mat(0xe9a69e),s*.36,.47,.13);inner.rotation.z=-s*.21;}const e=oval(head,white,s*.22,.12,.42,.115,.14,.065),pupil=oval(head,dark,s*.22,.12,.477,.063,.078,.032);eyes.push([e,.14],[pupil,.078]);}oval(head,cream,0,-.16,.44,dog?.27:.30,.18,dog?.32:.15);oval(head,dark,0,-.09,dog?.72:.58,.11,.08,.07);mouth=oval(head,dark,0,-.23,dog?.66:.56,.12,.03,.03);if(!dog)for(const s of [-1,1])for(let i=0;i<2;i++){const whisker=box(head,dark,s*.35,-.13-i*.09,.48,.30,.015,.015,.006);whisker.rotation.z=s*(.11-i*.22);}}
+ return {eyes,mouth,facialFeatures,brows:[]};}

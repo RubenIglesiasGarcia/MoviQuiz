@@ -15,7 +15,7 @@ function stitch(parent,mat,points,r=.012){const curve=new THREE.CatmullRomCurve3
 export function buildContestantBody({root,torso,skin,dark,white,shirt,gold,arms,legs},a){
  const host=a.presenter===true;if(host)shirt.color.setHex(0x643ba2);const trim=material(shirt.color.clone().multiplyScalar(.63),.84),light=material(shirt.color.clone().lerp(new THREE.Color(0xffffff),.19),.76),pants=material(host?0x292437:0x28334d,.83),sole=material(0x151c30,.87),rubber=material(0xe7eaf2,.67),crease=material(0xb87e59,.8),pantSeam=material(0x151d30,.8);
  shirt.roughness=.78;
- profile(torso,shirt,[[0,.61],[.27,.62],[.36,.68],[.37,.82],[.39,1.02],[.46,1.25],[.43,1.38],[.28,1.47],[.15,1.48],[0,1.47]],0,0,0,.77,32);
+ if(a.look&&a.look!=='classic')rounded(torso,shirt,0,1.06,0,.87,.84,.65,.16);else profile(torso,shirt,[[0,.61],[.27,.62],[.36,.68],[.37,.82],[.39,1.02],[.46,1.25],[.43,1.38],[.28,1.47],[.15,1.48],[0,1.47]],0,0,0,.77,32);
  profile(torso,trim,[[0,.61],[.31,.62],[.36,.65],[.37,.70],[.35,.73],[0,.74]],0,0,0,.79);
  oval(torso,pants,0,.66,0,.32,.18,.24);
  profile(torso,skin,[[0,0],[.14,.01],[.145,.13],[.12,.19],[0,.19]],0,1.39,0,.9);

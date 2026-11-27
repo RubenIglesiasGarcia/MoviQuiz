@@ -122,6 +122,7 @@ export function sonnyMoment(state,previousLeader=null){
  let type=null,mood='smug';
  if(p.some(x=>x.shieldBlocked))return {text:'Acceso denegado. El escudo acaba de salvar esos puntos.',mood:'smug'};
  if(p.some(x=>x.eventBonus))return {text:'Bonus desbloqueado. El marcador acaba de recibir un parche.',mood:'celebrate'};
+ const hot=p.find(x=>x.streak>=3&&x.streak%3===0&&x.reaction==='correct'),cold=p.find(x=>x.streak<=-3&&x.streak%3===0&&x.reaction==='wrong');if(normal&&!p.some(x=>x.stolen>0)&&hot)return {text:hot.name+' lleva '+hot.streak+' aciertos seguidos. ¡Ni un gato con nueve vidas tiene tanto margen!',mood:'celebrate'};if(normal&&!p.some(x=>x.stolen>0)&&cold)return {text:cold.name+', '+Math.abs(cold.streak)+' fallos seguidos. Te guardo una caja para pensar. ¡A remontar!',mood:'smug'};
  if(p.some(x=>x.stolen>0))type='steal';
  else if(previousLeader&&leader?.id!==previousLeader&&leader)type='lead';
  else if(p.some((x,j)=>(x.previousRank??j)-j>=2))type='comeback';

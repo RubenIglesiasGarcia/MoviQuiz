@@ -34,6 +34,7 @@ function reaction(s,previousLeader,speaker){
  if(p.some(x=>x.eventBonus))return '¡Puntos extra! Ese bonus puede cambiar la clasificación.';
  if(p.some(x=>x.stolen>0))return pick(['¡Acaba de haber un robo de puntos! Revisad la clasificación.','¡Un mordisco al marcador!','¡Alguien ha birlado el premio de otro!','¡Eso ha sido quitarle la pelota al rival!']);
  if(previousLeader&&leader&&leader.id!==previousLeader)return '¡Cambio de líder! '+leader.name+' toma la delantera.';
+ const hot=p.find(x=>x.streak>=3&&x.streak%3===0&&x.reaction==='correct'),cold=p.find(x=>x.streak<=-3&&x.streak%3===0&&x.reaction==='wrong');if(s.kind!=='arcade'&&hot)return hot.name+' lleva '+hot.streak+' aciertos seguidos. ¡Galletitas para esa racha!';if(s.kind!=='arcade'&&cold)return cold.name+', '+Math.abs(cold.streak)+' fallos seguidos. ¡Sacude las patas y a por la siguiente!';
  if(s.kind==='arcade')return pick(['¡Se acabó el tiempo! Veamos quién ha conseguido la mejor marca.','¡Prueba terminada! Menudo ritmo.','Los puntos ya están en el marcador. Todavía queda mucha partida.','¡Eso ha estado muy disputado!']);
  const correct=p.filter(x=>x.reaction==='correct').length;
  if(p.length&&correct===p.length)return pick(['¡Pleno de aciertos! Así da gusto.','¡Todos habéis acertado! Gran ronda.','¡Qué nivel! Vamos a tener que subir el listón.','¡Premio para toda la manada!','¡Todos han seguido el rastro correcto!','¡Menudo festival de colas moviéndose!','¡Habéis traído la pelota todos a la primera!','¡Guau, ni en una exhibición de agility!']);

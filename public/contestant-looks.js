@@ -1,0 +1,3 @@
+export const contestantLooks={studio:{label:'Estudio',description:'Humano angular, manos grandes y zapatillas.',color:'#eeb57d'},classic:{label:'Clásico',description:'El concursante original.',color:'#eeb57d'},cat:{label:'Gato',description:'Orejas puntiagudas y bigotes.',color:'#dfa55d'},dog:{label:'Galgo',description:'Hocico largo y orejas caídas.',color:'#c69c78'},crow:{label:'Cuervo',description:'Pico dorado y plumaje oscuro.',color:'#53637b'},robot:{label:'Robot',description:'Visor luminoso y cabeza cuadrada.',color:'#85bcc5'}};
+export function normalizeLook(value){return Object.hasOwn(contestantLooks,value)?value:'studio';}
+export function humanLook(value){return ['studio','classic'].includes(normalizeLook(value));}
