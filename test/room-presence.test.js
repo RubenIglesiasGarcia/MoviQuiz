@@ -6,3 +6,7 @@ test('active match retains points and ordinary questions need not await a discon
 
 import {nextPresenceExpiry} from '../public/room-presence.js';
 test('presence alarm follows the newest tab and expires when all clients disappear',()=>{const r={players:{a:{connected:true},b:{connected:true}}};assert.equal(nextPresenceExpiry(r,[socket('a',1000),socket('a',1500),socket('b',1200)],2000),51200);assert.equal(nextPresenceExpiry(r,[socket('a',1000),socket('a',1500)],2000),51500);});
+
+import {reconcileHost,nextHostAlarm,HOST_GRACE} from '../public/room-presence.js';
+test('host handoff only occurs after grace, between rounds, to an active player',()=>{const r={phase:'question',host:'h',players:{a:{connected:true},b:{connected:false},h:{connected:false}}};assert.equal(reconcileHost(r,new Set(['a']),1000),true);assert.equal(reconcileHost(r,new Set(['a']),1000+HOST_GRACE),false);assert.equal(r.host,'h');r.phase='reveal';assert.equal(nextHostAlarm(r,1000+HOST_GRACE),1000+HOST_GRACE+1);assert.equal(reconcileHost(r,new Set(['a']),1000+HOST_GRACE),true);assert.equal(r.host,'a');assert.equal(r.hostEpoch,1);assert.equal(r.hostPlays,true);});
+test('returning host cancels handoff and solo room never transfers',()=>{const r={phase:'lobby',host:'h',players:{a:{connected:true}}};reconcileHost(r,new Set(['a']),1000);reconcileHost(r,new Set(['h','a']),2000);assert.equal(r.hostLostAt,undefined);assert.equal(nextHostAlarm(r,2000),Infinity);assert.equal(reconcileHost({...r,solo:true},new Set(['a']),100000),false);});
