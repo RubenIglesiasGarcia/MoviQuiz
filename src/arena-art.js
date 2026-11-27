@@ -47,7 +47,7 @@ export function decorateArena(scene,kind,quality){
   mesh(group,cylG,metal,0,1.45,-6.7,1.45,.27,1.45).rotation.x=Math.PI/2;const door=mesh(group,cylG,M(0x93839a,.4,.4),0,1.45,-6.48,1.20,.2,1.20);door.rotation.x=Math.PI/2;for(let i=0;i<8;i++){const a=i*Math.PI/4;mesh(group,ballG,accent,Math.cos(a)*1.05,1.45+Math.sin(a)*1.05,-6.34,.1,.1,.06);}
   for(let i=0;i<12;i++)details.push([-6+i,1.8,-6.9,.28,.12,.06]);animated=batch(group,boxG,accent,details);
  }
- return {animate(t,motion){if(!motion)return;if(animated){animated.position.y=kind==='lava'?Math.sin(t*.7)*.45:0;animated.position.x=kind==='splash'?Math.sin(t*.65)*.6:0;}accent.emissiveIntensity=.55+.12*Math.sin(t*1.7);}};
+ return {limitShadows(){group.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=false;}});},animate(t,motion){if(!motion)return;if(animated){animated.position.y=kind==='lava'?Math.sin(t*.7)*.45:0;animated.position.x=kind==='splash'?Math.sin(t*.65)*.6:0;}accent.emissiveIntensity=.55+.12*Math.sin(t*1.7);}};
 }
 export function impactParticles(scene,quality){
  const count=quality.high?120:48,positions=new Float32Array(count*3),colors=new Float32Array(count*3),g=new THREE.BufferGeometry();positions.fill(-100);g.setAttribute('position',new THREE.BufferAttribute(positions,3));g.setAttribute('color',new THREE.BufferAttribute(colors,3));

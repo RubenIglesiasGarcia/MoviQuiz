@@ -38,6 +38,16 @@ export function standingsSpotlight(players=[]){
  const margin=players[1]?leader.score-players[1].score:null;
  return {kind:'leader',title:'AL FRENTE DEL MARCADOR',detail:leader.name+(margin!==null?' · '+margin.toLocaleString('es-ES')+' pts de ventaja':''),ids:[leader.id]};
 }
+// Distinguish a close fight from a genuine change of leader without inventing a comeback.
+export function competitiveMoment(players=[]){
+ if(players.length<2)return null;const leader=players[0],second=players[1],margin=leader.score-second.score;
+ if(margin===0)return {kind:'tie',title:'¡EMPATE EN CABEZA!',detail:players.filter(p=>p.score===leader.score).map(p=>p.name).join(' · '),ids:players.filter(p=>p.score===leader.score).map(p=>p.id)};
+ if(margin<0)return null;
+ if(Number(leader.previousRank)>0&&players.some(p=>p.previousRank===0&&p.id!==leader.id))return {kind:'change',title:'¡CAMBIO DE LÍDER!',detail:leader.name+' toma el mando · '+margin.toLocaleString('es-ES')+' pts de ventaja',ids:[leader.id]};
+ if(leader.score>0&&margin<=Math.max(100,Math.min(400,leader.score*.06)))return {kind:'close',title:'¡DUELO POR LA CORONA!',detail:leader.name+' y '+second.name+' · solo '+margin.toLocaleString('es-ES')+' pts de diferencia',ids:[leader.id,second.id]};
+ const climber=players.map((p,i)=>({p,gain:Number(p.previousRank)-i})).filter(x=>Number.isFinite(x.gain)&&x.gain>=3).sort((a,b)=>b.gain-a.gain)[0];
+ return climber?{kind:'comeback',title:'¡MENUDO REMONTADÓN!',detail:climber.p.name+' sube '+climber.gain+' puestos',ids:[climber.p.id]}:null;
+}
 export function applyShowScene(root,state){const scene=showScene(state);if(root.dataset.showScene!==scene.kind)root.dataset.showScene=scene.kind;if(root.dataset.showFinal!==String(scene.finale))root.dataset.showFinal=String(scene.finale);if(root.style.getPropertyValue('--show-accent')!==scene.theme)root.style.setProperty('--show-accent',scene.theme);return scene;}
 
  // A deterministic editorial cue, identical on every connected device.

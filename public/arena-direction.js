@@ -25,3 +25,7 @@ export function arenaMusicKey(state){
  const v=state?.arcade?.plan?.variant;
  return state?.phase==='question'&&state.kind==='arcade'&&themes[v]?'arena-'+v:'arcade';
 }
+
+// The play camera never changes heading or zoom during a live round. Intro motion
+// pulls back from a wider frame, so it cannot conceal any playable position.
+export function arenaCameraScale(elapsed,motion=true){if(!motion||elapsed>=0)return 1;const progress=Math.max(0,Math.min(1,(elapsed+3500)/3500));return 1+.13*(1-progress)**2;}
