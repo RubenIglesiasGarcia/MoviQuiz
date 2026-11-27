@@ -631,3 +631,16 @@ body.tv-mode .screen .question-media-image{height:clamp(80px,24vh,250px)}
 .host-preview:has(.character3d){isolation:isolate}.host-choice:focus-visible{outline:3px solid #ffd55a;outline-offset:2px}.coin-arena .arcade-canvas{touch-action:none}.comic-award.award-current{transform:translateY(-1px)}
 
 .arcade-coins[data-variant=tuna] .coin-time-track i{background:linear-gradient(90deg,#80d6d5,#ffd55a)}.arcade-coins[data-variant=splash] .coin-time-track i{background:linear-gradient(90deg,#9de9ff,#518de5)}.arcade-coins[data-variant=tuna] .coin-arena{border-color:#ffd55a}.arcade-coins[data-variant=splash] .coin-arena{border-color:#99e3ff}
+
+/* Arena broadcast layer: small non-interactive overlays, never cover the controls. */
+.coin-arena{position:relative;isolation:isolate;background:linear-gradient(145deg,#25203e,#161427);border-color:color-mix(in srgb,var(--arena-accent,#a78bf5) 65%,#333047);box-shadow:0 4px 22px #0b09244d,inset 0 0 0 1px #ffffff12}
+.arena-stage-tag{position:absolute;z-index:2;left:9px;top:9px;pointer-events:none;padding:5px 9px;border-radius:7px;background:#171523dc;border:1px solid #ffffff2b;color:var(--arena-accent,#e7d4ff);font-size:clamp(9px,1.15vw,15px);font-weight:850;letter-spacing:.09em;max-width:calc(100% - 18px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.arena-phase-tag{position:absolute;z-index:3;pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%);font-size:clamp(44px,10vw,100px);font-weight:950;line-height:1.05;color:#fff4d5;text-shadow:0 4px #422f58,0 0 25px #ffc86c90;-webkit-text-stroke:1px #38243f}
+.arena-phase-tag[hidden]{display:none!important}
+.arcade-coins[data-arena-phase=urgent] .arena-phase-tag{top:9px;left:auto;right:9px;transform:none;font-size:clamp(21px,3.8vw,44px);color:#ffcc8b;text-shadow:0 2px #45233e}
+.arcade-coins[data-arena-phase=ready] .arena-phase-tag,.arcade-coins[data-arena-phase=go] .arena-phase-tag{animation:arena-title-in .28s ease-out both}
+@keyframes arena-title-in{from{opacity:.15;scale:.84}to{opacity:1;scale:1}}
+.arcade-coins[data-arena-phase=urgent] .coin-time-track i{background:linear-gradient(90deg,#ffb65c,#ff6685)}
+.arcade-coins[data-arena-phase=end] .arena-phase-tag{font-size:clamp(34px,7vw,76px)}
+@media(max-width:480px){.arena-stage-tag{left:5px;top:5px;padding:4px 6px;font-size:9px}}
+@media(prefers-reduced-motion:reduce){.arena-phase-tag{animation:none!important}}
