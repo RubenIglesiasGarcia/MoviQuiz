@@ -186,9 +186,8 @@ async function openWardrobe(origin='room'){
  user=u;let legacy=null;try{legacy=localStorage.getItem('mq.personality.'+u.id);}catch{}const wardrobeUser={...u,avatar:{...u.avatar,personality:u.avatar?.personality??(legacy==='balanced'?'random':legacy||'random')}};wardrobe({user:wardrobeUser,progression,backLabel:fromProfile||!state?'Volver a mi perfil':'Volver al concurso',accountOnly:fromProfile&&!syncWardrobeToRoom(state,canPlay()),save:async data=>{
  if(view!=='wardrobe')throw Error('El editor ya no está abierto.');
  if(!fromProfile&&shouldCloseWardrobe(wardrobeGuard,state))throw Error('El concurso ya ha empezado.');
- const result=await api('/api/profile',data);user=result.user;try{localStorage.removeItem('mq.personality.'+user.id);}catch{}navRender();
- if(syncWardrobeToRoom(state,canPlay())){try{await send('join',{code:state.code,role});}catch(e){toast('Personaje guardado en tu cuenta. La sala no se ha actualizado.');if(view==='wardrobe')await back();return;}}
- if(view==='wardrobe')await back();toast('¡Personaje guardado!');
+ const result=await api('/api/profile',{name:user.name,hat:user.avatar?.hat||'none',shirt:user.avatar?.shirt||'violet',personality:user.avatar?.personality??'random',...data});user=result.user;try{localStorage.removeItem('mq.personality.'+user.id);}catch{}navRender();
+ if(syncWardrobeToRoom(state,canPlay())){try{await send('join',{code:state.code,role});}catch(e){toast('Personaje guardado en tu cuenta. La sala no se ha actualizado.');}}
  },close:back});
  }catch(e){toast(e.message);if(view==='wardrobe')await back();}
 }

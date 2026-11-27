@@ -6,3 +6,7 @@ test('refreshing profile appearance preserves room personality',()=>{assert.deep
 
 import {shouldForgetSession} from '../public/wardrobe-flow.js';
 test('temporary network and server failures retain the account session',()=>{for(const status of [undefined,403,429,500,503])assert.equal(shouldForgetSession(status),false);assert.equal(shouldForgetSession(401),true);});
+
+import {wardrobeAutosave} from '../public/wardrobe-flow.js';
+test('autosave serializes and coalesces appearance edits without resending a photo',async()=>{const calls=[];let release;const q=wardrobeAutosave(async p=>{calls.push(p);if(calls.length===1)await new Promise(r=>release=r);});q.enqueue({photo:'new',consent:true});const saving=q.flush();q.enqueue({hat:'crown'});q.enqueue({shirt:'blue'});q.enqueue({hat:'none'});release();assert.equal(await saving,true);assert.deepEqual(calls,[{photo:'new',consent:true},{hat:'none',shirt:'blue'}]);});
+test('failed saves preserve the latest changes for retry',async()=>{let fail=true;const calls=[];const q=wardrobeAutosave(async p=>{calls.push(p);if(fail)throw Error('offline');});q.enqueue({shirt:'blue'});assert.equal(await q.flush(),false);q.enqueue({shirt:'red'});fail=false;assert.equal(await q.flush(),true);assert.deepEqual(calls,[{shirt:'blue'},{shirt:'red'}]);});
