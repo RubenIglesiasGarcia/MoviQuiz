@@ -651,3 +651,63 @@ body.tv-mode .screen .question-media-image{height:clamp(80px,24vh,250px)}
 .round-results[data-step=rank][data-dramatic=change] .broadcast-spotlight,.round-results[data-step=rank][data-dramatic=comeback] .broadcast-spotlight{animation:result-drama .4s cubic-bezier(.16,1,.3,1) both}
 @keyframes result-drama{from{opacity:.5;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.round-results .broadcast-spotlight{animation:none!important}}
+
+/* Arcade is a controller, not a scrolling document. Only lock active players. */
+html:has(body.arcade-viewport),body.arcade-viewport{overflow:hidden;overscroll-behavior:none;overflow-anchor:none}
+body.arcade-viewport{position:fixed;inset:0;width:100%;height:100vh;height:100dvh;min-height:0;margin:0}
+body.arcade-viewport>#header,body.arcade-viewport>footer,body.arcade-viewport #app>.room-head,body.arcade-viewport #app>.host-controls,body.arcade-viewport #app .side{display:none}
+body.arcade-viewport #app{box-sizing:border-box;width:100%;max-width:none;height:100%;min-height:0;margin:0;padding:max(7px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));overflow:hidden;overscroll-behavior:none;touch-action:none}
+body.arcade-viewport #app>.board{display:block;height:100%;min-height:0;margin:0;overflow:hidden}
+body.arcade-viewport #round{box-sizing:border-box;height:100%;min-height:0;min-width:0;margin:0;padding:0;gap:0;display:flex;flex-direction:column;overflow:hidden;overflow-anchor:none;background:transparent;border:0;box-shadow:none}
+body.arcade-viewport[data-arcade-viewport=action] #round>:not(#answers){display:none}
+body.arcade-viewport[data-arcade-viewport=action] #answers{display:flex;flex:1 1 0;width:100%;min-width:0;min-height:0;height:auto;margin:0;overflow:hidden}
+body.arcade-viewport .arcade-game{box-sizing:border-box;width:100%;height:100%;min-width:0;min-height:0;gap:clamp(4px,1.15dvh,10px);overflow:hidden;display:flex;flex-direction:column;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+body.arcade-viewport .arcade-game>*{flex:0 0 auto;min-width:0;margin:0}
+body.arcade-viewport .arcade-arena{flex:1 1 0;height:auto;min-height:0;max-height:none;touch-action:none}
+body.arcade-viewport .arcade-arena canvas,body.arcade-viewport .coin-controller,body.arcade-viewport .coin-boost,body.arcade-viewport .arcade-buttons,body.arcade-viewport .arcade-input{touch-action:none;-webkit-touch-callout:none}
+body.arcade-viewport .arcade-hud{font-size:clamp(11px,2.4dvh,18px);min-height:1.4em}
+body.arcade-viewport .arcade-hud>strong{white-space:nowrap}
+body.arcade-viewport .arcade-combo{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body.arcade-viewport .arcade-pad-tools{justify-content:center;gap:6px;flex-wrap:nowrap}
+body.arcade-viewport .arcade-pad-tools button{font-size:11px;min-height:32px;padding:4px 10px}
+body.arcade-viewport .arcade-rotate{display:none}
+body.arcade-viewport .arcade-hint{font-size:clamp(11px,2dvh,15px);line-height:1.2;min-height:2.4em;height:2.4em;overflow:hidden;text-align:center}
+body.arcade-viewport .arcade-buttons{max-height:none;gap:8px;padding:3px 3px 6px}
+body.arcade-viewport .arcade-input{min-height:clamp(54px,15dvh,100px);height:auto;padding:4px;gap:3px}
+body.arcade-viewport .coin-controller{padding:2px 4px 6px;gap:12px;justify-content:space-evenly}
+body.arcade-viewport .coin-stick{width:clamp(88px,24dvh,162px);height:clamp(88px,24dvh,162px)}
+body.arcade-viewport .coin-boost{min-width:clamp(72px,20dvh,135px);min-height:clamp(72px,20dvh,135px);font-size:clamp(13px,3dvh,22px)}
+body.arcade-viewport .coin-control-copy{display:none}
+body.arcade-viewport .tv-gamepad .coin-controller,body.arcade-viewport .tv-gamepad .arcade-buttons{flex:1 1 0;min-height:0;align-items:center;max-height:none}
+body.arcade-viewport .tv-gamepad .arcade-input{height:100%;min-height:0}
+body.arcade-viewport .tv-gamepad .coin-stick{width:min(46dvh,42vw,240px);height:min(46dvh,42vw,240px)}
+body.arcade-viewport .tv-gamepad .coin-boost{min-width:min(36dvh,34vw,180px);min-height:min(36dvh,34vw,180px)}
+body.arcade-viewport .tv-gamepad .arcade-hint{height:2.4em;min-height:2.4em}
+body.arcade-viewport[data-arcade-viewport=quick] #round{gap:6px;padding:6px;justify-content:center}
+body.arcade-viewport[data-arcade-viewport=quick] #round>.question-identity,body.arcade-viewport[data-arcade-viewport=quick] #round>.question-format,body.arcade-viewport[data-arcade-viewport=quick] #round>.party-banner,body.arcade-viewport[data-arcade-viewport=quick] #round>.round-rule{display:none}
+body.arcade-viewport[data-arcade-viewport=quick] #round h2{font-size:clamp(15px,4vw,22px);line-height:1.15;margin:0}
+body.arcade-viewport[data-arcade-viewport=quick] #answers{min-height:0;min-width:0;margin:0;display:flex;flex-direction:column;justify-content:center;gap:5px;flex:1 1 0}
+body.arcade-viewport[data-arcade-viewport=quick] .odd-grid{min-height:0;gap:5px}
+body.arcade-viewport[data-arcade-viewport=quick] .odd-tile{min-height:clamp(38px,11dvh,74px);padding:4px;touch-action:none}
+body.arcade-viewport[data-arcade-viewport=quick] .reflex-pad{min-height:0;height:clamp(100px,45dvh,300px);touch-action:none}
+body.arcade-viewport[data-arcade-viewport=quick] .memory-symbol{padding:3px;font-size:clamp(22px,7dvh,48px)}
+body.arcade-viewport[data-arcade-viewport=quick] .memory-strip,body.arcade-viewport[data-arcade-viewport=quick] .count-board{gap:4px}
+body.arcade-viewport .connection-indicator.connection-compact,body.order-controller .connection-indicator.connection-compact{top:max(2px,env(safe-area-inset-top));bottom:auto;pointer-events:none;max-width:90vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(orientation:landscape) and (max-height:550px){
+ body.arcade-viewport[data-arcade-viewport=action] .arcade-game:not(.tv-gamepad){display:grid;grid-template-columns:minmax(0,1fr) minmax(140px,34%);grid-template-rows:auto minmax(0,1fr) auto auto;gap:4px 8px}
+ body.arcade-viewport .arcade-game:not(.tv-gamepad) .arcade-hud{grid-column:1/-1;grid-row:1}
+ body.arcade-viewport .arcade-game:not(.tv-gamepad) .arcade-arena{grid-column:1;grid-row:2;min-height:0;height:100%}
+ body.arcade-viewport .arcade-game:not(.tv-gamepad) .coin-controller,body.arcade-viewport .arcade-game:not(.tv-gamepad) .arcade-buttons{grid-column:2;grid-row:2;min-height:0;align-self:stretch;justify-content:center}
+ body.arcade-viewport .arcade-game:not(.tv-gamepad) .coin-controller{flex-direction:column;gap:5px}
+ body.arcade-viewport .arcade-game:not(.tv-gamepad) .coin-stick{width:clamp(70px,28dvh,120px);height:clamp(70px,28dvh,120px)}
+ body.arcade-viewport .arcade-game:not(.tv-gamepad) .coin-boost{min-width:72px;min-height:45px;border-radius:12px}
+ body.arcade-viewport .arcade-game:not(.tv-gamepad) .arcade-buttons{grid-template-columns:1fr;gap:4px}
+ body.arcade-viewport .arcade-game:not(.tv-gamepad) .arcade-input{min-height:0;height:100%;flex-direction:row;gap:6px}
+ body.arcade-viewport .arcade-game:not(.tv-gamepad) .pad-symbol{font-size:clamp(18px,6dvh,30px)}
+ body.arcade-viewport .arcade-game:not(.tv-gamepad) .arcade-timing,body.arcade-viewport .arcade-game:not(.tv-gamepad) .coin-time-track{grid-column:1;grid-row:3}
+ body.arcade-viewport .arcade-game:not(.tv-gamepad) .arcade-beats{grid-column:1;grid-row:4}
+ body.arcade-viewport .arcade-game:not(.tv-gamepad) .arcade-pad-tools{grid-column:2;grid-row:3/5}
+ body.arcade-viewport .arcade-game:not(.tv-gamepad) .arcade-hint{grid-column:1/-1;grid-row:5;height:1.2em;min-height:1.2em}
+ body.arcade-viewport[data-arcade-viewport=quick] #round h2{font-size:15px}
+ body.arcade-viewport[data-arcade-viewport=quick] .odd-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}

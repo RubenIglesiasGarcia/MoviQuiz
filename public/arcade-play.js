@@ -1,15 +1,15 @@
+import {readPadPreference,writePadPreference} from '/arcade-viewport.js';
 import {actionBeat,actionMeta,beatDuration} from '/arcade-rules.js';
 import {syncArcadeStage} from '/generated/character3d.js';
 import {mountCoinGame} from '/coin-play.js';
 import {playSound} from '/effects.js';
 import {arcadeQuip} from '/arcade-humor.js';
-let lastPadRoom='',lastPadPreference=null;
 const h=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e;};
 const btn=(cls,text,fn)=>{const b=h('button',cls,text);b.type='button';b.onclick=fn;return b;};
 export function mountArcadeGame(parent,{state,playerId,play,send,offset,reveal,role}){
  if(state.arcade.plan.kind==='coins')return mountCoinGame(parent,{state,playerId,play,send,offset,reveal,role});
  const kind=state.arcade.plan.kind,meta=actionMeta[kind],wrap=h('section','arcade-game arcade-'+kind),arena=h('div','arcade-arena'),overlay=h('div','arcade-cue'),hud=h('div','arcade-hud'),title=h('strong'),points=h('strong'),combo=h('span','arcade-combo'),progress=h('div','arcade-beats'),control=h('div','arcade-buttons'),hint=h('p','arcade-hint'),meter=h('div','arcade-timing'),fill=h('i'),zone=h('b'),tools=h('div','arcade-pad-tools'),live=h('div','arcade-live-scores'),rotate=h('p','arcade-rotate','Gira el móvil para jugar como con un mando.');
- const coarse=matchMedia('(pointer:coarse)'),landscape=matchMedia('(orientation:landscape)');let preference=lastPadRoom===state.code?lastPadPreference:null,pad=false,current=state,clock=offset,attempt=-1,active=false,last=-2,frame=0,lastFeedback=-1,lastFrame=0,signature='',disposed=false;
+ const coarse=matchMedia('(pointer:coarse)'),landscape=matchMedia('(orientation:landscape)');let preference=readPadPreference(state.code),pad=false,current=state,clock=offset,attempt=-1,active=false,last=-2,frame=0,lastFeedback=-1,lastFrame=0,signature='',disposed=false;
  const setText=(node,value)=>{if(node.textContent!==value)node.textContent=value;};
  const fallback=h('div','arcade-2d'),lanes=h('div','arcade-2d-lanes'),fallbackPlayers=h('div','arcade-2d-players');for(let i=0;i<3;i++)lanes.append(h('div','arcade-2d-lane'));fallback.append(lanes,fallbackPlayers);meter.append(zone,fill);arena.append(overlay,fallback);hud.append(title,points,combo);wrap.append(hud,arena,progress,meter,live,tools,rotate,control,hint);parent.append(wrap);
  const options=kind==='dash'?[['left','◀','IZQUIERDA'],['right','▶','DERECHA'],['jump','↑','SALTO']]:kind==='dodge'?[['0','◀','IZQUIERDA'],['1','●','CENTRO'],['2','▶','DERECHA']]:[['shoot','●','LANZAR']];
@@ -19,7 +19,7 @@ export function mountArcadeGame(parent,{state,playerId,play,send,offset,reveal,r
  for(const [value,icon,label] of options){const b=btn('arcade-input','',()=>input(value));b.dataset.action=value;b.setAttribute('aria-label',label);b.append(h('span','pad-symbol',icon),h('span','pad-label',label));b.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'||!e.isPrimary||b.disabled)return;e.preventDefault();input(value);});control.append(b);buttons.push(b);}
  // Multiple fingers can press controls; one accepted action per obstacle prevents spam.
  control.hidden=!play;tools.hidden=!play;rotate.hidden=true;
- const switchMode=btn('ghost arcade-mode-toggle','Mando TV',()=>{preference=!pad;lastPadRoom=current.code;lastPadPreference=preference;applyMode();});
+ const switchMode=btn('ghost arcade-mode-toggle','Mando TV',()=>{preference=!pad;writePadPreference(current.code,preference);applyMode();});
  const full=btn('ghost arcade-fullscreen','⛶ Pantalla completa',async()=>{try{if(!document.fullscreenElement&&document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();await screen.orientation?.lock?.('landscape');}catch{}applyMode();});
  tools.append(switchMode,full);
  function refreshScene(){if(arena.hidden)return;try{syncArcadeStage(arena,current,clock,play?playerId:null);}catch{arena.classList.add('arcade-fallback');}}
