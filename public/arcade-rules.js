@@ -1,7 +1,7 @@
 // Shared deterministic arcade timing. The server grades all input with its own clock.
 import {hazardPlan} from './arena-events.js';
 import {coinPlan,tunaPlan,territoryPlan,sofaPlan,startCoins,controlCoins,finishCoins} from './coin-engine.js';
-export const actionKinds=['dash','dodge','hoops'];
+export const actionKinds=['dash','dodge','hoops','volley'];
 export const isAction=kind=>kind==='coins'||kind==='territory'||kind==='sofa'||kind==='lava'||kind==='bomb'||kind==='tuna'||kind==='splash'||actionKinds.includes(kind);
 export const actionMeta={
  tuna:{title:'OPERACIÓN ATÚN',subtitle:'Recoge hasta tres latas y llévalas al comedero central. Un turbo contra otro jugador puede robarle una lata.',category:'Agilidad'},
@@ -13,6 +13,7 @@ export const actionMeta={
  coins:{title:'FIEBRE DEL ORO',subtitle:'Muévete libremente, esquiva las barreras y recoge más monedas que tus rivales.',category:'Agilidad'},
  dash:{title:'CARRERA DE VALLAS',subtitle:'Esquiva por los lados o salta la valla en el momento justo.',steps:12,interval:1750,category:'Agilidad'},
  dodge:{title:'LLUVIA DE METEORITOS',subtitle:'Observa los meteoritos y salta al carril que quede libre.',steps:12,interval:1700,category:'Reflejos'},
+ volley:{title:'VOLEY · PUNTO DE ORO',subtitle:'Lee la jugada: recibe el saque, coloca, remata o bloquea. Pulsa el gesto correcto cuando el balón llegue a la zona verde.',steps:12,interval:2200,category:'Deportes'},
  hoops:{title:'CANASTA ESTELAR',subtitle:'Lanza cuando el indicador atraviese la zona verde.',steps:10,interval:1900,category:'Deportes'}
 };
 export function makeActionPlan(kind,random=Math.random){
@@ -21,11 +22,11 @@ export function makeActionPlan(kind,random=Math.random){
  const beats=Array.from({length:m.steps},(_,i)=>{
   const level=Math.min(3,Math.floor(i*4/m.steps)),duration=m.interval-level*130;
   const choices=kind==='dash'?['left','right','jump']:['0','1','2'];
-  let target=kind==='hoops'?'shoot':choices[Math.min(2,Math.floor(random()*3))];
-  if(kind!=='hoops'&&target===prev&&repeat>=1)target=choices[(choices.indexOf(target)+1+Math.floor(random()*2))%3];
+  let target=kind==='volley'?(i%3===0?(random()<.5?'receive':'block'):i%3===1?'set':'spike'):kind==='hoops'?'shoot':choices[Math.min(2,Math.floor(random()*3))];
+  if(kind!=='hoops'&&kind!=='volley'&&target===prev&&repeat>=1)target=choices[(choices.indexOf(target)+1+Math.floor(random()*2))%3];
   repeat=target===prev?repeat+1:0;prev=target;
-  const center=kind==='hoops'?Math.round(duration*(.43+random()*.20)):Math.round(duration*.70);
-  const window=kind==='hoops'?[300,250,205,175][level]:kind==='dash'?[430,375,310,260][level]:[530,450,380,320][level];
+  const center=kind==='volley'?Math.round(duration*(.56+random()*.16)):kind==='hoops'?Math.round(duration*(.43+random()*.20)):Math.round(duration*.70);
+  const window=kind==='volley'?[460,390,325,275][level]:kind==='hoops'?[300,250,205,175][level]:kind==='dash'?[430,375,310,260][level]:[530,450,380,320][level];
   return {target,center,window,duration,level};
  });
  return {version:2,kind,lead:3500,interval:m.interval,beats};
@@ -44,7 +45,7 @@ export function actionPoints(kind,beat,input,elapsed){
  const error=Math.abs(elapsed-beat.center);
  if(error<=beat.window*.42)return 150;
  if(error<=beat.window)return 100;
- if(kind==='hoops'&&error<=beat.window*1.65)return 45;
+ if((kind==='hoops'||kind==='volley')&&error<=beat.window*1.65)return 45;
  return 0;
 }
 export function actionRound(kind){const m=actionMeta[kind],plan=makeActionPlan(kind);return {party:kind,mode:'fast',category:m.category,difficulty:'Difícil',prompt:m.subtitle,seconds:Math.ceil(actionDuration(plan)/1000),plan,correct:null,options:[]};}
@@ -53,7 +54,7 @@ export function recordAction(r,id,input,beatIndex,now){
  const a=r.action,p=a?.players[id];if(r.phase!=='question'||r.partyStage!=='arcade-action'||!p||!Number.isInteger(beatIndex)||typeof input!=='string')throw Error('Prueba no disponible.');
  if(a.plan.kind==='coins')return controlCoins(a,id,input,now);const beat=actionBeat(a.plan,now-a.started);
  if(beat.index!==beatIndex||beatIndex<0||beatIndex>=a.plan.beats.length||p.lastBeat>=beatIndex)throw Error('Esta oportunidad ya ha terminado.');
- if(!(a.plan.kind==='dash'?['left','right','jump']:a.plan.kind==='dodge'?['0','1','2']:['shoot']).includes(input))throw Error('Control no válido.');
+ if(!(a.plan.kind==='dash'?['left','right','jump']:a.plan.kind==='dodge'?['0','1','2']:a.plan.kind==='volley'?['receive','set','spike','block']:['shoot']).includes(input))throw Error('Control no válido.');
  const base=actionPoints(a.plan.kind,a.plan.beats[beatIndex],input,beat.elapsed);
  if(a.plan.version===2){p.combo=base?(p.lastBeat===beatIndex-1?(p.combo||0)+1:1):0;p.bestCombo=Math.max(p.bestCombo||0,p.combo);if(base===150)p.perfect=(p.perfect||0)+1;}
  const score=base+(a.plan.version===2&&base?Math.min(40,Math.max(0,p.combo-1)*10):0);

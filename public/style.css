@@ -821,3 +821,15 @@ body.tv-mode .tv-scoreboard[data-dense=true] .tv-score-avatar .full-character{wi
 .tv-scoreboard[data-count="1"] .tv-score-row{min-height:32vh;grid-template-columns:3ch minmax(14vh,24vh) minmax(0,1fr) minmax(6ch,auto) minmax(7ch,auto)}.tv-scoreboard[data-count="1"] .tv-score-avatar{height:25vh}.tv-scoreboard[data-count="1"] .tv-score-avatar .full-character{width:17.5vh;height:25vh}.tv-scoreboard[data-count="2"] .tv-score-row{min-height:24vh}.tv-scoreboard[data-count="2"] .tv-score-avatar{height:20vh}.tv-scoreboard[data-count="2"] .tv-score-avatar .full-character{width:14vh;height:20vh}
 @media(prefers-reduced-motion:no-preference){.tv-scoreboard[data-step=points] .full-character[data-emote=hit]{animation:full-hit .9s 1}}
 .stage-social-bubble[hidden]{display:none!important}
+
+/* Voley: lightweight broadcast court and timing, shared with the controller for lower latency. */
+.arcade-volley .arcade-arena{background:linear-gradient(145deg,#0b3344,#18324a);position:relative;min-height:130px}
+.volley-court{position:absolute;inset:19% 5% 7%;overflow:hidden;border:2px solid #e9fbfa;border-radius:12px;background:linear-gradient(90deg,#d78a55 0 49.6%,#e9fbfa 49.6% 50.4%,#d78a55 50.4%);box-shadow:inset 0 0 0 5px #215d74}
+.volley-court:before,.volley-court:after{content:'';position:absolute;top:0;bottom:0;width:2px;background:#f9eee1;left:33.3%}.volley-court:after{left:66.6%}
+.volley-net{position:absolute;left:48%;top:3%;bottom:3%;width:4%;border:1px solid #f4f4fa;background:repeating-linear-gradient(0deg,#edf6ff88 0 1px,#222e4c55 1px 6px);z-index:1}
+.volley-zone{position:absolute;left:26%;top:22%;width:48%;height:58%;border-radius:50%;border:2px dashed #fff8;opacity:.3}.volley-court[data-ready=true] .volley-zone{opacity:1;background:#5bff9450;border-color:#b5ffb5}
+.volley-player{position:absolute;top:62%;font-size:clamp(25px,6vh,64px);color:#324870;line-height:1;text-shadow:0 3px #222}.volley-player.near{left:24%;color:#674cb5}.volley-player.far{right:18%;color:#bf4d63}
+.volley-ball{position:absolute;z-index:3;transform:translate(-50%,-50%);font-size:clamp(26px,5vh,56px);filter:drop-shadow(0 3px 2px #0006)}
+.volley-contact{position:absolute;bottom:5%;left:50%;transform:translateX(-50%);font-weight:900;font-size:clamp(11px,1.6vh,20px);opacity:.4;color:#fff}.volley-court[data-ready=true] .volley-contact{opacity:1;color:#e0ffac}
+.arcade-volley .arcade-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.arcade-volley .arcade-input{min-height:44px}.arcade-volley .arcade-cue{z-index:4;position:relative}
+.lobby-remove{font-size:16px;padding:4px 8px;border:1px solid #ff8da9;border-radius:6px;background:#49223b;color:#fff}.rank-row:has(.lobby-remove){grid-template-columns:auto auto minmax(0,1fr) auto auto auto}

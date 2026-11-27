@@ -7,6 +7,7 @@ const styles={
  bluff:['#c4acff','EL FARSANTE','No te fíes de las apariencias.'],hot:['#ff9b73','PATATA CALIENTE','Que no te pille el reloj.'],
  pie:['#ff9db7','TARTAZO','Acierta y elige tu objetivo.'],draw:['#79d9ef','DIBUJA COMO PUEDAS','Una pista puede cambiarlo todo.'],
  dash:['#79d9ef','CARRERA DE VALLAS','El ritmo lo es todo.'],dodge:['#c4acff','LLUVIA DE METEORITOS','Encuentra el hueco y esquiva.'],
+ volley:['#77e2b2','VOLEY · PUNTO DE ORO','Domina los cuatro gestos y el momento de contacto.'],
  hoops:['#ffbf73','CANASTA ESTELAR','Apunta al instante perfecto.'],coins:['#ffdb78','FIEBRE DEL ORO','Cada moneda cuenta.'],territory:['#ff9db7','GUERRA DE COLORES','Conquista el terreno de tus rivales.'],tuna:['#ffd55a','OPERACIÓN ATÚN','¡El comedero os espera!'],splash:['#83d8f6','EMPUJÓN Y CHAPUZÓN','No te caigas al agua.'],lava:['#ff955d','EL SUELO ES LAVA','¡Corre, que te quemas!'],bomb:['#e7bf70','PAQUETE SOSPECHOSO','Aquí no se aceptan devoluciones.'],sofa:['#efb3e5','REY DEL SOFÁ','Aquí no se reserva asiento.'],
  memory:['#c4acff','MEMORIA RELÁMPAGO','Graba cada símbolo en tu memoria.'],odd:['#76e3d2','EL INTRUSO','Uno de ellos no encaja.'],
  reflex:['#76e3d2','LUZ VERDE','No te adelantes a la señal.'],count:['#8ecbff','CUENTA ATRÁS','Observa antes de contar.'],
@@ -61,6 +62,7 @@ export function roundBeat(state){
 }
 
 const sonnyRules={
+ volley:['¡Que no se os caiga el balón, humanos!','Recibid, colocad, rematad o bloquead según la jugada. Pulsad en la zona verde.'],
  tiebreak:['Plot twist. Aquí nadie se va todavía.','Solo los líderes empatados responden; un acierto puede decidir el concurso.'],
  classic:['El que sabe, sabe. El que no, disimula.','Elegid una de las respuestas antes de que acabe el tiempo.'],
  warmup:['Vamos a ver si las neuronas han venido con vosotros.','Acertad y sumad puntos para arrancar.'],

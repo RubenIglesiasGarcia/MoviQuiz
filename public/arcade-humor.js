@@ -1,5 +1,6 @@
 // Short, friendly, event-driven lines. Never change scores or mock inactive players.
 const lines={
+ volley:{perfect:['¡Al suelo, sin defensa!','¡Qué toque de seda!','¡Bloqueo de manual!'],hit:['¡Balón en juego!','¡Buena técnica!','¡Sigue la jugada!'],miss:['¡Se ha escapado el balón!','¡Ajusta el tiempo del salto!','¡La siguiente es tuya!']},
  dash:{perfect:['¡Ni las prisas del lunes!','¡Salto de película!','¡Qué piernas!'],hit:['¡Valla superada!','¡Por los pelos!','¡Sigue corriendo!'],miss:['¡La valla no se aparta!','¡Eso era una valla, no una puerta!','¡A levantarse!']},
  dodge:{perfect:['¡Ni un rasguño espacial!','¡Digno de un astronauta!','¡Qué cintura galáctica!'],hit:['¡Meteorito esquivado!','¡Aún en órbita!','¡Casi te despeina!'],miss:['¡Abrazo de meteorito!','¡Houston, tenemos un problemilla!','¡Eso sí que ha sido un impacto!']},
  hoops:{perfect:['¡De tres y con estilo!','¡El aro pide autógrafos!','¡Qué muñeca!'],hit:['¡Dentro!','¡También valen las feas!','¡Canasta con suspense!'],miss:['¡Aparca el balón, no lo mandes a Marte!','¡El aro sigue esperando!','¡Rebote imaginario!']}
@@ -22,6 +23,6 @@ export function arcadeAward(state){
  else if(variant==='bomb'){pick=unique('bumps',2);if(pick){label='REPARTIDOR SOSPECHOSO';detail=pick.p.bumps+' paquetes entregados';}}
  else if(variant==='lava'){pick=unique('hits',3);if(pick){label='PIES DE AMIANTO';detail=pick.p.hits+' segundos a salvo';}}
  else if(kind!=='coins'){pick=unique('bestCombo',3);if(pick){label='EN MODO LEYENDA';detail='Combo de '+pick.p.bestCombo;}}
- if(!pick){pick=unique('score',1);if(!pick)return null;label=variant==='lava'?'PIES DE AMIANTO':variant==='bomb'?'NO SE ACEPTAN DEVOLUCIONES':variant==='sofa'?'DUEÑO DEL SALÓN':variant==='territory'?'REY DEL RODILLO':kind==='coins'?'ASPIRADORA DE MONEDAS':kind==='dash'?'PIERNAS DE GOMA':kind==='dodge'?'TURISTA GALÁCTICO':'MUÑECA DE ORO';detail=Math.round(pick.p.score).toLocaleString('es-ES')+' puntos';}
+ if(!pick){pick=unique('score',1);if(!pick)return null;label=variant==='lava'?'PIES DE AMIANTO':variant==='bomb'?'NO SE ACEPTAN DEVOLUCIONES':variant==='sofa'?'DUEÑO DEL SALÓN':variant==='territory'?'REY DEL RODILLO':kind==='coins'?'ASPIRADORA DE MONEDAS':kind==='dash'?'PIERNAS DE GOMA':kind==='dodge'?'TURISTA GALÁCTICO':kind==='volley'?'ESTRELLA DE LA RED':'MUÑECA DE ORO';detail=Math.round(pick.p.score).toLocaleString('es-ES')+' puntos';}
  return {label,name:pick.person.name,detail};
 }
