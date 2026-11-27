@@ -1,3 +1,4 @@
+import {upperPacks} from './upper-question-bank.js';
 import {packExpansion} from './question-expansion.js';
 // Curated public catalog, independent of D1 migrations and user accounts.
 // Verified November 26, 2026: Know Your Meme (November poll, Jupiter Incident 2011,
@@ -3489,7 +3490,7 @@ const cristinaPack={
 };
 const entries=[{id:"6d656d657332303236313131",title:"Memes e Internet",description:"Memes clásicos, cultura de Internet y tendencias de 2026.",art:"memes",questions},...themes,cristinaPack];
 const keys={'6d656d657332303236313131':'memes','706f6b656d6f6e3030303031':'pokemon','646967696d6f6e3030303031':'digimon','766f6c6579626f6c30303031':'volley','656c656374726f6e69636131':'electro','6368616d70696f6e73303031':'champions'};
-const catalog=new Map(entries.map(({questions,...meta})=>{const added=packExpansion[keys[meta.id]]||[],seen=new Set(questions.map(q=>q.prompt));questions=[...questions,...added.filter(q=>!seen.has(q.prompt))];return [meta.id,{meta:{...meta,visibility:'public',count:questions.length,updated:meta.updated??Date.UTC(2026,10,27),owned:false,builtin:true},questions}];}));
+const catalog=new Map(entries.map(({questions,...meta})=>{const key=keys[meta.id],added=[...(packExpansion[key]||[]),...(upperPacks[key]||[])],normalize=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^\p{L}\p{N}]/gu,''),seen=new Set(questions.map(q=>normalize(q.prompt)));questions=[...questions,...added.filter(q=>{const k=normalize(q.prompt);if(seen.has(k))return false;seen.add(k);return true;})];return [meta.id,{meta:{...meta,visibility:'public',count:questions.length,updated:meta.updated??Date.UTC(2026,10,27),owned:false,builtin:true},questions}];}));
 export const officialPacks=[...catalog.values()].map(x=>x.meta);
 export const memePack=officialPacks[0];
 export const builtinPack=id=>{const entry=catalog.get(id);return entry?{...entry.meta,questions:entry.questions}:null;};

@@ -4,10 +4,10 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111b30"><title>MobiQuiz — El concurso está en tus manos</title>
 <link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icons/v2-180.png"><link rel="icon" href="/icons/mobiquiz-v2.webp"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="stylesheet" href="/generated/ui.css"><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/studio-design.css"><script type="module" src="/generated/ui.js"></script>
-<script src="https://accounts.google.com/gsi/client" async></script><script type="module" src="/app.js"></script>
+<script src="https://accounts.google.com/gsi/client" async></script><script src="/startup-guard.js" defer></script><script type="module" src="/app.js"></script>
 </head>
 <body class="mq-studio"><header id="header"><button class="brand" id="home" aria-label="Inicio"><img class="logo" src="/icons/mobiquiz-v2.webp" alt=""><span>Mobi<span class="accent">Quiz</span></span></button><span class="live"><i></i> ¡EN EL AIRE!</span><nav id="nav"></nav></header>
-<main id="app" aria-live="polite"></main><div id="toast" role="status"></div>
+<main id="app" aria-live="polite"><section class="startup-card panel" id="startup-card"><h2>Preparando el concurso…</h2><p class="sub">Cargando MobiQuiz.</p><noscript>Activa JavaScript para jugar.</noscript></section></main><div id="toast" role="status"></div>
 <template id="home-template">
 <section class="show-poster" aria-label="MobiQuiz, el concurso de tu salón">
  <div class="poster-marquee" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
