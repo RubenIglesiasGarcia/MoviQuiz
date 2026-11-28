@@ -514,3 +514,57 @@ body.open-lobby #app .lobby-qr{margin:0;gap:4px;max-width:180px}.lobby-invite-ca
  body.quiz-controller #answers .options{gap:6px!important}
 }
 @media(max-width:360px){body.open-lobby #app .lobby-invite-card{grid-template-columns:minmax(0,1fr) 95px}body.open-lobby #app .lobby-invite-details>.room-code{font-size:24px}.mq-studio #app.wardrobe .wardrobe-grid{gap:4px}.mq-studio #app.wardrobe .wardrobe-choice-label{font-size:11px}.mq-studio .pack-dialog .catalog-grid .pack-card{grid-template-columns:62px minmax(0,1fr)}}
+
+/* Mobile home: real grid tracks keep the headline and artwork separate.
+   Menus may scroll naturally; the live quiz/TV viewport rules remain untouched. */
+@media(max-width:800px){
+ body.mq-studio #app.home{width:100%;max-width:520px;align-items:stretch;gap:10px;padding:12px max(12px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));}
+ .mq-studio #app.home .show-poster{width:100%;min-width:0;height:auto;min-height:112px;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-areas:"headline artwork";align-items:center;align-content:center;justify-content:stretch;column-gap:8px;padding:12px;border-radius:14px;}
+ .mq-studio #app.home .poster-art{grid-area:artwork;position:relative;inset:auto;width:100%;height:auto;aspect-ratio:1.28;min-width:0;z-index:auto;opacity:1;}
+ .mq-studio #app.home .poster-art>img:first-child{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;}
+ .mq-studio #app.home .show-poster h1{grid-area:headline;min-width:0;max-width:none;width:100%;font-size:clamp(20px,5.5vw,32px);line-height:1.02;letter-spacing:-.035em;overflow-wrap:normal;transform:none;}
+ .mq-studio #app.home .show-poster h1 span{display:inline;}
+ .mq-studio #app.home .show-poster h1 span:last-child{display:block;font-size:1em;margin-top:3px;}
+ .mq-studio #app.home .show-menu{width:100%;min-width:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+ .mq-studio #app.home :is(.ticket-create,.ticket-join,.home-tv-action,.install-ticket){grid-column:1/-1;}
+ .mq-studio #app.home .show-ticket{min-width:0;min-height:62px;padding:10px;grid-template-columns:36px minmax(0,1fr) 18px;gap:9px;}
+ .mq-studio #app.home .ticket-copy{min-width:0;gap:4px;}
+ .mq-studio #app.home .ticket-copy strong{font-size:17px;line-height:1.13;letter-spacing:-.025em;white-space:normal;overflow-wrap:break-word;}
+ .mq-studio #app.home .ticket-copy small{font-size:12px;line-height:1.25;white-space:normal;}
+ .mq-studio #app.home :is(.ticket-solo,.ticket-packs){grid-template-columns:1fr;grid-template-rows:auto 1fr;align-items:start;gap:7px;padding:10px;min-height:104px;}
+ .mq-studio #app.home :is(.ticket-solo,.ticket-packs) .ticket-arrow{display:none;}
+ .mq-studio #app.home :is(.ticket-solo,.ticket-packs) .ticket-copy strong{font-size:16px;}
+ .mq-studio #app.home .home-tv-action{min-height:54px;padding:8px 10px;gap:8px;background:#192c40;}
+ .mq-studio #app.home .home-tv-action[data-cast-status=available],.mq-studio #app.home .home-tv-connected{background:#24443f;}
+ .mq-studio #app.home .home-tv-action>.ui-icon{width:25px;height:25px;}
+ .mq-studio #app.home .home-tv-action strong{font-size:15px;line-height:1.2;}
+ .mq-studio #app.home .home-tv-action small{font-size:12px;overflow-wrap:break-word;}
+ .mq-studio #app.home #home-tv-disconnect{min-height:44px;flex-shrink:0;}
+ .mq-studio #app.home .install-ticket{min-height:44px;font-size:13px;padding:6px;border-bottom:0;}
+ .mq-studio #app.home .update-notice{width:auto;max-width:100%;align-self:center;min-height:44px;margin:0;font-size:13px;padding:8px 12px;background:transparent;border:1px solid #506780;box-shadow:none;}
+ body.mq-studio:has(#app.home):not(.tv-mode)>#header{width:100%;padding:8px max(10px,env(safe-area-inset-right)) 8px max(10px,env(safe-area-inset-left));gap:8px;}
+ body.mq-studio:has(#app.home)>#header .brand{font-size:clamp(16px,4.5vw,22px);gap:5px;min-height:44px;}
+ body.mq-studio:has(#app.home)>#header .brand img.logo{width:30px;height:30px;}
+ body.mq-studio:has(#app.home)>#header #nav{min-width:0;gap:6px;}
+ body.mq-studio:has(#app.home)>#header #nav .nav-sound{width:44px;height:44px;min-width:44px;flex:none;}
+ body.mq-studio:has(#app.home)>#header #nav .nav-player{min-width:0;min-height:44px;max-width:150px;gap:5px;padding:4px 6px;box-shadow:none;border-radius:10px;}
+ body.mq-studio:has(#app.home)>#header .nav-player-copy b{max-width:68px;font-size:13px;}
+ body.mq-studio:has(#app.home)>#header .nav-player .mq-character{width:29px;height:32px;}
+ body.mq-studio:has(#app.home)>#header .nav-level{font-size:10px;}
+}
+@media(max-width:430px){
+ body.mq-studio:has(#app.home)>#header .nav-player-copy small{display:none;}
+}
+@media(max-width:360px){
+ .mq-studio #app.home .show-poster{min-height:100px;padding:10px;gap:6px;}
+ .mq-studio #app.home .show-poster h1{font-size:20px;}
+ .mq-studio #app.home .show-ticket{gap:6px;padding:8px;}
+ .mq-studio #app.home :is(.ticket-solo,.ticket-packs) .ticket-copy strong{font-size:15px;}
+ body.mq-studio:has(#app.home)>#header #nav .nav-player{max-width:124px;}
+ body.mq-studio:has(#app.home)>#header .nav-player-copy b{max-width:46px;}
+}
+@media(max-height:650px) and (max-width:800px){
+ .mq-studio #app.home .show-ticket{min-height:48px;}
+ .mq-studio #app.home :is(.ticket-solo,.ticket-packs){min-height:80px;}
+ .mq-studio #app.home .show-poster{min-height:96px;}
+}

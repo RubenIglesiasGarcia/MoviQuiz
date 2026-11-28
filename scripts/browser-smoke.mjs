@@ -9,6 +9,24 @@ async function page(token,viewport){const ctx=await browser.newContext({viewport
 try{
  const a=await request('/api/guest',null,{name:'Browser Host'}),b=await request('/api/guest',null,{name:'Browser Player'});
  const host=await page(a.token,{width:1280,height:720}),player=await page(b.token,{width:390,height:844}),tv=await page(null,{width:1280,height:720});
+
+ await player.goto(base);await player.locator('#create').waitFor({state:'visible',timeout:20000});
+ await player.evaluate(()=>document.fonts.ready);
+ for(const [width,height] of [[320,568],[360,640],[390,844],[430,932],[768,1024]]){
+   await player.setViewportSize({width,height});
+   const layout=await player.evaluate(()=>{
+     const rect=n=>{const r=n.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
+     const h=document.querySelector('.show-poster h1'),art=document.querySelector('.poster-art'),poster=document.querySelector('.show-poster');
+     return {doc:document.documentElement.scrollWidth,headline:rect(h),art:rect(art),poster:rect(poster),headlineText:h.textContent,
+       controls:[...document.querySelectorAll('#header button,#app.home button')].filter(n=>n.getClientRects().length).map(n=>({id:n.id,...rect(n)}))};
+   });
+   assert.ok(layout.doc<=width+2,JSON.stringify({width,layout}));
+   assert.match(layout.headlineText,/QUE\s+EMPIECE\s+EL SHOW/);
+   assert.ok(layout.headline.right<=layout.art.left+1,JSON.stringify({width,layout}));
+   assert.ok(layout.headline.left>=layout.poster.left&&layout.art.right<=layout.poster.right+1,JSON.stringify({width,layout}));
+   for(const control of layout.controls)assert.ok(control.left>=-1&&control.right<=width+1&&control.height>=43,JSON.stringify({width,control}));
+ }
+ await player.setViewportSize({width:390,height:844});
  await host.goto(base);await host.locator('#create').waitFor({state:'visible',timeout:20000});await host.locator('#create').click();await host.getByText('Elegir categorías y packs',{exact:true}).waitFor({state:'visible'});
  const question={mode:'choice',prompt:'¿Qué número resulta de sumar dos más dos?',category:'Ciencia',difficulty:'Media',options:['Cuatro','Cinco','Tres','Dos'],correct:0,seconds:120};
  const created=await request('/api/rooms',a.token,{kind:'classic',hostPlays:true,autoAdvance:false,questions:[question]});const code=created.state.code;
@@ -20,5 +38,5 @@ try{
  await player.locator('#answers .option').first().waitFor({state:'visible',timeout:20000});
  await host.locator('#answers .option').first().waitFor({state:'visible',timeout:20000});
  for(const [width,height] of [[390,844],[360,640],[844,390],[1280,720]]){await player.setViewportSize({width,height});await player.waitForTimeout(200);const layout=await player.evaluate(()=>{const rect=n=>{const b=n.getBoundingClientRect();return {top:b.top,bottom:b.bottom,left:b.left,right:b.right};};return {height:innerHeight,width:innerWidth,documentHeight:document.documentElement.scrollHeight,controls:[...document.querySelectorAll('#answers .option')].map(rect),prompt:rect(document.querySelector('#round h2'))};});assert.ok(layout.controls.length>=4,JSON.stringify(layout));assert.ok(layout.documentHeight<=height+4,JSON.stringify(layout));for(const x of [...layout.controls,layout.prompt])assert.ok(x.top>=-3&&x.bottom<=height+3&&x.left>=-3&&x.right<=width+3,JSON.stringify({width,height,x}));}
- await player.locator('#answers .option').first().click();await host.locator('#answers .option').first().click();await tv.locator('.tv-scoreboard').waitFor({state:'visible',timeout:20000});assert.deepEqual(errors,[]);console.log('PASS: lobby, 2 players, browser TV, 4 viewport sizes, real answer/reveal flow.');
+ await player.locator('#answers .option').first().click();await host.locator('#answers .option').first().click();await tv.locator('.tv-scoreboard').waitFor({state:'visible',timeout:20000});assert.deepEqual(errors,[]);console.log('PASS: mobile home (5 sizes), lobby, 2 players, browser TV, 4 viewport sizes, real answer/reveal flow.');
 }finally{await browser.close();}
